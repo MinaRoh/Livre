@@ -5,7 +5,25 @@
     <string name="title_writing">Writing</string>
     <string name="title_mypage">Mypage</string>
     <string name="title_more">More</string>
-
+    <string name="Livre">Livre</string>
+    <string name="signUp">signUp</string>
+    <string name="signIn">signIn</string>
+    <string name="back">back</string>
+    <string name="sign_up_text">회원가입</string>
+    <string name="person">person</string>
+    <string name="nickname">닉네임</string>
+    <string name="duplication">btn_duplication_check</string>
+    <string name="btn_email">btn_email</string>
+    <string name="email">이메일</string>
+    <string name="btn_password">btn_password</string>
+    <string name="password">비밀번호(6자리 이상)</string>
+    <string name="btn_continue">continue</string>
+    <string name="btn_kakao">btn_kakao</string>
+    <string name="btn_google">btn_google</string>
+    <string name="btn_already_have_an_account">btn_already_have_an_account</string>
+    <string name="btn_login">btn_login</string>
+    <string name="sign_in_text">로그인</string>
+    <string name="btn_find_pw">btn_find_pw</string>
     <string name="test">test</string>
     <string name="test2">test222</string>
     <string name="test3">test3</string>

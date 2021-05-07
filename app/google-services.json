@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "199746644439",
+    "firebase_url": "https://mp-livre-default-rtdb.firebaseio.com",
+    "project_id": "mp-livre",
+    "storage_bucket": "mp-livre.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:199746644439:android:ab9a1022f70609ce4c4392",
+        "android_client_info": {
+          "package_name": "gachon.mp.livre_bottom_navigation"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "199746644439-eggagk8tjpvk8q47cvalbpnbk8o0iqnj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBkEvESntEI4lSRJHg10TQFdxCeAIJN7lU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "199746644439-eggagk8tjpvk8q47cvalbpnbk8o0iqnj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
