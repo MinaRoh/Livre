@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Livre_bottom_navigation</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_writing">Writing</string>
+    <string name="title_mypage">Mypage</string>
+    <string name="title_more">More</string>
+
+    <string name="test">test</string>
+    <string name="test2">test222</string>
+    <string name="test3">test3</string>
+</resources>
