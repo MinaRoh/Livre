@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="10sp"
+    android:background="#0A4CAF50">
+
+    <ImageView
+        android:id="@+id/image"
+        android:layout_width="134dp"
+        android:layout_height="189dp"
+        android:src="@drawable/ic_launcher_background" />
+
+    <TextView
+        android:id="@+id/txttitle"
+        android:layout_width="134dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/image"
+        android:layout_marginTop="0dp"
+        android:singleLine="true"
+        android:gravity="center"
+        android:text="책제목"
+        android:textSize="13sp" />
+
+    <TextView
+        android:layout_width="134dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/txtauthor"
+        android:text="책저자"
+        android:singleLine="true"
+        android:gravity="center"
+        android:textSize="13sp"
+        android:layout_below="@id/txttitle"
+        android:layout_centerVertical="true"/>
+</RelativeLayout>
