@@ -1,4 +1,4 @@
-package gachon.mp.livre_bottom_navigation.ui.dashboard;
+package gachon.mp.livre_bottom_navigation.ui.feed;
 
 import android.content.Context;
 import android.text.Html;

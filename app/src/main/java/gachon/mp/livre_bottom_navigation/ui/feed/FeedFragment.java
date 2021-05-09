@@ -1,4 +1,4 @@
-package gachon.mp.livre_bottom_navigation.ui.dashboard;
+package gachon.mp.livre_bottom_navigation.ui.feed;
 
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -10,8 +10,6 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -33,9 +31,9 @@ import java.util.List;
 
 import gachon.mp.livre_bottom_navigation.R;
 
-public class DashboardFragment extends Fragment {
+public class FeedFragment extends Fragment {
 
-    private DashboardViewModel dashboardViewModel;
+    private FeedViewModel feedViewModel;
     //데이터를 생성하기 위해서
     ArrayList<BookVO> array;
     String apiURL = "https://openapi.naver.com/v1/search/book.json?";
@@ -56,11 +54,11 @@ public class DashboardFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        dashboardViewModel =
-                new ViewModelProvider(this).get(DashboardViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_dashboard, container, false);
+        feedViewModel =
+                new ViewModelProvider(this).get(FeedViewModel.class);
+        View root = inflater.inflate(R.layout.fragment_feed, container, false);
         final TextView textView = root.findViewById(R.id.text_dashboard);
-        dashboardViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
+        feedViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
                 textView.setText(s);
@@ -184,7 +182,7 @@ public class DashboardFragment extends Fragment {
 
                         // 해당 위치의 data 를 가져옴
                         BookVO vo = array.get(currentPosition);
-                        Intent intent = new Intent(getActivity(), DashboardDetailFragment.class);
+                        Intent intent = new Intent(getActivity(), FeedDetailFragment.class);
                         // Toast.makeText(MainActivity.this, "You touched" + vo.getTitle(), Toast.LENGTH_LONG).show();
                         // 해당 책의 제목을 BookDetail_Clicked 로 넘겨줌
                         intent.putExtra("title", vo.getTitle());

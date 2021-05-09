@@ -1,4 +1,4 @@
-package gachon.mp.livre_bottom_navigation.ui.dashboard;
+package gachon.mp.livre_bottom_navigation.ui.feed;
 
 public class BookVO {
     // private String author;

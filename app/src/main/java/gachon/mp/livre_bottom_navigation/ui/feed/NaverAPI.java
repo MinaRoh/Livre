@@ -1,4 +1,4 @@
-package gachon.mp.livre_bottom_navigation.ui.dashboard;
+package gachon.mp.livre_bottom_navigation.ui.feed;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
