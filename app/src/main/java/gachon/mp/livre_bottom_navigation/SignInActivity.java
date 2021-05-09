@@ -124,14 +124,13 @@ public class SignInActivity extends AppCompatActivity implements GoogleApiClient
                             } else {
                                 // If sign in fails, display a message to the user.
                                 Log.w(TAG, "signInWithEmail:failure", task.getException());
-                                Toast.makeText(gachon.mp.livre_bottom_navigation.SignInActivity.this, "Authentication failed.",
+                                Toast.makeText(SignInActivity.this, "Authentication failed.",
                                         Toast.LENGTH_SHORT).show();
 
                             }
                         }
                     });
         }
-
     }
 
     @Override
