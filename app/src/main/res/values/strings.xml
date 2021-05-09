@@ -18,12 +18,12 @@
     <string name="btn_password">btn_password</string>
     <string name="password">비밀번호(6자리 이상)</string>
     <string name="btn_continue">continue</string>
-    <string name="btn_kakao">btn_kakao</string>
     <string name="btn_google">btn_google</string>
     <string name="btn_already_have_an_account">btn_already_have_an_account</string>
     <string name="btn_login">btn_login</string>
     <string name="sign_in_text">로그인</string>
     <string name="btn_find_pw">btn_find_pw</string>
+    <string name="facebook">facebook</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
