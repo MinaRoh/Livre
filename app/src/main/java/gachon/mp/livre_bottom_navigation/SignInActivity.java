@@ -31,12 +31,12 @@ public class SignInActivity extends AppCompatActivity implements GoogleApiClient
     private GoogleSignInClient mGoogleSignInClient;
     private GoogleApiClient googleApiClient;
     private static final int RC_SIGN_IN = 1000;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
+
         ImageButton sign_in_btn_back = (ImageButton)findViewById(R.id.sign_in_btn_back);
         ImageButton btn_login = (ImageButton)findViewById(R.id.btn_login);
         ImageButton btn_google_login = (ImageButton)findViewById(R.id.btn_google_login);
@@ -74,11 +74,13 @@ public class SignInActivity extends AppCompatActivity implements GoogleApiClient
     @Override// 구글 로그인 인증 요청 했을 때 값 받음
     protected void onActivityResult(int requestCode, int resultCode,@Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        SplashActivity SA = (SplashActivity)SplashActivity.Splash_Activity;//스플래시 액티비티
         if(requestCode == RC_SIGN_IN){
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             if(result.isSuccess()){
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 startActivityForResult(intent, Protocol.SIGN_IN_OK);
+                SA.finish();//스플래시 액티비티 종료
                 finish();
             }
         }
@@ -97,6 +99,7 @@ public class SignInActivity extends AppCompatActivity implements GoogleApiClient
 
     /*기존 사용자 로그인 메소드*/
     private void signIn(){
+        SplashActivity SA = (SplashActivity)SplashActivity.Splash_Activity;
         EditText emailEditText = findViewById(R.id.emailEditText);
         EditText passwordEditText = findViewById(R.id.passwordEditText);
         String email = emailEditText.getText().toString();
@@ -120,6 +123,7 @@ public class SignInActivity extends AppCompatActivity implements GoogleApiClient
                                 FirebaseUser user = mAuth.getCurrentUser();
                                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                                 startActivityForResult(intent, Protocol.SIGN_IN_OK);
+                                SA.finish();
                                 finish();
                             } else {
                                 // If sign in fails, display a message to the user.

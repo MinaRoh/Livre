@@ -1,5 +1,6 @@
 package gachon.mp.livre_bottom_navigation;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -17,9 +18,11 @@ import androidx.appcompat.app.AppCompatActivity;
 * 자동 로그인이 된 사용자는 1초간 정지된 스플래시 화면이 나오고 메인 액티비티(나무화면)로 이동한다.*/
 public class SplashActivity extends AppCompatActivity {
     Handler handler = new Handler();
+    public static Activity Splash_Activity;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Splash_Activity = SplashActivity.this;
         //이 if-else 기능은 자동 로그인 기능 구현을 마치고 적용할 것임
         //1. if (로그인이 안 된 상태일 때) -> 애니매이션 효과 + 버튼 2개 등장
         setContentView(R.layout.activity_splash_anim);
