@@ -12,6 +12,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.facebook.AccessToken;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -23,6 +29,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
@@ -33,6 +40,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.Arrays;
 import java.util.HashMap;
 
 public class SignUpActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
@@ -42,6 +50,7 @@ public class SignUpActivity extends AppCompatActivity implements GoogleApiClient
     private GoogleApiClient googleApiClient;
     private static final int RC_SIGN_IN = 1000;
     private boolean nicknameCheck = false;
+    private CallbackManager mCallbackManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,6 +60,7 @@ public class SignUpActivity extends AppCompatActivity implements GoogleApiClient
         ImageButton btn_login = (ImageButton)findViewById(R.id.btn_login);
         ImageButton btn_duplication_check = (ImageButton)findViewById(R.id.btn_duplication_check);
         ImageButton btn_google_signup = (ImageButton)findViewById(R.id.btn_google_signup);
+        ImageButton btn_facebook_signup = (ImageButton)findViewById(R.id.btn_facebook_signup);
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
         //왼쪽 상단의 뒤로가기 버튼을 눌렀을 때
@@ -67,6 +77,7 @@ public class SignUpActivity extends AppCompatActivity implements GoogleApiClient
                 createAccount();
             }
         });
+        //로그인 버튼을 눌렀을 때
         btn_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -75,6 +86,7 @@ public class SignUpActivity extends AppCompatActivity implements GoogleApiClient
                 finish();
             }
         });
+        //닉네임 중복확인 버튼을 눌렀을 때
         btn_duplication_check.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -109,6 +121,32 @@ public class SignUpActivity extends AppCompatActivity implements GoogleApiClient
                         });
             }
         });
+        //페이스북 로고를 눌렀을 때
+        btn_facebook_signup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mCallbackManager = CallbackManager.Factory.create(); //로그인 응답을 처리할 콜백 관리자
+                SplashActivity SA = (SplashActivity)SplashActivity.Splash_Activity;//스플래시 액티비티
+                LoginManager.getInstance().logInWithReadPermissions(SignUpActivity.this,
+                        Arrays.asList("public_profile", "user_friends"));//프로필, 이메일을 수집하기 위한 허가(퍼미션)
+                LoginManager.getInstance().registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
+                    @Override
+                    public void onSuccess(LoginResult loginResult) {
+                        Log.d(TAG, "facebook:onSuccess:" + loginResult);
+                        handleFacebookAccessToken(loginResult.getAccessToken());
+
+                    }
+                    @Override
+                    public void onCancel() {
+                        Log.d(TAG, "facebook:onCancel");
+                    }
+                    @Override
+                    public void onError(FacebookException error) {
+                        Log.d(TAG, "facebook:onError", error);
+                    }
+                });
+            }
+        });
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
@@ -127,18 +165,18 @@ public class SignUpActivity extends AppCompatActivity implements GoogleApiClient
         });
     }
 
-    @Override// 구글 로그인 인증 요청 했을 때 값 받음
+    @Override// 구글 로그인 인증 요청 했을 때 값 받음 + 페이스북 로그인도
     protected void onActivityResult(int requestCode, int resultCode,@Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+        super.onActivityResult(requestCode, resultCode, data);//공통 코드
         if(requestCode == RC_SIGN_IN){
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             if(result.isSuccess()){
                 GoogleSignInAccount account = result.getSignInAccount(); //구글 로그인 정보 담는다
                 resultLogin(account);
             }
-            else
-                Toast.makeText(gachon.mp.livre_bottom_navigation.SignUpActivity.this, result.getStatus().toString(),
-                        Toast.LENGTH_SHORT).show();
+        }
+        else{
+            mCallbackManager.onActivityResult(requestCode, resultCode, data);//페이스북 코드
         }
     }
 
@@ -148,7 +186,7 @@ public class SignUpActivity extends AppCompatActivity implements GoogleApiClient
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        if(task.isSuccessful()) {//로그인 성공\
+                        if(task.isSuccessful()) {//로그인 성공
                             Toast.makeText(gachon.mp.livre_bottom_navigation.SignUpActivity.this, "회원가입 성공",
                                     Toast.LENGTH_SHORT).show();
                             //해쉬맵 테이블을 파이어베이스 데이터베이스에 저장
@@ -163,6 +201,10 @@ public class SignUpActivity extends AppCompatActivity implements GoogleApiClient
                             Intent intent = new Intent(getApplicationContext(), SignInActivity.class);
                             startActivityForResult(intent, Protocol.SIGN_IN_CLICKED);
                             finish();
+                        }
+                        else if(task.getException() instanceof FirebaseAuthUserCollisionException){
+                            Toast.makeText(SignUpActivity.this, "중복된 이메일이 존재합니다",
+                                    Toast.LENGTH_SHORT).show();
                         }
                         else{
                             Toast.makeText(gachon.mp.livre_bottom_navigation.SignUpActivity.this, "회원가입 실패",
@@ -232,7 +274,7 @@ public class SignUpActivity extends AppCompatActivity implements GoogleApiClient
 
                                 } else if (task.getException() instanceof FirebaseAuthUserCollisionException) {
                                     Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                                    Toast.makeText(gachon.mp.livre_bottom_navigation.SignUpActivity.this, "이미 존재하는 계정입니다",
+                                    Toast.makeText(gachon.mp.livre_bottom_navigation.SignUpActivity.this, "중복된 이메일이 존재합니다",
                                             Toast.LENGTH_SHORT).show();
                                 } else if (task.getException() instanceof FirebaseAuthWeakPasswordException) {
                                     Log.w(TAG, "createUserWithEmail:failure", task.getException());
@@ -263,5 +305,52 @@ public class SignUpActivity extends AppCompatActivity implements GoogleApiClient
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
     }
-    /*기존 사용자 로그인 메소드*/
+    /*페이스북 회원가입 메소드*/
+    private void handleFacebookAccessToken(AccessToken token) {
+        Log.d(TAG, "handleFacebookAccessToken:" + token);
+
+        AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
+        mAuth.signInWithCredential(credential)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d(TAG, "signInWithCredential:success");
+                            Toast.makeText(gachon.mp.livre_bottom_navigation.SignUpActivity.this, "회원가입 성공",
+                                    Toast.LENGTH_SHORT).show();
+
+                            FirebaseUser user = mAuth.getCurrentUser();
+                            String email = user.getEmail();
+                            String uid = user.getUid();
+                            String nickname = user.getDisplayName();
+
+                            //해쉬맵 테이블을 파이어베이스 데이터베이스에 저장
+                            HashMap<Object, String> hashMap = new HashMap<>();
+                            hashMap.put("uid", uid);
+                            hashMap.put("email", email);
+                            hashMap.put("nickname", nickname);
+
+                            FirebaseFirestore database = FirebaseFirestore.getInstance();
+                            database.collection("Users").add(hashMap);
+
+                            Intent intent = new Intent(getApplicationContext(), SignInActivity.class);
+                            startActivityForResult(intent, Protocol.SIGN_IN_CLICKED);
+                            finish();
+
+                        }
+                        else if(task.getException() instanceof FirebaseAuthUserCollisionException){
+                            Toast.makeText(SignUpActivity.this, "중복된 이메일이 존재합니다",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                        else {
+                            // If sign in fails, display a message to the user.
+                            Log.w(TAG, "signInWithCredential:failure", task.getException());
+                            Toast.makeText(SignUpActivity.this, "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();
+
+                        }
+                    }
+                });
+    }
 }

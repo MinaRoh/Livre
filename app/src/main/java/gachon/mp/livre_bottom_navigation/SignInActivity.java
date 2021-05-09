@@ -12,6 +12,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.facebook.AccessToken;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -21,16 +27,23 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 
-public class SignInActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
+import java.util.Arrays;
+import java.util.HashMap;
+
+    public class SignInActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
     private static final String TAG = "SignInActivity";
     private FirebaseAuth mAuth;
     private GoogleSignInClient mGoogleSignInClient;
     private GoogleApiClient googleApiClient;
     private static final int RC_SIGN_IN = 1000;
+    private CallbackManager mCallbackManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -40,6 +53,7 @@ public class SignInActivity extends AppCompatActivity implements GoogleApiClient
         ImageButton sign_in_btn_back = (ImageButton)findViewById(R.id.sign_in_btn_back);
         ImageButton btn_login = (ImageButton)findViewById(R.id.btn_login);
         ImageButton btn_google_login = (ImageButton)findViewById(R.id.btn_google_login);
+        ImageButton btn_facebook_signin = (ImageButton)findViewById(R.id.btn_facebook_signin);
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
         //왼쪽 상단의 뒤로가기 버튼을 눌렀을 때
@@ -53,6 +67,41 @@ public class SignInActivity extends AppCompatActivity implements GoogleApiClient
         btn_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) { signIn();
+            }
+        });
+        //페이스북 로고를 눌렀을 때
+        btn_facebook_signin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mCallbackManager = CallbackManager.Factory.create(); //로그인 응답을 처리할 콜백 관리자
+                SplashActivity SA = (SplashActivity)SplashActivity.Splash_Activity;//스플래시 액티비티
+                LoginManager.getInstance().logInWithReadPermissions(SignInActivity.this,
+                        Arrays.asList("public_profile", "user_friends"));//프로필, 이메일을 수집하기 위한 허가(퍼미션)
+                LoginManager.getInstance().registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
+                    @Override
+                    public void onSuccess(LoginResult loginResult) {
+                        Log.d(TAG, "facebook:onSuccess:" + loginResult);
+                        handleFacebookAccessToken(loginResult.getAccessToken());
+                        Toast.makeText(SignInActivity.this, "로그인 성공",
+                                Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                        startActivityForResult(intent, Protocol.SIGN_IN_OK);
+                        SA.finish();//스플래시 액티비티 종료
+                        finish();
+                    }
+
+                    @Override
+                    public void onCancel() {
+                        Log.d(TAG, "facebook:onCancel");
+                    }
+
+                    @Override
+                    public void onError(FacebookException error) {
+                        Log.d(TAG, "facebook:onError", error);
+                        Toast.makeText(SignInActivity.this, "로그인 실패",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
         });
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -78,11 +127,16 @@ public class SignInActivity extends AppCompatActivity implements GoogleApiClient
         if(requestCode == RC_SIGN_IN){
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             if(result.isSuccess()){
+                Toast.makeText(SignInActivity.this, "로그인 성공",
+                        Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 startActivityForResult(intent, Protocol.SIGN_IN_OK);
                 SA.finish();//스플래시 액티비티 종료
                 finish();
             }
+        }
+        else{
+            mCallbackManager.onActivityResult(requestCode, resultCode, data);//페이스북 코드
         }
     }
 
@@ -121,6 +175,8 @@ public class SignInActivity extends AppCompatActivity implements GoogleApiClient
                                 // Sign in success, update UI with the signed-in user's information
                                 Log.d(TAG, "signInWithEmail:success");
                                 FirebaseUser user = mAuth.getCurrentUser();
+                                Toast.makeText(SignInActivity.this, "로그인 성공",
+                                        Toast.LENGTH_SHORT).show();
                                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                                 startActivityForResult(intent, Protocol.SIGN_IN_OK);
                                 SA.finish();
@@ -128,7 +184,7 @@ public class SignInActivity extends AppCompatActivity implements GoogleApiClient
                             } else {
                                 // If sign in fails, display a message to the user.
                                 Log.w(TAG, "signInWithEmail:failure", task.getException());
-                                Toast.makeText(SignInActivity.this, "Authentication failed.",
+                                Toast.makeText(SignInActivity.this, "로그인 실패",
                                         Toast.LENGTH_SHORT).show();
 
                             }
@@ -137,8 +193,28 @@ public class SignInActivity extends AppCompatActivity implements GoogleApiClient
         }
     }
 
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        private void handleFacebookAccessToken(AccessToken token) {
+            Log.d(TAG, "handleFacebookAccessToken:" + token);
 
+            AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
+            mAuth.signInWithCredential(credential)
+                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                // Sign in success, update UI with the signed-in user's information
+                                Log.d(TAG, "signInWithCredential:success");
+                            } else {
+                                // If sign in fails, display a message to the user.
+                                Log.w(TAG, "signInWithCredential:failure", task.getException());
+
+                            }
+                        }
+                    });
+        }
+
+        @Override
+        public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+        }
     }
-}

@@ -130,14 +130,14 @@
             android:src="@drawable/btn_google"
             android:layout_marginStart="150dp" />
         <ImageButton
-            android:id="@+id/btn_facebook"
+            android:id="@+id/btn_facebook_signin"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="60dp"
             android:adjustViewBounds="true"
             android:background="@android:color/transparent"
-            android:contentDescription="@string/facebook"
+            android:contentDescription="@string/btn_facebook"
             android:scaleType="fitCenter"
             android:src="@drawable/btn_facebook"
             android:layout_marginStart="10dp" />
