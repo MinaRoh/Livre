@@ -10,6 +10,8 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -57,11 +59,11 @@ public class FeedFragment extends Fragment {
         feedViewModel =
                 new ViewModelProvider(this).get(FeedViewModel.class);
         View root = inflater.inflate(R.layout.fragment_feed, container, false);
-        final TextView textView = root.findViewById(R.id.text_dashboard);
+        // final TextView textView = root.findViewById(R.id.text_dashboard);
         feedViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
-                textView.setText(s);
+
             }
         });
         return root;
@@ -93,28 +95,28 @@ public class FeedFragment extends Fragment {
             }
         });
 
-//        // 자동완성
-//        // 리스트를 생성한다
-//        autotextviewlist = new ArrayList<String>();
-//
-//        // 리스트에 검색될 데이터(단어)를 추가한다
-//        settingList();
-//
-//        final AutoCompleteTextView autoCompleteTextView = (AutoCompleteTextView) getView().findViewById(R.id.autoCompleteTextView);
-//
-//        // edtsearch 에 adapter 를 연결한다
-//        autoCompleteTextView.setAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line, autotextviewlist));
-//        //
+        // 자동완성
+        // 리스트를 생성한다
+        autotextviewlist = new ArrayList<String>();
+
+        // 리스트에 검색될 데이터(단어)를 추가한다
+        settingList();
+
+        final AutoCompleteTextView autoCompleteTextView = (AutoCompleteTextView) getView().findViewById(R.id.autoCompleteTextView);
+
+        // edtsearch 에 adapter 를 연결한다
+        autoCompleteTextView.setAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line, autotextviewlist));
+        //
 
     }
 
-//    //
-//    // 검색에 사용될 데이터를 리스트에 추가한다.
-//    private void settingList() {
-//        autotextviewlist.add("coffee");
-//        autotextviewlist.add("best");
-//    }
-//    //
+    //
+    // 검색에 사용될 데이터를 리스트에 추가한다.
+    private void settingList() {
+        autotextviewlist.add("coffee");
+        autotextviewlist.add("best");
+    }
+    //
 
     // html tag 없이 출력하기 ex) <b>주식</b> 이런거
     public String stripHtml(String html) {
