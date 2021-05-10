@@ -1,36 +1,131 @@
 package gachon.mp.livre_bottom_navigation.ui.writing;
 
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
 
+import java.io.InputStream;
+
+import gachon.mp.livre_bottom_navigation.MainActivity;
 import gachon.mp.livre_bottom_navigation.R;
-import gachon.mp.livre_bottom_navigation.ui.mypage.MypageViewModel;
+
+import static android.app.Activity.RESULT_OK;
 
 public class WritingFragment extends Fragment {
+    MainActivity activity;
 
-    private WritingViewModel writingViewModel;
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        activity = (MainActivity) getActivity();
+    }
 
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
-        writingViewModel =
-                new ViewModelProvider(this).get(WritingViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_writing, container, false);
-        final TextView textView = root.findViewById(R.id.text_writing);
-        writingViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        activity = null;
+    }
+
+    LinearLayout imageLayout;
+    LinearLayout textLayout;
+    ImageButton createEditText;
+    ImageButton createImageView;
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        imageLayout=(LinearLayout)this.getView().findViewById(R.id.imageLayout);
+        textLayout=(LinearLayout)this.getView().findViewById(R.id.textLayout);
+
+        createImageView=(ImageButton)this.getView().findViewById(R.id.createImageView);
+        createImageView.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
+            public void onClick(View v) {
+                createImageView();
+
+                Intent intent = new Intent();
+                intent.setType("image/*");
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(intent, 1);
             }
         });
-        return root;
+
+        createEditText=(ImageButton)this.getView().findViewById(R.id.createEditText);
+        createEditText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                createEditText();
+            }
+        });
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(@Nullable LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_writing, container, false);
+    }
+
+    //이미지뷰 동적 생성
+    ImageView imageViewNm;
+    private void createImageView(){
+        imageViewNm=new ImageView(activity.getApplicationContext());
+        imageViewNm.setId(0);
+
+        LinearLayout.LayoutParams params=new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT);
+
+        imageViewNm.setImageResource(R.drawable.default_image);
+        imageViewNm.setLayoutParams(params);
+        imageViewNm.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+        imageLayout.addView(imageViewNm);
+    }
+
+    //갤러리에서 사진 불러오기
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 1) {
+            if (resultCode == RESULT_OK) {
+                try {
+                    InputStream in = getActivity().getContentResolver().openInputStream(data.getData());
+                    Bitmap img = BitmapFactory.decodeStream(in);
+                    in.close();
+                    imageViewNm.setImageBitmap(img);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    //텍스트뷰 동적 생성
+    private void createEditText(){
+        EditText editTextNm=new EditText(activity.getApplicationContext());
+        editTextNm.setHint("내용");
+        editTextNm.setTextSize(18);
+        editTextNm.setTypeface(null);
+        editTextNm.setId(0);
+
+        LinearLayout.LayoutParams params=new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT);
+
+        editTextNm.setLayoutParams(params);
+        editTextNm.setBackgroundColor(Color.parseColor("#4197B843"));
+        textLayout.addView(editTextNm);
     }
 }
