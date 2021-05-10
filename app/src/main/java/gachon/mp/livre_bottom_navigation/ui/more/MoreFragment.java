@@ -18,12 +18,21 @@ import androidx.fragment.app.Fragment;
 
 import java.util.ArrayList;
 
+import gachon.mp.livre_bottom_navigation.MainActivity;
 import gachon.mp.livre_bottom_navigation.R;
 
 public class MoreFragment extends Fragment {
+    MainActivity activity;
 
-    public static MoreFragment newInstance() {
-        return new MoreFragment();
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        activity = (MainActivity) getActivity();
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        activity = null;
     }
 
     ListView listView;
@@ -47,14 +56,12 @@ public class MoreFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent;
                 if(position==0){
-                    intent=new Intent(getActivity(), AlarmFragment.class);
+                    intent=new Intent(getActivity(), AlarmActivity.class);
                     startActivity(intent);
-                    //finish();
                 }
                 else if(position==1){
-                    intent=new Intent(getActivity(), SettingFragment.class);
+                    intent=new Intent(getActivity(), SettingActivity.class);
                     startActivity(intent);
-                    //finish();
                 }
             }
         });
