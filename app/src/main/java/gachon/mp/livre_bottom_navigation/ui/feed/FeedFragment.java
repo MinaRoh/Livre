@@ -18,6 +18,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -34,8 +36,10 @@ import java.util.List;
 import gachon.mp.livre_bottom_navigation.R;
 
 public class FeedFragment extends Fragment {
+    //
+    private FragmentActivity myContext;
+    //
 
-    private FeedViewModel feedViewModel;
     //데이터를 생성하기 위해서
     ArrayList<BookVO> array;
     String apiURL = "https://openapi.naver.com/v1/search/book.json?";
@@ -56,16 +60,16 @@ public class FeedFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        feedViewModel =
-                new ViewModelProvider(this).get(FeedViewModel.class);
+//        feedViewModel =
+//                new ViewModelProvider(this).get(FeedViewModel.class);
         View root = inflater.inflate(R.layout.fragment_feed, container, false);
         // final TextView textView = root.findViewById(R.id.text_dashboard);
-        feedViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-
-            }
-        });
+//        feedViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
+//            @Override
+//            public void onChanged(@Nullable String s) {
+//
+//            }
+//        });
         return root;
     }
 
@@ -184,14 +188,31 @@ public class FeedFragment extends Fragment {
 
                         // 해당 위치의 data 를 가져옴
                         BookVO vo = array.get(currentPosition);
-                        Intent intent = new Intent(getActivity(), FeedDetailFragment.class);
-                        // Toast.makeText(MainActivity.this, "You touched" + vo.getTitle(), Toast.LENGTH_LONG).show();
-                        // 해당 책의 제목을 BookDetail_Clicked 로 넘겨줌
-                        intent.putExtra("title", vo.getTitle());
-                        intent.putExtra("description", vo.getDescription());
-                        intent.putExtra("author", vo.getAuthor());
-                        intent.putExtra("image", vo.getImage());
-                        startActivity(intent);
+
+                        //
+                        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+                        FeedDetailFragment feedDetailFragment = new FeedDetailFragment();
+                        // FeedFragment 에서 FeedDetailFragment 로 데이터 전달 (book title, author, description...)
+                        Bundle bundle = new Bundle();
+                        bundle.putString("title", vo.getTitle());
+//                        bundle.putString("description", vo.getDescription());
+//                        bundle.putString("author", vo.getAuthor());
+//                        bundle.putString("image", vo.getImage());
+                        // Bundle 변수 값 전달
+                        // setArguements() method 사용 안하면 받는 쪽에서 null 로 받음
+                        feedDetailFragment.setArguments(bundle);
+                        // transaction.replace(R.id.txttitle, feedDetailFragment);
+                        transaction.commit();
+
+                        // Activity 간 통신만 intent 가 사용 가능하다 ㅠㅠ
+//                        Intent intent = new Intent(getActivity(), FeedDetailFragment.class);
+//                        // Toast.makeText(MainActivity.this, "You touched" + vo.getTitle(), Toast.LENGTH_LONG).show();
+//                        // 해당 책의 제목을 BookDetail_Clicked 로 넘겨줌
+//                        intent.putExtra("title", vo.getTitle());
+//                        intent.putExtra("description", vo.getDescription());
+//                        intent.putExtra("author", vo.getAuthor());
+//                        intent.putExtra("image", vo.getImage());
+//                        startActivity(intent);
 
                         return true;
                     }

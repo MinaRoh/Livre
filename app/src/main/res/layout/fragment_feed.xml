@@ -7,39 +7,23 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-<!--    <TextView-->
-<!--        android:id="@+id/text_dashboard"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginStart="8dp"-->
-<!--        android:layout_marginTop="8dp"-->
-<!--        android:layout_marginEnd="8dp"-->
-<!--        android:gravity="center"-->
-<!--        android:textSize="20sp"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="parent" />-->
-
-    <!--    <Button-->
-    <!--        android:layout_width="wrap_content"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:text="검색"-->
-    <!--        app:backgroundTint="#3c5e64"-->
-    <!--        android:layout_toRightOf="@id/edtsearch"-->
-    <!--        android:layout_marginLeft="12dp"/>-->
-
     <LinearLayout
         android:id="@+id/linear"
-        android:layout_width="320dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        tools:layout_editor_absouteY="8dp"
-        tools:layout_editor_absouleX="8dp"
+        android:orientation="horizontal"
         tools:ignore="MissingConstraints">
+
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="35dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="5dp"
+            android:src="@drawable/baseline_search_24"/>
 
         <AutoCompleteTextView
             android:id="@+id/autoCompleteTextView"
+            android:singleLine="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -49,9 +33,11 @@
             android:textColor="#97b843"
             android:completionHint="검색어를 입력하세요"
             android:textColorHint="#97b843"
-            android:completionThreshold="1" />
-
+            android:completionThreshold="1"
+            tools:ignore="MissingConstraints" />
     </LinearLayout>
+
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:layout_below="@id/linear"
