@@ -12,30 +12,21 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 
 import java.util.ArrayList;
 
 import gachon.mp.livre_bottom_navigation.R;
 
-public class SettingFragment extends Fragment {
-
-    public static SettingFragment newInstance() {
-        return new SettingFragment();
-    }
-
+public class SettingActivity extends AppCompatActivity {
     ListView listView;
 
     @Override
-    public void onStart() {
-        super.onStart();
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.fragment_more_setting);
 
-        //setContentView(R.layout.fragment_more);
-
-        listView=(ListView)this.getView().findViewById(R.id.listView);
+        listView=(ListView)this.findViewById(R.id.listView);
 
         ArrayList<String> items=new ArrayList<>();
         items.add("개인정보 변경");
@@ -46,7 +37,7 @@ public class SettingFragment extends Fragment {
         items.add("오류 신고");
         items.add("회원 탈퇴");
 
-        CustomAdapter adapter=new CustomAdapter(getActivity(), 0, items);
+        CustomAdapter adapter=new CustomAdapter(this, 0, items);
         listView.setAdapter(adapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -55,48 +46,42 @@ public class SettingFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent;
                 if(position==0){
-                    intent=new Intent(getActivity(), PersonalInfoFragment.class);
+                    intent=new Intent(getApplicationContext(), ChangePersonalInfoActivity.class);
                     startActivity(intent);
-                    //finish();
+                    finish();
                 }
                 else if(position==1){
-                    intent=new Intent(getActivity(), AlarmSettingFragment.class);
+                    intent=new Intent(getApplicationContext(), AlarmSettingActivity.class);
                     startActivity(intent);
-                    //finish();
+                    finish();
                 }
                 else if(position==2){
-                    intent=new Intent(getActivity(), LogoutFragment.class);
+                    intent=new Intent(getApplicationContext(), LogoutActivity.class);
                     startActivity(intent);
-                    //finish();
+                    finish();
                 }
                 else if(position==3){
-                    intent=new Intent(getActivity(), DeveloperFragment.class);
+                    intent=new Intent(getApplicationContext(), DeveloperActivity.class);
                     startActivity(intent);
-                    //finish();
+                    finish();
                 }
                 else if(position==4){
-                    intent=new Intent(getActivity(), VersionFragment.class);
+                    intent=new Intent(getApplicationContext(), VersionActivity.class);
                     startActivity(intent);
-                    //finish();
+                    finish();
                 }
                 else if(position==5){
-                    intent=new Intent(getActivity(), BugReportFragment.class);
+                    intent=new Intent(getApplicationContext(), BugReportActivity.class);
                     startActivity(intent);
-                    //finish();
+                    finish();
                 }
                 else if(position==6){
-                    intent=new Intent(getActivity(), DeleteFragment.class);
+                    intent=new Intent(getApplicationContext(), DeleteActivity.class);
                     startActivity(intent);
-                    //finish();
+                    finish();
                 }
             }
         });
-    }
-
-    @Nullable
-    @Override
-    public View onCreateView(@Nullable LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_more_setting, container, false);
     }
 
     private class CustomAdapter extends ArrayAdapter<String> {
@@ -110,13 +95,9 @@ public class SettingFragment extends Fragment {
         public View getView(int position, View convertView, ViewGroup parent) {
             View view = convertView;
             if (view == null) {
-                LayoutInflater vi = LayoutInflater.from(parent.getContext());
-                view = vi.inflate(R.layout.fragment_more_listview_item, null);
-            }
-            /*if (view == null) {
                 LayoutInflater vi = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 view = vi.inflate(R.layout.fragment_more_listview_item, null);
-            }*/
+            }
 
             ImageView imageView = (ImageView)view.findViewById(R.id.imageView);
 
