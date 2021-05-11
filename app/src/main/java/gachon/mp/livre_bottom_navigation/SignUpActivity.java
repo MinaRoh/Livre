@@ -1,7 +1,11 @@
 package gachon.mp.livre_bottom_navigation;
 
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -40,6 +44,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.HashMap;
 
@@ -63,6 +69,7 @@ public class SignUpActivity extends AppCompatActivity implements GoogleApiClient
         ImageButton btn_facebook_signup = (ImageButton)findViewById(R.id.btn_facebook_signup);
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
+        getHashKey();
         //왼쪽 상단의 뒤로가기 버튼을 눌렀을 때
         sign_up_btn_back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -352,5 +359,26 @@ public class SignUpActivity extends AppCompatActivity implements GoogleApiClient
                         }
                     }
                 });
+    }
+
+    private void getHashKey(){
+        PackageInfo packageInfo = null;
+        try {
+            packageInfo = getPackageManager().getPackageInfo(getPackageName(), PackageManager.GET_SIGNATURES);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        if (packageInfo == null)
+            Log.e("KeyHash", "KeyHash:null");
+
+        for (Signature signature : packageInfo.signatures) {
+            try {
+                MessageDigest md = MessageDigest.getInstance("SHA");
+                md.update(signature.toByteArray());
+                Log.d("KeyHash", Base64.encodeToString(md.digest(), Base64.DEFAULT));
+            } catch (NoSuchAlgorithmException e) {
+                Log.e("KeyHash", "Unable to get MessageDigest. signature=" + signature, e);
+            }
+        }
     }
 }
