@@ -33,6 +33,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Arrays;
@@ -137,12 +138,29 @@ import java.util.HashMap;
         if(requestCode == RC_SIGN_IN){
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             if(result.isSuccess()){
-                Toast.makeText(SignInActivity.this, "로그인 성공",
-                        Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                startActivityForResult(intent, Protocol.SIGN_IN_OK);
-                SA.finish();//스플래시 액티비티 종료
-                finish();
+                GoogleSignInAccount account = result.getSignInAccount();
+                AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
+                mAuth.signInWithCredential(credential)
+                        .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                if(task.isSuccessful()) {//로그인 성공
+                                    Toast.makeText(getApplicationContext(), "로그인 성공",
+                                            Toast.LENGTH_SHORT).show();
+                                    //해쉬맵 테이블을 파이어베이스 데이터베이스에 저장
+                                    sharedPreference();
+                                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                                    startActivityForResult(intent, Protocol.SIGN_IN_OK);
+                                    SA.finish();
+                                    finish();
+                                }
+                                else{
+                                    Toast.makeText(getApplicationContext(), "로그인 실패",
+                                            Toast.LENGTH_SHORT).show();
+                                }
+
+                            }
+                        });
             }
         }
         else{
