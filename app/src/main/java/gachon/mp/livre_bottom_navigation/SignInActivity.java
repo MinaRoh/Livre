@@ -32,6 +32,7 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -82,7 +83,7 @@ import java.util.HashMap;
             @Override
             public void onClick(View view) {
                 mCallbackManager = CallbackManager.Factory.create(); //로그인 응답을 처리할 콜백 관리자
-                SplashActivity SA = (SplashActivity)SplashActivity.Splash_Activity;//스플래시 액티비티
+
                 LoginManager.getInstance().logInWithReadPermissions(SignInActivity.this,
                         Arrays.asList("public_profile", "user_friends"));//프로필, 이메일을 수집하기 위한 허가(퍼미션)
                 LoginManager.getInstance().registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
@@ -90,12 +91,7 @@ import java.util.HashMap;
                     public void onSuccess(LoginResult loginResult) {
                         Log.d(TAG, "facebook:onSuccess:" + loginResult);
                         handleFacebookAccessToken(loginResult.getAccessToken());
-                        Toast.makeText(SignInActivity.this, "로그인 성공",
-                                Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                        startActivityForResult(intent, Protocol.SIGN_IN_OK);
-                        SA.finish();//스플래시 액티비티 종료
-                        finish();
+
                     }
 
                     @Override
@@ -217,6 +213,7 @@ import java.util.HashMap;
             }
         }
         private void handleFacebookAccessToken(AccessToken token) {
+            SplashActivity SA = (SplashActivity)SplashActivity.Splash_Activity;//스플래시 액티비티
             Log.d(TAG, "handleFacebookAccessToken:" + token);
 
             AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
@@ -227,7 +224,18 @@ import java.util.HashMap;
                             if (task.isSuccessful()) {
                                 // Sign in success, update UI with the signed-in user's information
                                 Log.d(TAG, "signInWithCredential:success");
-                            } else {
+                                Toast.makeText(SignInActivity.this, "로그인 성공",
+                                        Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                                startActivityForResult(intent, Protocol.SIGN_IN_OK);
+                                SA.finish();//스플래시 액티비티 종료
+                                finish();
+                            }
+                            else if(task.getException() instanceof FirebaseAuthUserCollisionException){
+                                Toast.makeText(gachon.mp.livre_bottom_navigation.SignInActivity.this, "다른 계정이 존재합니다(이메일 또는 페이스북)",
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                            else {
                                 // If sign in fails, display a message to the user.
                                 Log.w(TAG, "signInWithCredential:failure", task.getException());
 
