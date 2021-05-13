@@ -22,19 +22,21 @@
         android:layout_height="wrap_content">
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/email"/>
+            android:id="@+id/image_email"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/baseline_email_24" />
 
         <TextView
-            android:id="@+id/btnemail"
-            android:layout_gravity="center"
+            android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="문의 하기"
-            android:textStyle="bold"
-            android:textColor="#D61414"
-            android:textSize="40dp" />
+            android:layout_gravity="center_vertical"
+            android:paddingLeft="10dp"
+            android:text="무엇이 문제인가요?"
+            android:textColor="@color/themeColor"
+            android:textSize="18sp" />
+
     </LinearLayout>
-    
+
 </LinearLayout>
