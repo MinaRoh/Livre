@@ -179,7 +179,30 @@ public class SignUpActivity extends AppCompatActivity implements GoogleApiClient
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             if(result.isSuccess()){
                 GoogleSignInAccount account = result.getSignInAccount(); //구글 로그인 정보 담는다
-                resultLogin(account);
+                FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+                String email = account.getEmail();
+                db.collection("Users")
+                        .whereEqualTo("email", email)
+                        .get()
+                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                if (task.isSuccessful()) {
+                                    int num=0;
+                                    for (QueryDocumentSnapshot document : task.getResult()) {
+                                        num = num+1;
+                                    }
+                                    if(num==0) {
+                                        resultLogin(account);
+                                    }
+                                    else{
+                                        Toast.makeText(gachon.mp.livre_bottom_navigation.SignUpActivity.this, "중복된 이메일이 존재합니다",
+                                                Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            }
+                        });
             }
         }
         else{
@@ -197,10 +220,15 @@ public class SignUpActivity extends AppCompatActivity implements GoogleApiClient
                             Toast.makeText(gachon.mp.livre_bottom_navigation.SignUpActivity.this, "회원가입 성공",
                                     Toast.LENGTH_SHORT).show();
                             //해쉬맵 테이블을 파이어베이스 데이터베이스에 저장
+                            FirebaseUser user = mAuth.getCurrentUser();
+                            String email = user.getEmail();
+                            String uid = user.getUid();
+                            String nickname = user.getDisplayName();
+
                             HashMap<Object, String> hashMap = new HashMap<>();
-                            hashMap.put("uid", account.getId());
-                            hashMap.put("email", account.getEmail());
-                            hashMap.put("nickname", account.getDisplayName());
+                            hashMap.put("uid", uid);
+                            hashMap.put("email", email);
+                            hashMap.put("nickname", nickname);
 
                             FirebaseFirestore database = FirebaseFirestore.getInstance();
                             database.collection("Users").add(hashMap);
@@ -208,10 +236,6 @@ public class SignUpActivity extends AppCompatActivity implements GoogleApiClient
                             Intent intent = new Intent(getApplicationContext(), SignInActivity.class);
                             startActivityForResult(intent, Protocol.SIGN_IN_CLICKED);
                             finish();
-                        }
-                        else if(task.getException() instanceof FirebaseAuthUserCollisionException){
-                            Toast.makeText(SignUpActivity.this, "중복된 이메일이 존재합니다",
-                                    Toast.LENGTH_SHORT).show();
                         }
                         else{
                             Toast.makeText(gachon.mp.livre_bottom_navigation.SignUpActivity.this, "회원가입 실패",
