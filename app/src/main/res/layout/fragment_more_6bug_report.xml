@@ -39,4 +39,14 @@
 
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="15dp"
+        android:text="발견하신 문제점 또는 불편하신 점을 적어주세요"
+        android:textColor="@color/themeColor"
+        android:textSize="12sp" />
+
 </LinearLayout>

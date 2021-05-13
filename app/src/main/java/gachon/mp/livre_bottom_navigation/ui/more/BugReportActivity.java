@@ -23,8 +23,6 @@ public class BugReportActivity extends AppCompatActivity {
                 email.setType("plain/text");
                 String[] address = {"email@gmail.com"};
                 email.putExtra(Intent.EXTRA_EMAIL, address);
-                email.putExtra(Intent.EXTRA_SUBJECT, "test@test");
-                email.putExtra(Intent.EXTRA_TEXT, "발견하신 문제점 또는 불편하신 점을 적어주세요");
                 startActivity(email);
             }
         });
