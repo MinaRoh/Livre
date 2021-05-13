@@ -1,6 +1,7 @@
     package gachon.mp.livre_bottom_navigation;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -43,17 +44,23 @@ import java.util.HashMap;
     private GoogleSignInClient mGoogleSignInClient;
     private GoogleApiClient googleApiClient;
     private static final int RC_SIGN_IN = 1000;
-    private CallbackManager mCallbackManager;
+    private CallbackManager mCallbackManager; //페이스북 로그인 매니저
+    String email;
+    EditText emailEditText;
+    SharedPreferences sh_Pref;
+    SharedPreferences.Editor toEdit;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
-
         ImageButton sign_in_btn_back = (ImageButton)findViewById(R.id.sign_in_btn_back);
         ImageButton btn_login = (ImageButton)findViewById(R.id.btn_login);
         ImageButton btn_google_login = (ImageButton)findViewById(R.id.btn_google_login);
         ImageButton btn_facebook_signin = (ImageButton)findViewById(R.id.btn_facebook_signin);
+        emailEditText = findViewById(R.id.emailEditText);
+        applySharedPreference();
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
         //왼쪽 상단의 뒤로가기 버튼을 눌렀을 때
@@ -66,7 +73,8 @@ import java.util.HashMap;
         //로그인 버튼을 눌렀을 때
         btn_login.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) { signIn();
+            public void onClick(View v) {
+                signIn();
             }
         });
         //페이스북 로고를 눌렀을 때
@@ -119,7 +127,9 @@ import java.util.HashMap;
                 startActivityForResult(intent,RC_SIGN_IN);
             }
         });
+
     }
+
     @Override// 구글 로그인 인증 요청 했을 때 값 받음
     protected void onActivityResult(int requestCode, int resultCode,@Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -154,9 +164,9 @@ import java.util.HashMap;
     /*기존 사용자 로그인 메소드*/
     private void signIn(){
         SplashActivity SA = (SplashActivity)SplashActivity.Splash_Activity;
-        EditText emailEditText = findViewById(R.id.emailEditText);
+
         EditText passwordEditText = findViewById(R.id.passwordEditText);
-        String email = emailEditText.getText().toString();
+        email = emailEditText.getText().toString();
         String password = passwordEditText.getText().toString();
         if(email.isEmpty()){
             Toast.makeText(gachon.mp.livre_bottom_navigation.SignInActivity.this, "이메일을 입력해 주세요",
@@ -177,6 +187,7 @@ import java.util.HashMap;
                                 FirebaseUser user = mAuth.getCurrentUser();
                                 Toast.makeText(SignInActivity.this, "로그인 성공",
                                         Toast.LENGTH_SHORT).show();
+                                sharedPreference();
                                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                                 startActivityForResult(intent, Protocol.SIGN_IN_OK);
                                 SA.finish();
@@ -192,7 +203,19 @@ import java.util.HashMap;
                     });
         }
     }
-
+        public void sharedPreference() {
+            sh_Pref = getSharedPreferences("Login Credentials", MODE_PRIVATE);
+            toEdit = sh_Pref.edit();
+            toEdit.putString("UserEmail", email);//쓴다
+            toEdit.commit();
+        }
+        public void applySharedPreference(){
+            sh_Pref = getSharedPreferences("Login Credentials", MODE_PRIVATE);
+            if (sh_Pref!=null && sh_Pref.contains("UserEmail")){ //null이면 noname
+                String userEmail = sh_Pref.getString("UserEmail", "이메일");//읽어온다
+                emailEditText.setText(userEmail);
+            }
+        }
         private void handleFacebookAccessToken(AccessToken token) {
             Log.d(TAG, "handleFacebookAccessToken:" + token);
 
