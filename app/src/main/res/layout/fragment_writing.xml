@@ -4,10 +4,9 @@
     android:layout_height="match_parent">
 
     <LinearLayout
-        xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/activity_main"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
 
         <LinearLayout
@@ -16,7 +15,7 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/cancel_btn"
+                android:id="@+id/btn_cancel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -36,7 +35,7 @@
                 android:textSize="20sp" />
 
             <Button
-                android:id="@+id/upload_btn"
+                android:id="@+id/btn_upload"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -58,39 +57,21 @@
                 android:hint="제목"
                 android:textSize="18sp"/>
 
-            <LinearLayout
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="wrap_content"
+                android:layout_height="300dp"
+                android:scaleType="fitCenter"
+                android:layout_gravity="center_horizontal"
+                android:src="@drawable/baseline_add_photo_alternate_24"
+                android:contentDescription="addImage"/>
+
+            <EditText
+                android:id="@+id/editText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                tools:ignore="NestedWeights">
-
-                <ImageButton
-                    android:id="@+id/createEditText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:backgroundTint="#406CA7C9"
-                    android:src="@drawable/baseline_create_24" />
-
-                <ImageButton
-                    android:id="@+id/createImageView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:backgroundTint="#406CA7C9"
-                    android:src="@drawable/baseline_image_24" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/imageLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"/>
-
-            <LinearLayout
-                android:id="@+id/textLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"/>
+                android:textSize="16sp"
+                android:hint="내용" />
 
         </LinearLayout>
 

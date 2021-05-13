@@ -2,18 +2,14 @@ package gachon.mp.livre_bottom_navigation.ui.writing;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -30,7 +26,6 @@ import gachon.mp.livre_bottom_navigation.MainActivity;
 import gachon.mp.livre_bottom_navigation.R;
 
 import static android.app.Activity.RESULT_OK;
-import static android.content.ContentValues.TAG;
 
 public class WritingFragment extends Fragment {
     MainActivity activity;
@@ -46,36 +41,21 @@ public class WritingFragment extends Fragment {
         activity = null;
     }
 
-    LinearLayout imageLayout;
-    LinearLayout textLayout;
-    ImageButton createEditText;
-    ImageButton createImageView;
+    //이미지뷰 누르면 갤러리로 이동
+    final int GET_GALLERY_IMAGE=200;
+    ImageView getImageView;
 
     @Override
     public void onStart() {
         super.onStart();
 
-        imageLayout=(LinearLayout)this.getView().findViewById(R.id.imageLayout);
-        textLayout=(LinearLayout)this.getView().findViewById(R.id.textLayout);
-
-        createImageView=(ImageButton)this.getView().findViewById(R.id.createImageView);
-        createImageView.setOnClickListener(new View.OnClickListener() {
+        getImageView=this.getView().findViewById(R.id.imageView);
+        getImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                createImageView();
-
-                Intent intent = new Intent();
-                intent.setType("image/*");
-                intent.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(intent, 1);
-            }
-        });
-
-        createEditText=(ImageButton)this.getView().findViewById(R.id.createEditText);
-        createEditText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                createEditText();
+                Intent intent = new Intent(Intent.ACTION_PICK);
+                intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
+                startActivityForResult(intent, GET_GALLERY_IMAGE);
             }
         });
     }
@@ -86,61 +66,21 @@ public class WritingFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_writing, container, false);
     }
 
-    //이미지뷰 동적 생성
-    ImageView imageViewNm;
-    private void createImageView(){
-        imageViewNm=new ImageView(activity.getApplicationContext());
-        imageViewNm.setId(0);
-
-        LinearLayout.LayoutParams params=new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT);
-
-        imageViewNm.setImageResource(R.drawable.default_image);
-        imageViewNm.setLayoutParams(params);
-        imageViewNm.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-        imageLayout.addView(imageViewNm);
-    }
-
     //갤러리에서 사진 불러오기
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == 1) {
-            if (resultCode == RESULT_OK) {
-                try {
-                    InputStream in = getActivity().getContentResolver().openInputStream(data.getData());
-                    Bitmap img = BitmapFactory.decodeStream(in);
-                    in.close();
-                    imageViewNm.setImageBitmap(img);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
+        if (requestCode == GET_GALLERY_IMAGE && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            Uri selectedImageUri = data.getData();
+            getImageView.setImageURI(selectedImageUri);
         }
-    }
-
-    //텍스트뷰 동적 생성
-    private void createEditText(){
-        EditText editTextNm=new EditText(activity.getApplicationContext());
-        editTextNm.setHint("내용");
-        editTextNm.setTextSize(18);
-        editTextNm.setTypeface(null);
-        editTextNm.setId(0);
-
-        LinearLayout.LayoutParams params=new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT);
-
-        editTextNm.setLayoutParams(params);
-        editTextNm.setBackgroundColor(Color.parseColor("#4197B843"));
-        textLayout.addView(editTextNm);
     }
 
     View.OnClickListener onClickListener = new View.OnClickListener(){
         @Override
         public void onClick(View v){
             switch(v.getId()){
-                case R.id.upload_btn:
+                case R.id.btn_upload:
 //                    profileUpdate();
                     break;
             }
