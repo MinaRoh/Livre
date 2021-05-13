@@ -33,6 +33,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import gachon.mp.livre_bottom_navigation.MainActivity;
 import gachon.mp.livre_bottom_navigation.R;
 
 public class FeedFragment extends Fragment {
@@ -213,6 +214,11 @@ public class FeedFragment extends Fragment {
 //                        intent.putExtra("author", vo.getAuthor());
 //                        intent.putExtra("image", vo.getImage());
 //                        startActivity(intent);
+
+                        // getActivity()로 MainActivity의 replaceFragment를 불러옵니다.
+                        // 새로 불러올 Fragment의 Instance를 Main으로 전달
+                         ((MainActivity)getActivity()).replaceFragment(FeedDetailFragment.newInstance());
+
 
                         return true;
                     }

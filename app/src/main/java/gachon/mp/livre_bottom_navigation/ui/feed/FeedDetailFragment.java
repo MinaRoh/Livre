@@ -27,6 +27,13 @@ public class FeedDetailFragment extends Fragment {
     TextView description;
     ImageView image;
 
+    public static Fragment newInstance() {
+        FeedDetailFragment fragment = new FeedDetailFragment();
+        Bundle args =  new Bundle();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

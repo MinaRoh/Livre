@@ -13,10 +13,16 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
+
+import gachon.mp.livre_bottom_navigation.ui.feed.FeedDetailFragment;
+import gachon.mp.livre_bottom_navigation.ui.feed.FeedFragment;
 
 import static android.content.ContentValues.TAG;
 
@@ -64,7 +70,31 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         }
+
+        // FeedFragment 에서 FeedDetailFragment 로 화면 전환
+        // 화면전환 fragment 선언 및 초기화면 설정
+//        FragmentManager fragmentManager = getChildFragmentManager();
+//        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//        FeedDetailFragment feeddetailfragment = new FeedDetailFragment();
+//        fragmentTransaction.add(R.id.fragment_feed_container, feeddetailfragment);
+//        fragmentTransaction.commit();
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        FeedDetailFragment feeddetailfragment = new FeedDetailFragment();
+        fragmentTransaction.add(R.id.fragment_feed_container, feeddetailfragment.newInstance());
+        // fragmentTransaction.replace(R.id.fragment_feed_container, feeddetailfragment.newInstance()).commit();
+
     }
+
+    public void replaceFragment(Fragment fragment) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        // Fragment로 사용할 MainActivity내의 layout공간을 선택합니다.
+        fragmentTransaction.replace(R.id.container, fragment).commit();
+    }
+
+
     // 뒤로가기 키를 눌렀을 때에 대한 상황을 오버라이딩한다.
     @Override
     public void onBackPressed() {
@@ -89,6 +119,5 @@ public class MainActivity extends AppCompatActivity {
         alBuilder.setTitle("프로그램 종료");
         alBuilder.show(); // AlertDialog.Bulider로 만든 AlertDialog를 보여준다.
     }
-
 
 }
