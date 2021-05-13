@@ -99,7 +99,7 @@ public class SettingActivity extends AppCompatActivity {
                 view = vi.inflate(R.layout.fragment_more_listview_item, null);
             }
 
-            ImageView imageView = (ImageView)view.findViewById(R.id.imageView);
+            ImageView imageView = (ImageView)view.findViewById(R.id.iv_photo);
 
             if("개인정보 변경".equals(items.get(position)))
                 imageView.setImageResource(R.drawable.baseline_person_24);

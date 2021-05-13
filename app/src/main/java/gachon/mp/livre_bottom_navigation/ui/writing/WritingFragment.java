@@ -9,7 +9,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,18 +20,24 @@ import androidx.fragment.app.Fragment;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-
-import java.io.InputStream;
 
 import gachon.mp.livre_bottom_navigation.MainActivity;
 import gachon.mp.livre_bottom_navigation.R;
 
 import static android.app.Activity.RESULT_OK;
+import static android.content.ContentValues.TAG;
 
 public class WritingFragment extends Fragment {
+    final int GET_GALLERY_IMAGE=200;
+    private FirebaseUser user;
     MainActivity activity;
+    ImageView getImageView;
+    Button getBtnUpload;
+
 
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
@@ -41,15 +50,12 @@ public class WritingFragment extends Fragment {
         activity = null;
     }
 
-    //이미지뷰 누르면 갤러리로 이동
-    final int GET_GALLERY_IMAGE=200;
-    ImageView getImageView;
 
     @Override
     public void onStart() {
         super.onStart();
-
-        getImageView=this.getView().findViewById(R.id.imageView);
+        //이미지뷰 누르면 갤러리로 이동
+        getImageView=this.getView().findViewById(R.id.iv_photo);
         getImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -58,6 +64,17 @@ public class WritingFragment extends Fragment {
                 startActivityForResult(intent, GET_GALLERY_IMAGE);
             }
         });
+
+        //등록하기 버튼 클릭
+        getBtnUpload=this.getView().findViewById(R.id.btn_upload);
+        getBtnUpload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                profileUpdate();
+            }
+        });
+
+
     }
 
     @Nullable
@@ -76,38 +93,43 @@ public class WritingFragment extends Fragment {
         }
     }
 
-    View.OnClickListener onClickListener = new View.OnClickListener(){
-        @Override
-        public void onClick(View v){
-            switch(v.getId()){
-                case R.id.btn_upload:
-//                    profileUpdate();
-                    break;
-            }
-        }
-    };
 
-    // 민하 작업중
-//    private void profileUpdate(){
-//        final String title = ((EditText) getActivity().findViewById(R.id.txttitle)).getText().toString();
-//        final String contents = ((EditText) getActivity().findViewById(R.id.createEditText)).getText().toString();
-//
-//    }
-//
-//    private void uploader(WriteInfo writeInfo){
-//        FirebaseFirestore db = FirebaseFirestore.getInstance();
-//        db.collection("posts").add(writeInfo)
-//                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-//                    @Override
-//                    public void onSuccess(DocumentReference documentReference) {
-//                        Log.d(TAG, "DocumentSnapshot written with ID: "+documentReference.getId());
-//                    }
-//                })
-//                .addOnFailureListener(new OnFailureListener() {
-//                    @Override
-//                    public void onFailure(@NonNull Exception e) {
-//                        Log.w(TAG, "Error adding document", e);
-//                    }
-//                });
-//    }
+    //포스트 업로드 전 체크
+    private void profileUpdate(){
+        final String title = ((EditText) getActivity().findViewById(R.id.et_title)).getText().toString();
+        final String contents = ((EditText) getActivity().findViewById(R.id.et_contents)).getText().toString();
+
+        if(title.length() > 0 && contents.length() > 0){
+            user = FirebaseAuth.getInstance().getCurrentUser();
+            WriteInfo writeInfo = new WriteInfo(title, contents, user.getUid());
+            postUploader(writeInfo);
+        }else{
+            toastMsg("제목 또는 내용을 입력해주세요.");
+        }
+
+    }
+
+    //파이어베이스 posts에 업로드
+    private void postUploader(WriteInfo writeInfo){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("posts").add(writeInfo)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        Log.d(TAG, "DocumentSnapshot written with ID: "+documentReference.getId());
+                        toastMsg("등록되었습니다!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error adding document", e);
+                        toastMsg("등록에 실패하였습니다.");
+                    }
+                });
+    }
+
+    private void toastMsg(String msg){
+        Toast.makeText(getActivity(), msg, Toast.LENGTH_SHORT).show();
+    }
 }

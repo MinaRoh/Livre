@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -7,7 +8,8 @@
         android:id="@+id/activity_main"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="10dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -49,29 +51,33 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="10dp">
 
             <EditText
+                android:id="@+id/et_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="제목"
-                android:textSize="18sp"/>
+                android:textSize="18sp" />
 
             <ImageView
-                android:id="@+id/imageView"
+                android:id="@+id/iv_photo"
                 android:layout_width="wrap_content"
-                android:layout_height="300dp"
-                android:scaleType="fitCenter"
+                android:layout_height="match_parent"
                 android:layout_gravity="center_horizontal"
-                android:src="@drawable/baseline_add_photo_alternate_24"
-                android:contentDescription="addImage"/>
+                android:contentDescription="addImage"
+                android:scaleType="fitCenter"
+                android:src="@drawable/baseline_add_photo_alternate_24" />
 
             <EditText
-                android:id="@+id/editText"
+                android:id="@+id/et_contents"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="16sp"
-                android:hint="내용" />
+                android:gravity="top"
+                android:hint="내용"
+                android:lines="15"
+                android:textSize="16sp" />
 
         </LinearLayout>
 
