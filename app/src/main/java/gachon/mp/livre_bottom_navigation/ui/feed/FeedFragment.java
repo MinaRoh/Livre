@@ -39,6 +39,7 @@ import gachon.mp.livre_bottom_navigation.R;
 public class FeedFragment extends Fragment {
     //
     private FragmentActivity myContext;
+    // MainActivity activity;
     //
 
     //데이터를 생성하기 위해서
@@ -190,8 +191,7 @@ public class FeedFragment extends Fragment {
                         // 해당 위치의 data 를 가져옴
                         BookVO vo = array.get(currentPosition);
 
-                        //
-                        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+                        //FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
                         FeedDetailFragment feedDetailFragment = new FeedDetailFragment();
                         // FeedFragment 에서 FeedDetailFragment 로 데이터 전달 (book title, author, description...)
                         Bundle bundle = new Bundle();
@@ -201,21 +201,12 @@ public class FeedFragment extends Fragment {
 //                        bundle.putString("image", vo.getImage());
                         // Bundle 변수 값 전달
                         // setArguements() method 사용 안하면 받는 쪽에서 null 로 받음
-                        feedDetailFragment.setArguments(bundle);
+                        //feedDetailFragment.setArguments(bundle);
+                        ((MainActivity)getActivity()).fragBtnClick(bundle);
                         // transaction.replace(R.id.txttitle, feedDetailFragment);
-                        transaction.commit();
+                        // feedDetailFragment.commit();
 
-                        // Activity 간 통신만 intent 가 사용 가능하다 ㅠㅠ
-//                        Intent intent = new Intent(getActivity(), FeedDetailFragment.class);
-//                        // Toast.makeText(MainActivity.this, "You touched" + vo.getTitle(), Toast.LENGTH_LONG).show();
-//                        // 해당 책의 제목을 BookDetail_Clicked 로 넘겨줌
-//                        intent.putExtra("title", vo.getTitle());
-//                        intent.putExtra("description", vo.getDescription());
-//                        intent.putExtra("author", vo.getAuthor());
-//                        intent.putExtra("image", vo.getImage());
-//                        startActivity(intent);
-
-                        // getActivity()로 MainActivity의 replaceFragment를 불러옵니다.
+                        // getActivity()로 MainActivity의 replaceFragment를 불러오기
                         // 새로 불러올 Fragment의 Instance를 Main으로 전달
                          ((MainActivity)getActivity()).replaceFragment(FeedDetailFragment.newInstance());
 

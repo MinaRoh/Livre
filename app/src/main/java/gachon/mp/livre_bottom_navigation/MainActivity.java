@@ -29,6 +29,7 @@ import static android.content.ContentValues.TAG;
 
 public class MainActivity extends AppCompatActivity {
     public static Activity Main_Activity;
+    public Bundle mBundle;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,18 +76,10 @@ public class MainActivity extends AppCompatActivity {
 
         // FeedFragment 에서 FeedDetailFragment 로 화면 전환
         // 화면전환 fragment 선언 및 초기화면 설정
-//        FragmentManager fragmentManager = getChildFragmentManager();
-//        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//        FeedDetailFragment feeddetailfragment = new FeedDetailFragment();
-//        fragmentTransaction.add(R.id.fragment_feed_container, feeddetailfragment);
-//        fragmentTransaction.commit();
-
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         FeedDetailFragment feeddetailfragment = new FeedDetailFragment();
         fragmentTransaction.add(R.id.fragment_feed_container, feeddetailfragment.newInstance());
-        // fragmentTransaction.replace(R.id.fragment_feed_container, feeddetailfragment.newInstance()).commit();
-
     }
 
     public void replaceFragment(Fragment fragment) {
@@ -96,6 +89,9 @@ public class MainActivity extends AppCompatActivity {
         fragmentTransaction.replace(R.id.container, fragment).commit();
     }
 
+    public void fragBtnClick(Bundle bundle) {
+        this.mBundle = bundle;
+    }
 
     // 뒤로가기 키를 눌렀을 때에 대한 상황을 오버라이딩한다.
     @Override
