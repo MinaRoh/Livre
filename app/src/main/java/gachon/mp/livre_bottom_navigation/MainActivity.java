@@ -1,5 +1,6 @@
 package gachon.mp.livre_bottom_navigation;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
@@ -27,10 +28,11 @@ import gachon.mp.livre_bottom_navigation.ui.feed.FeedFragment;
 import static android.content.ContentValues.TAG;
 
 public class MainActivity extends AppCompatActivity {
-
+    public static Activity Main_Activity;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Main_Activity = MainActivity.this;
         setContentView(R.layout.activity_main);
         BottomNavigationView navView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each

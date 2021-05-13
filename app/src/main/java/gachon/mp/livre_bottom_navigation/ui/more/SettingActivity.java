@@ -1,6 +1,8 @@
 package gachon.mp.livre_bottom_navigation.ui.more;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,15 +14,21 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 
+import gachon.mp.livre_bottom_navigation.MainActivity;
+import gachon.mp.livre_bottom_navigation.Protocol;
 import gachon.mp.livre_bottom_navigation.R;
+import gachon.mp.livre_bottom_navigation.SplashActivity;
 
 public class SettingActivity extends AppCompatActivity {
     ListView listView;
-
+    MainActivity MA = (MainActivity)MainActivity.Main_Activity;//메인 액티비티
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,10 +63,35 @@ public class SettingActivity extends AppCompatActivity {
                     startActivity(intent);
                     finish();
                 }
-                else if(position==2){
-                    intent=new Intent(getApplicationContext(), LogoutActivity.class);
-                    startActivity(intent);
-                    finish();
+                else if(position==2){//로그아웃!
+                    AlertDialog.Builder alBuilder = new AlertDialog.Builder(SettingActivity.this);
+                    alBuilder.setMessage("로그아웃하시겠습니까?");
+
+                    // "예" 버튼을 누르면 실행되는 리스너
+                    alBuilder.setPositiveButton("예", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                            FirebaseAuth.getInstance().signOut();//로그아웃
+                            Intent intent = new Intent(getApplicationContext(), SplashActivity.class);
+                            startActivityForResult(intent, Protocol.SIGN_OUT_OK);
+                            MA.finish();//MainActivity 종료
+                            finish(); //SettingActivity 종료
+                        }
+                    });
+                    // "아니오" 버튼을 누르면 실행되는 리스너
+                    alBuilder.setNegativeButton("아니오", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            return; // 아무런 작업도 하지 않고 돌아간다
+                        }
+                    });
+                    alBuilder.setTitle("로그아웃");
+                    alBuilder.show(); // AlertDialog.Bulider로 만든 AlertDialog를 보여준다.
+
+//                    intent=new Intent(getApplicationContext(), LogoutActivity.class);
+//                    startActivity(intent);
+//                    finish();
                 }
                 else if(position==3){
                     intent=new Intent(getApplicationContext(), DeveloperActivity.class);
