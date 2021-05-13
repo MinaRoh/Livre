@@ -6,8 +6,35 @@
     android:orientation="vertical" >
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Connect"/>
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:text="오류 신고"
+        android:textSize="20sp"
+        android:textColor="@color/themeColor"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center"/>
 
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_marginTop="30dp"
+        android:layout_width="wrap_content"
+        android:layout_gravity="center"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/email"/>
+
+        <TextView
+            android:id="@+id/btnemail"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="문의 하기"
+            android:textStyle="bold"
+            android:textColor="#D61414"
+            android:textSize="40dp" />
+    </LinearLayout>
+    
 </LinearLayout>

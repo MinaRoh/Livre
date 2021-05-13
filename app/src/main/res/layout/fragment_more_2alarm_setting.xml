@@ -5,4 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:text="알림 설정"
+        android:textSize="20sp"
+        android:textColor="@color/themeColor"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center"/>
+
 </LinearLayout>
