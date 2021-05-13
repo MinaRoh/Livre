@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,12 +19,18 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
 import java.io.InputStream;
 
 import gachon.mp.livre_bottom_navigation.MainActivity;
 import gachon.mp.livre_bottom_navigation.R;
 
 import static android.app.Activity.RESULT_OK;
+import static android.content.ContentValues.TAG;
 
 public class WritingFragment extends Fragment {
     MainActivity activity;
@@ -128,4 +135,39 @@ public class WritingFragment extends Fragment {
         editTextNm.setBackgroundColor(Color.parseColor("#4197B843"));
         textLayout.addView(editTextNm);
     }
+
+    View.OnClickListener onClickListener = new View.OnClickListener(){
+        @Override
+        public void onClick(View v){
+            switch(v.getId()){
+                case R.id.upload_btn:
+//                    profileUpdate();
+                    break;
+            }
+        }
+    };
+
+    // 민하 작업중
+//    private void profileUpdate(){
+//        final String title = ((EditText) getActivity().findViewById(R.id.txttitle)).getText().toString();
+//        final String contents = ((EditText) getActivity().findViewById(R.id.createEditText)).getText().toString();
+//
+//    }
+//
+//    private void uploader(WriteInfo writeInfo){
+//        FirebaseFirestore db = FirebaseFirestore.getInstance();
+//        db.collection("posts").add(writeInfo)
+//                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+//                    @Override
+//                    public void onSuccess(DocumentReference documentReference) {
+//                        Log.d(TAG, "DocumentSnapshot written with ID: "+documentReference.getId());
+//                    }
+//                })
+//                .addOnFailureListener(new OnFailureListener() {
+//                    @Override
+//                    public void onFailure(@NonNull Exception e) {
+//                        Log.w(TAG, "Error adding document", e);
+//                    }
+//                });
+//    }
 }

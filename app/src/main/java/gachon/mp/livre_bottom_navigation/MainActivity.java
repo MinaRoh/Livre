@@ -2,8 +2,14 @@ package gachon.mp.livre_bottom_navigation;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,6 +17,8 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
+
+import static android.content.ContentValues.TAG;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -30,6 +38,32 @@ public class MainActivity extends AppCompatActivity {
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupWithNavController(navView, navController);
+
+
+
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        if(user == null){
+
+        }else{
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            DocumentReference docRef = db.collection("users").document(user.getUid());
+            docRef.get().addOnCompleteListener((task) -> {
+                if(task.isSuccessful()){
+                    DocumentSnapshot document = task.getResult();
+                    if(document!=null){
+                        if(document.exists()){
+                            Log.d(TAG, "DocumentSnapshot data: "+document.getData());
+                        } else{
+                            Log.d(TAG, "No such document");
+
+                        }
+                    }
+                } else {
+                    Log.d(TAG, "get failed with ", task.getException());
+                }
+            });
+        }
     }
     // 뒤로가기 키를 눌렀을 때에 대한 상황을 오버라이딩한다.
     @Override
@@ -55,4 +89,6 @@ public class MainActivity extends AppCompatActivity {
         alBuilder.setTitle("프로그램 종료");
         alBuilder.show(); // AlertDialog.Bulider로 만든 AlertDialog를 보여준다.
     }
+
+
 }
