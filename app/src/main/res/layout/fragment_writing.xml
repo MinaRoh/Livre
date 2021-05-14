@@ -60,6 +60,12 @@
                 android:layout_height="wrap_content"
                 android:hint="제목"
                 android:textSize="18sp" />
+            <EditText
+                android:id="@+id/et_booktitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="책 제목"
+                android:textSize="18sp" />
 
             <ImageView
                 android:id="@+id/iv_photo"

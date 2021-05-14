@@ -19,6 +19,7 @@ import gachon.mp.livre_bottom_navigation.R;
 public class HomeFragment extends Fragment {
 
     Button button;
+    Button button2;
     ImageView bg;
     ImageView trunk;
     ImageView leaves;
