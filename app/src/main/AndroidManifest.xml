@@ -51,11 +51,9 @@
         <activity android:name=".ui.more.AlarmActivity"/>
         <activity android:name=".ui.more.ChangePersonalInfoActivity"/>
         <activity android:name=".ui.more.AlarmSettingActivity"/>
-        <activity android:name=".ui.more.LogoutActivity"/>
         <activity android:name=".ui.more.DeveloperActivity"/>
         <activity android:name=".ui.more.VersionActivity"/>
         <activity android:name=".ui.more.BugReportActivity"/>
-        <activity android:name=".ui.more.DeleteActivity"/>
         <!--for MORE fragment END-->
 
         <activity android:name=".ui.writing.WritingActivity"/>

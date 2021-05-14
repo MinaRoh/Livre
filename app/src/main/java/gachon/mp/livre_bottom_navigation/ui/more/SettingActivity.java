@@ -90,10 +90,6 @@ public class SettingActivity extends AppCompatActivity {
                     });
                     alBuilder.setTitle("로그아웃");
                     alBuilder.show(); // AlertDialog.Bulider로 만든 AlertDialog를 보여준다.
-
-//                    intent=new Intent(getApplicationContext(), LogoutActivity.class);
-//                    startActivity(intent);
-//                    finish();
                 }
                 else if(position==3){
                     intent=new Intent(getApplicationContext(), DeveloperActivity.class);
@@ -110,9 +106,8 @@ public class SettingActivity extends AppCompatActivity {
                     startActivity(intent);
                     finish();
                 }
-                else if(position==6){
-                    intent=new Intent(getApplicationContext(), DeleteActivity.class);
-                    startActivity(intent);
+                else if(position==6){//회원탈퇴!
+
                     finish();
                 }
                 else if(position==7){
