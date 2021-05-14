@@ -61,6 +61,7 @@ import java.util.HashMap;
         ImageButton btn_google_login = (ImageButton)findViewById(R.id.btn_google_login);
         ImageButton btn_facebook_signin = (ImageButton)findViewById(R.id.btn_facebook_signin);
         emailEditText = findViewById(R.id.emailEditText);
+        ImageButton btn_find_pw = (ImageButton)findViewById(R.id.btn_find_pw);
         applySharedPreference();
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
@@ -123,7 +124,13 @@ import java.util.HashMap;
                 startActivityForResult(intent,RC_SIGN_IN);
             }
         });
+        //비밀번호 찾기 버튼을 눌렀을 때
+        btn_find_pw.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
+            }
+        });
     }
 
     @Override// 구글 로그인 인증 요청 했을 때 값 받음
