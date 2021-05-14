@@ -25,6 +25,7 @@ import gachon.mp.livre_bottom_navigation.MainActivity;
 import gachon.mp.livre_bottom_navigation.Protocol;
 import gachon.mp.livre_bottom_navigation.R;
 import gachon.mp.livre_bottom_navigation.SplashActivity;
+import gachon.mp.livre_bottom_navigation.ui.writing.WritingActivity;
 
 public class SettingActivity extends AppCompatActivity {
     ListView listView;
@@ -44,6 +45,7 @@ public class SettingActivity extends AppCompatActivity {
         items.add("버전 정보");
         items.add("오류 신고");
         items.add("회원 탈퇴");
+        items.add("글쓰기(베타)");
 
         CustomAdapter adapter=new CustomAdapter(this, 0, items);
         listView.setAdapter(adapter);
@@ -110,6 +112,11 @@ public class SettingActivity extends AppCompatActivity {
                 }
                 else if(position==6){
                     intent=new Intent(getApplicationContext(), DeleteActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+                else if(position==7){
+                    intent=new Intent(getApplicationContext(), WritingActivity.class);
                     startActivity(intent);
                     finish();
                 }

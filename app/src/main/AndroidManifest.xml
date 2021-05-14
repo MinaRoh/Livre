@@ -58,6 +58,7 @@
         <activity android:name=".ui.more.DeleteActivity"/>
         <!--for MORE fragment END-->
 
+        <activity android:name=".ui.writing.WritingActivity"/>
     </application>
 
 </manifest>
