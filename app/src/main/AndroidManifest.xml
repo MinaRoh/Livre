@@ -42,7 +42,7 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
-
+        <activity android:name="PasswordResetActivity"/>
         <!--for MORE fragment-->
         <activity android:name=".ui.more.SettingActivity"/>
         <activity android:name=".ui.more.AlarmActivity"/>
