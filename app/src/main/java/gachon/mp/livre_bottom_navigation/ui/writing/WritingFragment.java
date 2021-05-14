@@ -101,7 +101,7 @@ public class WritingFragment extends Fragment {
 
         if(title.length() > 0 && contents.length() > 0){
             user = FirebaseAuth.getInstance().getCurrentUser();
-            WriteInfo writeInfo = new WriteInfo(title, contents, user.getUid());
+            WriteInfo writeInfo = new WriteInfo(title, contents, user.getUid(), 0);
             postUploader(writeInfo);
         }else{
             toastMsg("제목 또는 내용을 입력해주세요.");
@@ -112,7 +112,7 @@ public class WritingFragment extends Fragment {
     //파이어베이스 posts에 업로드
     private void postUploader(WriteInfo writeInfo){
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("posts").add(writeInfo)
+        db.collection("Posts").add(writeInfo)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
