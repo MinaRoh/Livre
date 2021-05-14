@@ -41,7 +41,8 @@ public class FeedFragment extends Fragment {
     ArrayList<BookVO> array;
     String apiURL = "https://openapi.naver.com/v1/search/book.json?";
     // 나중에 이부분은 좋아요 순으로 바꿀 것
-    String query = "안드로이드";
+    String query = "고양이";
+    // query가 0일때 if 문 써서 추천순을 보이고, 0 아닐땐 recylcerview 보이게 못하나?
     int start = 1;
 
     RecyclerView list;
@@ -107,17 +108,17 @@ public class FeedFragment extends Fragment {
 
         // edtsearch 에 adapter 를 연결한다
         autoCompleteTextView.setAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line, autotextviewlist));
-        //
-
     }
 
-    //
     // 검색에 사용될 데이터를 리스트에 추가한다.
-    private void settingList() {
+    public void settingList() {
         autotextviewlist.add("coffee");
         autotextviewlist.add("best");
+        autotextviewlist.add("언어의 온도");
+        autotextviewlist.add("자존감 수업");
+        autotextviewlist.add("나는 나로 살기로 했다");
+        autotextviewlist.add("빨간 머리 앤");
     }
-    //
 
     // html tag 없이 출력하기 ex) <b>주식</b> 이런거
     public String stripHtml(String html) {
@@ -126,7 +127,6 @@ public class FeedFragment extends Fragment {
 
     //BackThread 생성
     class BookThread extends AsyncTask<String,String,String> {
-
         @Override
         protected String doInBackground(String... strings) {
             return NaverAPI.main(apiURL,query,start);
