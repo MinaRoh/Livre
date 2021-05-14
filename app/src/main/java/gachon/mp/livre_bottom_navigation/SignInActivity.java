@@ -129,7 +129,8 @@ import java.util.HashMap;
         btn_find_pw.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Intent intent = new Intent(getApplicationContext(), PasswordResetActivity.class);
+                startActivity(intent);
             }
         });
     }
