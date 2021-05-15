@@ -63,7 +63,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.319"
-        tools:text="닉네임" />
+        android:text="닉네임" />
 
     <EditText
         android:id="@+id/editText_nickname"
@@ -71,7 +71,6 @@
         android:layout_height="50dp"
         android:layout_marginTop="84dp"
         android:background="@drawable/edittext_style"
-        android:hint="닉네임"
         android:inputType="text"
         android:textColor="#97b843"
         android:textColorHint="#97b843"

@@ -17,7 +17,7 @@
     <string name="duplication">btn_duplication_check</string>
     <string name="btn_email">btn_email</string>
     <string name="email">이메일</string>
-    <string name="password_reset_text">비밀번호 찾기</string>
+    <string name="password_reset_text">비밀번호 재설정</string>
     <string name="btn_password">btn_password</string>
     <string name="password">비밀번호(6자리 이상)</string>
     <string name="btn_continue">continue</string>
