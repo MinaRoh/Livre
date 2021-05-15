@@ -17,10 +17,15 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.type.DateTime;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import gachon.mp.livre_bottom_navigation.R;
 
@@ -72,10 +77,11 @@ public class WritingActivity extends AppCompatActivity {
     private void profileUpdate(){
         final String title = ((EditText) this.findViewById(R.id.et_title)).getText().toString();
         final String contents = ((EditText) this.findViewById(R.id.et_contents)).getText().toString();
+        Timestamp upload_time = new Timestamp(new Date());
 
         if(title.length() > 0 && contents.length() > 0){
             user = FirebaseAuth.getInstance().getCurrentUser();
-            WriteInfo writeInfo = new WriteInfo(title, contents, user.getUid(), 0);
+            WriteInfo writeInfo = new WriteInfo(title, contents, user.getUid(), upload_time, 0, 0);
             postUploader(writeInfo);
         }else{
             toastMsg("제목 또는 내용을 입력해주세요.");
