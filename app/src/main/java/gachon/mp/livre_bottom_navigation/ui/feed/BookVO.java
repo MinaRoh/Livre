@@ -1,12 +1,11 @@
 package gachon.mp.livre_bottom_navigation.ui.feed;
 
 public class BookVO {
-    // private String author;
     private String title;
-    // private int price;
     private String image;
     private String author;
     private String description;
+    private int isbn;
 
     public String getTitle() {
         return title;
@@ -24,13 +23,9 @@ public class BookVO {
         this.author = author;
     }
 
-//    public int getPrice() {
-//        return price;
-//    }
+    public int getIsbn() { return isbn; }
 
-//    public void setPrice(int price) {
-//        this.price = price;
-//    }
+    public void setIsbn(int isbn) { this.isbn = isbn; }
 
     public String getDescription() { return description; }
 
@@ -47,11 +42,6 @@ public class BookVO {
 
     @Override
     public String toString() {
-//        return "BookVO{" +
-//                "author='" + author + '\'' +
-//                ", price=" + price +
-//                ", image='g" + image + '\'' +
-//                '}';
         return "BookVO{" +
                 "title='" + title + '\'' +
                 ", author=" + author +

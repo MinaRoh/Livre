@@ -36,7 +36,6 @@ public class WritingActivity extends AppCompatActivity {
     private FirebaseUser user;
     ImageView getImageView;
     Button getBtnUpload;
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

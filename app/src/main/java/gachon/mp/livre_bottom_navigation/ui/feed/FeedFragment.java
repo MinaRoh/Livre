@@ -32,10 +32,7 @@ import java.util.List;
 import gachon.mp.livre_bottom_navigation.R;
 
 public class FeedFragment extends Fragment {
-    //
     private FragmentActivity myContext;
-    // MainActivity activity;
-    //
 
     //데이터를 생성하기 위해서
     ArrayList<BookVO> array;
@@ -58,16 +55,7 @@ public class FeedFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-//        feedViewModel =
-//                new ViewModelProvider(this).get(FeedViewModel.class);
         View root = inflater.inflate(R.layout.fragment_feed, container, false);
-        // final TextView textView = root.findViewById(R.id.text_dashboard);
-//        feedViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-//            @Override
-//            public void onChanged(@Nullable String s) {
-//
-//            }
-//        });
         return root;
     }
 
@@ -112,12 +100,28 @@ public class FeedFragment extends Fragment {
 
     // 검색에 사용될 데이터를 리스트에 추가한다.
     public void settingList() {
-        autotextviewlist.add("coffee");
-        autotextviewlist.add("best");
         autotextviewlist.add("언어의 온도");
         autotextviewlist.add("자존감 수업");
         autotextviewlist.add("나는 나로 살기로 했다");
         autotextviewlist.add("빨간 머리 앤");
+        autotextviewlist.add("Hello 마더구스 세트");
+        autotextviewlist.add("Hello Coding 프로그래밍");
+        autotextviewlist.add("Hello 부동산 Bravo! 멋진 인생");
+        autotextviewlist.add("Hello! 처음 만나는 전기기기");
+        autotextviewlist.add("우리는 안녕");
+        autotextviewlist.add("안녕, 나의 빨강머리 앤");
+        autotextviewlist.add("안녕, 앤");
+        autotextviewlist.add("안녕, 나는 익명이고 너를 조아해");
+        autotextviewlist.add("안녕, 우주");
+        autotextviewlist.add("안녕, 소중한 사람");
+        autotextviewlist.add("책 먹는 여우의 겨울 이야기");
+        autotextviewlist.add("매우 예민한 사람들을 위한 책");
+        autotextviewlist.add("사소해서 물어보지 못했지만 궁금했던 이야기");
+        autotextviewlist.add("주린이도 술술 읽는 주식책");
+        autotextviewlist.add("유저를 끌어당기는 모바일 게임 기획");
+        autotextviewlist.add("모바일 리얼리티");
+        autotextviewlist.add("모바일 게임 기획의 모든 것");
+        autotextviewlist.add("아몬드");
     }
 
     // html tag 없이 출력하기 ex) <b>주식</b> 이런거
@@ -146,6 +150,7 @@ public class FeedFragment extends Fragment {
                     vo.setImage(obj.getString("image"));
                     vo.setAuthor(stripHtml(obj.getString("author")));
                     vo.setDescription(stripHtml(obj.getString("description")));
+                    // vo.setIsbn(obj.getInt("isbn"));
 
                     array.add(vo);
                 }
@@ -192,6 +197,7 @@ public class FeedFragment extends Fragment {
                         intent.putExtra("description", vo.getDescription());
                         intent.putExtra("author", vo.getAuthor());
                         intent.putExtra("image", vo.getImage());
+                        // intent.putExtra("isbn", vo.getIsbn());
                         startActivity(intent);
 
                         return true;
@@ -201,12 +207,10 @@ public class FeedFragment extends Fragment {
 
                 @Override
                 public void onTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
-
                 }
 
                 @Override
                 public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-
                 }
             };
 

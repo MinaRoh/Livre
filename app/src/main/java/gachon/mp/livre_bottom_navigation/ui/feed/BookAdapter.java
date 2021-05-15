@@ -36,6 +36,7 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         String image=array.get(position).getImage();
+
         holder.txttitle.setText(Html.fromHtml(array.get(position).getTitle()));
         holder.txtauthor.setText(Html.fromHtml(array.get(position).getAuthor()));
 
@@ -44,6 +45,8 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
 
     @Override
     public int getItemCount() {
+        System.out.println("****************");
+        System.out.println(array.size());
         return array.size();
     }
 

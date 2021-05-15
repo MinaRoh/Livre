@@ -17,6 +17,7 @@ public class FeedDetailActivity extends AppCompatActivity {
     String descriptionFromMain;
     String authorFromMain;
     String imageFromMain;
+    int isbnFromMain;
 
     TextView title;
     TextView author;
@@ -39,6 +40,11 @@ public class FeedDetailActivity extends AppCompatActivity {
         descriptionFromMain = intent.getStringExtra("description");
         authorFromMain = intent.getStringExtra("author");
         imageFromMain = intent.getStringExtra("image");
+//        // isbn
+//        isbnFromMain = intent.getIntExtra("isbn", 0);
+//        // test
+//        System.out.println("***********************************************************************");
+//        System.out.println(isbnFromMain);
 
         title.setText(titleFromMain);
         description.setText(descriptionFromMain);
