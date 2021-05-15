@@ -44,7 +44,6 @@
         </activity>
 
         <activity android:name="PasswordResetActivity"/>
-        <activity android:name=".PasswordChangeActivity"/>
         <activity android:name=".ui.feed.FeedDetailActivity"/>
 
         <!--for MORE fragment-->

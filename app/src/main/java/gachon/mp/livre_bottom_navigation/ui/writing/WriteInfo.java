@@ -1,7 +1,6 @@
 package gachon.mp.livre_bottom_navigation.ui.writing;
 
 import com.google.firebase.Timestamp;
-import com.google.type.DateTime;
 
 public class WriteInfo {
     private String title;
