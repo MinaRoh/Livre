@@ -124,6 +124,7 @@ public class WritingActivity extends AppCompatActivity {
                         Intent intent = new Intent(getApplicationContext(), PostActivity.class);
                         intent.putExtra("posts_id", posts_id);//포스트 액티비티에 문서 id 전달
                         startActivityForResult(intent, Protocol.UPLOAD_POST);
+                        finish();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
