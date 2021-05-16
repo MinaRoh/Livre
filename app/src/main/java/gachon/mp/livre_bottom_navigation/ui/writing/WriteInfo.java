@@ -9,8 +9,12 @@ public class WriteInfo {
     private int num_heart;
     private int num_comment;
     private Timestamp upload_time;
-    public WriteInfo(String title, String contents, String publisher, Timestamp upload_time, int num_heart, int num_comment){
+    private String nickname;
+    private String ISBN;
+    public WriteInfo(String ISBN, String title, String nickname, String contents, String publisher, Timestamp upload_time, int num_heart, int num_comment){
+        this.ISBN = ISBN;
         this.title = title;
+        this.nickname = nickname;
         this.contents = contents;
         this.publisher = publisher;
         this.upload_time = upload_time;
@@ -20,6 +24,10 @@ public class WriteInfo {
 
     public String getTitle(){ return this.title;}
     public void setTitle(String title){ this.title = title;}
+    public String getISBN(){ return this.ISBN;}
+    public void setISBN(String title){ this.ISBN = ISBN;}
+    public String getNickname(){ return this.nickname;}
+    public void setNickname(String nickname){ this.nickname = nickname;}
     public String getContents(){ return this.contents;}
     public void setContents(String contents){ this.contents = contents;}
     public String getPublisher(){ return this.publisher;}
