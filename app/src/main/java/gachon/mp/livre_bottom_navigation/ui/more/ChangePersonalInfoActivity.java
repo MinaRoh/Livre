@@ -8,6 +8,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.net.Uri;
+import android.os.Bundle;
+import android.provider.MediaStore;
+import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -15,6 +19,9 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import androidx.annotation.Nullable;
+
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -30,6 +37,10 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.Transaction;
 
 import gachon.mp.livre_bottom_navigation.PasswordResetActivity;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+
 import gachon.mp.livre_bottom_navigation.R;
 
 public class ChangePersonalInfoActivity extends AppCompatActivity {
@@ -38,6 +49,10 @@ public class ChangePersonalInfoActivity extends AppCompatActivity {
     private String nickname;
     private boolean nicknameCheck = false;
     private String document_id;
+    private FirebaseUser user;
+    private String profileImg = "";
+    private final int GET_GALLERY_IMAGE = 200;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -48,7 +63,7 @@ public class ChangePersonalInfoActivity extends AppCompatActivity {
         EditText editText_nickname = (EditText)findViewById(R.id.editText_nickname);
         ImageButton btn_change_pw = (ImageButton)findViewById(R.id.btn_change_pw);
         ImageButton btn_save = (ImageButton)findViewById(R.id.btn_save);
-
+        updateProfileImg(user_profile);
         /*유저 닉네임 파이어스토어에서 가져오기*/
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
@@ -80,13 +95,6 @@ public class ChangePersonalInfoActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {//롤리팝 이상만 지원하나봄?
             user_profile.setClipToOutline(true);
         }
-        //갤러리 불러와서 프로필 이미지뷰 바꾸기
-        btn_gallery.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
 
         //비밀번호 재설정 액티비티로 던지기
         btn_change_pw.setOnClickListener(new View.OnClickListener() {
@@ -166,6 +174,99 @@ public class ChangePersonalInfoActivity extends AppCompatActivity {
                 }
             }
         });
+
+        btn_gallery.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // 기존 프로필 이미지 삭제
+                FirebaseStorage storage = FirebaseStorage.getInstance();
+                StorageReference storageRef = storage.getReference();
+                StorageReference desertRef = storageRef.child("profile_"+user.getEmail()+".png");
+                desertRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                    }
+                });
+
+                // 새 프로필 이미지 선택
+                Intent intent = new Intent(Intent.ACTION_PICK);
+                intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,"image/*");
+                startActivityForResult(intent, GET_GALLERY_IMAGE);
+
+            }
+        });
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == GET_GALLERY_IMAGE && resultCode == RESULT_OK &&
+        data != null && data.getData() != null){
+            ImageView imageView = findViewById(R.id.user_profile);
+            FirebaseStorage storage = FirebaseStorage.getInstance();
+            StorageReference storageRef = storage.getReference();
+            // 파일명 생성 "profile_email.png"
+            String filename = "profile_"+user.getEmail()+".jpg";
+            Uri file = data.getData();
+            StorageReference riverRef = storageRef.child(filename);
+            UploadTask uploadTask = riverRef.putFile(file);
+            // 새로운 프로필 이미지 저장
+            uploadTask.addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                }
+            }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) { // db 업데이트
+                    FirebaseFirestore db = FirebaseFirestore.getInstance();
+                    DocumentReference documentRef = db.collection("Users").document(user.getUid());
+                    documentRef.update("profileImage", filename);
+                    updateProfileImg(imageView); // Img button 업데이트
+                }
+            });
+
+        }
+    }
+    public void updateProfileImg(ImageView imageView){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        db.collection("Users")
+                .whereEqualTo("uid", user.getUid())
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                profileImg = document.get("profileImage").toString();
+                            }
+                            //FirebaseStorage 인스턴스를 생성
+                            FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
+                            // 위의 저장소를 참조하는 파일명으로 지정
+                            StorageReference storageReference = firebaseStorage.getReferenceFromUrl("gs://mp-livre.appspot.com/"+profileImg);
+                            //StorageReference에서 파일 다운로드 URL 가져옴
+                            storageReference.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Uri> task) {
+                                    if (task.isSuccessful()) {
+                                        // Glide 이용하여 이미지뷰에 로딩
+                                        Glide.with(getApplication())
+                                                .load(task.getResult())
+                                                .override(1024, 980)
+                                                .into(imageView);
+                                    } else {
+                                        // URL을 가져오지 못하면 토스트 메세지
+                                        Toast.makeText(getApplication(), task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
+                        }
+                    }
+                });
     }
 
 }

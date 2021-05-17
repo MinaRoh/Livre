@@ -4,6 +4,10 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
@@ -30,6 +34,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
@@ -43,7 +49,11 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
@@ -57,6 +67,8 @@ public class SignUpActivity extends AppCompatActivity implements GoogleApiClient
     private static final int RC_SIGN_IN = 1000;
     private boolean nicknameCheck = false;
     private CallbackManager mCallbackManager;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,6 +79,7 @@ public class SignUpActivity extends AppCompatActivity implements GoogleApiClient
         ImageButton btn_duplication_check = (ImageButton)findViewById(R.id.btn_duplication_check);
         ImageButton btn_google_signup = (ImageButton)findViewById(R.id.btn_google_signup);
         ImageButton btn_facebook_signup = (ImageButton)findViewById(R.id.btn_facebook_signup);
+
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
         getHashKey();
@@ -291,9 +304,13 @@ public class SignUpActivity extends AppCompatActivity implements GoogleApiClient
                                     hashMap.put("uid", uid);
                                     hashMap.put("email", email);
                                     hashMap.put("nickname", nickname);
+                                    hashMap.put("commentAlarm", "on");
+                                    hashMap.put("heartAlarm", "on");
+                                    hashMap.put("nightTimeAlarm", "on");
+                                    hashMap.put("profileImage", "profile.png");
 
                                     FirebaseFirestore database = FirebaseFirestore.getInstance();
-                                    database.collection("Users").add(hashMap);
+                                    database.collection("Users").document(user.getUid()).set(hashMap);
 
                                     // Sign in success, update UI with the signed-in user's information
                                     Log.d(TAG, "createUserWithEmail:success");
@@ -356,6 +373,8 @@ public class SignUpActivity extends AppCompatActivity implements GoogleApiClient
                             String uid = user.getUid();
                             String nickname = user.getDisplayName();
 
+
+
                             //해쉬맵 테이블을 파이어베이스 데이터베이스에 저장
                             HashMap<Object, String> hashMap = new HashMap<>();
                             hashMap.put("uid", uid);
@@ -405,4 +424,5 @@ public class SignUpActivity extends AppCompatActivity implements GoogleApiClient
             }
         }
     }
-}
+
+    }
