@@ -238,13 +238,18 @@ public class SignUpActivity extends AppCompatActivity implements GoogleApiClient
                             String uid = user.getUid();
                             String nickname = user.getDisplayName();
 
+                            //해쉬맵 테이블을 파이어베이스 데이터베이스에 저장
                             HashMap<Object, String> hashMap = new HashMap<>();
                             hashMap.put("uid", uid);
                             hashMap.put("email", email);
                             hashMap.put("nickname", nickname);
+                            hashMap.put("commentAlarm", "on");
+                            hashMap.put("heartAlarm", "on");
+                            hashMap.put("nightTimeAlarm", "on");
+                            hashMap.put("profileImage", "profile.png");
 
                             FirebaseFirestore database = FirebaseFirestore.getInstance();
-                            database.collection("Users").add(hashMap);
+                            database.collection("Users").document(user.getUid()).set(hashMap);
 
                             Intent intent = new Intent(getApplicationContext(), SignInActivity.class);
                             startActivityForResult(intent, Protocol.SIGN_IN_CLICKED);
@@ -373,16 +378,18 @@ public class SignUpActivity extends AppCompatActivity implements GoogleApiClient
                             String uid = user.getUid();
                             String nickname = user.getDisplayName();
 
-
-
                             //해쉬맵 테이블을 파이어베이스 데이터베이스에 저장
                             HashMap<Object, String> hashMap = new HashMap<>();
                             hashMap.put("uid", uid);
                             hashMap.put("email", email);
                             hashMap.put("nickname", nickname);
+                            hashMap.put("commentAlarm", "on");
+                            hashMap.put("heartAlarm", "on");
+                            hashMap.put("nightTimeAlarm", "on");
+                            hashMap.put("profileImage", "profile.png");
 
                             FirebaseFirestore database = FirebaseFirestore.getInstance();
-                            database.collection("Users").add(hashMap);
+                            database.collection("Users").document(user.getUid()).set(hashMap);
 
                             Intent intent = new Intent(getApplicationContext(), SignInActivity.class);
                             startActivityForResult(intent, Protocol.SIGN_IN_CLICKED);
