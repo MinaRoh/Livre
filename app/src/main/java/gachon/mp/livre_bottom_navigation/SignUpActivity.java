@@ -246,7 +246,7 @@ public class SignUpActivity extends AppCompatActivity implements GoogleApiClient
                             hashMap.put("commentAlarm", "on");
                             hashMap.put("heartAlarm", "on");
                             hashMap.put("nightTimeAlarm", "on");
-                            hashMap.put("profileImage", "profile.png");
+                            hashMap.put("profileImage", "profile_img/profile.png");
 
                             FirebaseFirestore database = FirebaseFirestore.getInstance();
                             database.collection("Users").document(user.getUid()).set(hashMap);
@@ -312,7 +312,7 @@ public class SignUpActivity extends AppCompatActivity implements GoogleApiClient
                                     hashMap.put("commentAlarm", "on");
                                     hashMap.put("heartAlarm", "on");
                                     hashMap.put("nightTimeAlarm", "on");
-                                    hashMap.put("profileImage", "profile.png");
+                                    hashMap.put("profileImage", "profile_img/profile.png");
 
                                     FirebaseFirestore database = FirebaseFirestore.getInstance();
                                     database.collection("Users").document(user.getUid()).set(hashMap);
@@ -386,7 +386,7 @@ public class SignUpActivity extends AppCompatActivity implements GoogleApiClient
                             hashMap.put("commentAlarm", "on");
                             hashMap.put("heartAlarm", "on");
                             hashMap.put("nightTimeAlarm", "on");
-                            hashMap.put("profileImage", "profile.png");
+                            hashMap.put("profileImage", "profile_img/profile.png");
 
                             FirebaseFirestore database = FirebaseFirestore.getInstance();
                             database.collection("Users").document(user.getUid()).set(hashMap);

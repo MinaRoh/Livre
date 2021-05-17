@@ -178,20 +178,6 @@ public class ChangePersonalInfoActivity extends AppCompatActivity {
         btn_gallery.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // 기존 프로필 이미지 삭제
-                FirebaseStorage storage = FirebaseStorage.getInstance();
-                StorageReference storageRef = storage.getReference();
-                StorageReference desertRef = storageRef.child("profile_"+user.getEmail()+".png");
-                desertRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                    }
-                });
-
                 // 새 프로필 이미지 선택
                 Intent intent = new Intent(Intent.ACTION_PICK);
                 intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,"image/*");
@@ -210,7 +196,7 @@ public class ChangePersonalInfoActivity extends AppCompatActivity {
             FirebaseStorage storage = FirebaseStorage.getInstance();
             StorageReference storageRef = storage.getReference();
             // 파일명 생성 "profile_email.png"
-            String filename = "profile_"+user.getEmail()+".jpg";
+            String filename = "profile_img/profile_"+user.getEmail()+".jpg";
             Uri file = data.getData();
             StorageReference riverRef = storageRef.child(filename);
             UploadTask uploadTask = riverRef.putFile(file);
