@@ -5,13 +5,18 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -65,6 +70,24 @@ public class MainActivity extends AppCompatActivity {
 
                         }
                     }
+
+
+//                    //post list 가져오기
+//                    db.collection("posts")
+//                            .get()
+//                            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//                                @Override
+//                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                                    if(task.isSuccessful()){
+//                                        for(QueryDocumentSnapshot document : task.getResult()){
+//                                            Log.d(TAG, document.getID() + " => " + document.getData());
+//                                            postList.add();
+//                                        }
+//                                    }
+//                                }
+//                            })
+
+
                 } else {
                     Log.d(TAG, "get failed with ", task.getException());
                 }
@@ -98,5 +121,7 @@ public class MainActivity extends AppCompatActivity {
         alBuilder.setTitle("프로그램 종료");
         alBuilder.show(); // AlertDialog.Bulider로 만든 AlertDialog를 보여준다.
     }
+
+
 
 }
