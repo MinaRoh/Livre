@@ -82,7 +82,7 @@ public class ChangePersonalInfoActivity extends AppCompatActivity {
                                 Log.d(TAG, document.getId() + " => " + document.getData());
                                 document_id = document.getId();
                                 nickname = document.getData().get("nickname").toString();
-                                editText_nickname.setHint(nickname);
+                                editText_nickname.setText(nickname);
                             }
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
@@ -110,7 +110,7 @@ public class ChangePersonalInfoActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String new_nickname = editText_nickname.getText().toString();
                 //닉네임 안바꾼 경우
-                if(new_nickname == nickname){
+                if(new_nickname.equals(nickname)){
                     //프로필 사진만 업데이트
                     Toast.makeText(ChangePersonalInfoActivity.this, "저장되었습니다",
                             Toast.LENGTH_SHORT).show();
