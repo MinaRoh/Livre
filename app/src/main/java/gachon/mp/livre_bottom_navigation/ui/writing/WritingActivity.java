@@ -244,10 +244,11 @@ public class WritingActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
                         Log.d(TAG, "DocumentSnapshot written with ID: "+documentReference.getId());
+                        posts_id = documentReference.getId();
                         toastMsg("등록되었습니다!");
-//                        Intent intent = new Intent(getApplicationContext(), PostActivity.class);
-//                        intent.putExtra("posts_id", posts_id);//포스트 액티비티에 문서 id 전달
-//                        startActivityForResult(intent, Protocol.UPLOAD_POST);
+                        Intent intent = new Intent(getApplicationContext(), PostActivity.class);
+                        intent.putExtra("posts_id", posts_id);//포스트 액티비티에 문서 id 전달
+                        startActivityForResult(intent, Protocol.UPLOAD_POST);
                         finish();
                     }
                 })
