@@ -10,7 +10,6 @@ public class MypageViewModel extends ViewModel {
 
     public MypageViewModel() {
         mText = new MutableLiveData<>();
-        mText.setValue("This is mypage fragment");
     }
 
     public LiveData<String> getText() {
