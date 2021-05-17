@@ -1,9 +1,11 @@
 package gachon.mp.livre_bottom_navigation.ui.feed;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Html;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -12,12 +14,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
@@ -32,13 +40,16 @@ import java.util.List;
 import gachon.mp.livre_bottom_navigation.R;
 
 public class FeedFragment extends Fragment {
+
     private FragmentActivity myContext;
+    FeedPostFragment feedPostFragment;
+    FeedSearchFragment feedSearchFragment;
 
     //데이터를 생성하기 위해서
     ArrayList<BookVO> array;
     String apiURL = "https://openapi.naver.com/v1/search/book.json?";
     // 나중에 이부분은 좋아요 순으로 바꿀 것
-    String query = "고양이";
+    String query = ""; //고양이
     // query가 0일때 if 문 써서 추천순을 보이고, 0 아닐땐 recylcerview 보이게 못하나?
     int start = 1;
 
@@ -51,10 +62,10 @@ public class FeedFragment extends Fragment {
     // 데이터를 넣은 리스트 변수
     private List<String> autotextviewlist;
 
+
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_feed, container, false);
         return root;
     }
@@ -62,67 +73,113 @@ public class FeedFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+//        LinearLayout seaarch_bar = (LinearLayout) getActivity(). findViewById(R.id.search_bar);
 
-        list = getView().findViewById(R.id.list);
-        LinearLayoutManager manager=new LinearLayoutManager(getActivity());
-        list.setLayoutManager(manager);
+        Button btn_post = getActivity().findViewById(R.id.btn_post);
+        Button btn_searchresult = getActivity().findViewById(R.id.btn_searchresult);
+        Button btn_exit = getActivity().findViewById(R.id.btn_exit);
 
-        //생성
-        array=new ArrayList<BookVO>();
+        feedSearchFragment = new FeedSearchFragment();
+        feedPostFragment = new FeedPostFragment();
 
-        //생성
-        new BookThread().execute();
+        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+        transaction.replace(R.id.nav_host_fragment, feedPostFragment).commit();
+//        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment, feedPostFragment).commit();
 
-        final EditText edtsearch = getView().findViewById(R.id.autoCompleteTextView);
-        edtsearch.setOnKeyListener(new View.OnKeyListener() {
+//        View.OnClickListener clickListener = new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                switch (v.getId()){
+//                    case R.id.btn_post :
+//                        transaction.replace(R.id.nav_host_fragment, feedPostFragment).commit();
+//                        break;
+//                    case R.id.btn_searchresult :
+//                        transaction.replace(R.id.nav_host_fragment, feedSearchFragment).commit();
+//                        break;
+//
+//
+//                }
+//            }
+//        };
+
+        btn_post.setOnClickListener(new View.OnClickListener(){
             @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                start = 1;
-                array.clear();
-                query = edtsearch.getText().toString();
-                new BookThread().execute();
-                return false;
+            public void onClick(View v){
+////                removeFragment(feedSearchFragment);
+//                // 해당 transaction 을 Back Stack 에 저장
+//                transaction.addToBackStack(null);
+//                // transaction 실행
+//                transaction.commit();
+
+//                FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+//                transaction.replace(R.id.nav_host_fragment, feedPostFragment).commit();
+                openFragment(feedPostFragment);
             }
         });
 
-        // 자동완성
-        // 리스트를 생성한다
-        autotextviewlist = new ArrayList<String>();
+        btn_searchresult.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+//                removeFragment(feedPostFragment);
+//                // 해당 transaction 을 Back Stack 에 저장
+//                transaction.addToBackStack(null);
+//                // transaction 실행
+//                transaction.commit();
+                openFragment(feedSearchFragment);
+//                FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+//                transaction.replace(R.id.nav_host_fragment, feedSearchFragment).commit();
+            }
+        });
 
-        // 리스트에 검색될 데이터(단어)를 추가한다
-        settingList();
 
-        final AutoCompleteTextView autoCompleteTextView = (AutoCompleteTextView) getView().findViewById(R.id.autoCompleteTextView);
+//        btn_exit.setOnClickListener(new View.OnClickListener(){
+//        @Override
+//        public void onClick(View v){
+//
+//            transaction.addToBackStack(null);
+//            // transaction 실행
+//            transaction.commit();
+//
+//        }
+//    });
 
-        // edtsearch 에 adapter 를 연결한다
-        autoCompleteTextView.setAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line, autotextviewlist));
+
+
+
+}
+
+    private void openFragment(final Fragment fragment)   {
+//        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+//        transaction.replace(R.id.nav_host_fragment, feedSearchFragment).commit();
+//        FragmentManager fragmentManager = getSupportFragmentManager();
+//        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        FragmentManager fragmentManager = getChildFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.replace(R.id.container, fragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
+
     }
 
-    // 검색에 사용될 데이터를 리스트에 추가한다.
-    public void settingList() {
-        autotextviewlist.add("언어의 온도");
-        autotextviewlist.add("자존감 수업");
-        autotextviewlist.add("나는 나로 살기로 했다");
-        autotextviewlist.add("빨간 머리 앤");
-        autotextviewlist.add("Hello 마더구스 세트");
-        autotextviewlist.add("Hello Coding 프로그래밍");
-        autotextviewlist.add("Hello 부동산 Bravo! 멋진 인생");
-        autotextviewlist.add("Hello! 처음 만나는 전기기기");
-        autotextviewlist.add("우리는 안녕");
-        autotextviewlist.add("안녕, 나의 빨강머리 앤");
-        autotextviewlist.add("안녕, 앤");
-        autotextviewlist.add("안녕, 나는 익명이고 너를 조아해");
-        autotextviewlist.add("안녕, 우주");
-        autotextviewlist.add("안녕, 소중한 사람");
-        autotextviewlist.add("책 먹는 여우의 겨울 이야기");
-        autotextviewlist.add("매우 예민한 사람들을 위한 책");
-        autotextviewlist.add("사소해서 물어보지 못했지만 궁금했던 이야기");
-        autotextviewlist.add("주린이도 술술 읽는 주식책");
-        autotextviewlist.add("유저를 끌어당기는 모바일 게임 기획");
-        autotextviewlist.add("모바일 리얼리티");
-        autotextviewlist.add("모바일 게임 기획의 모든 것");
-        autotextviewlist.add("아몬드");
+
+    private void removeFragment(Fragment fragment) {
+        if (fragment != null) {
+            FragmentManager mFragmentManager = getActivity().getSupportFragmentManager();
+            final FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
+            mFragmentTransaction.remove(fragment);
+            mFragmentTransaction.commit();
+
+            fragment.onDestroy();
+            fragment.onDetach();
+            fragment = null;
+            toastMsg("현재 fragment 종료되었습니다.");
+        }
     }
+
+
+
+
+
 
     // html tag 없이 출력하기 ex) <b>주식</b> 이런거
     public String stripHtml(String html) {
@@ -216,5 +273,9 @@ public class FeedFragment extends Fragment {
 
             list.addOnItemTouchListener(onItemTouchListener);
         }
+    }
+
+    private void toastMsg(String msg){
+        Toast.makeText(getActivity(), msg, Toast.LENGTH_SHORT).show();
     }
 }

@@ -1,5 +1,7 @@
 package gachon.mp.livre_bottom_navigation.ui.writing;
 
+import android.net.Uri;
+
 import com.google.firebase.Timestamp;
 
 public class WriteInfo {
@@ -11,11 +13,14 @@ public class WriteInfo {
     private Timestamp upload_time;
     private String nickname;
     private String ISBN;
-    public WriteInfo(String ISBN, String title, String nickname, String contents, String publisher, Timestamp upload_time, int num_heart, int num_comment){
+    private String imagePath;
+
+    public WriteInfo(String ISBN, String title, String nickname, String contents, String imagePath, String publisher, Timestamp upload_time, int num_heart, int num_comment){
         this.ISBN = ISBN;
         this.title = title;
         this.nickname = nickname;
         this.contents = contents;
+        this.imagePath = imagePath;
         this.publisher = publisher;
         this.upload_time = upload_time;
         this.num_heart = num_heart;
@@ -31,6 +36,8 @@ public class WriteInfo {
     public String getContents(){ return this.contents;}
     public void setContents(String contents){ this.contents = contents;}
     public String getPublisher(){ return this.publisher;}
+    public void setImagePath(String imagePath){ this.imagePath = imagePath;}
+    public String getImagePath(){ return this.imagePath;}
     public void setPublisher(String publisher){ this.publisher = publisher;}
     public int getNum_heart(){ return this.num_heart;}
     public void setNum_heart(Integer num_heart){ this.num_heart = num_heart;}
