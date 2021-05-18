@@ -162,11 +162,18 @@ public class WritingActivity extends AppCompatActivity {
 
             // firestore 에 업로드
             user = FirebaseAuth.getInstance().getCurrentUser();
-            String filePath = imagePath.toString(); //Uri to String
-            System.out.println("************************filePath: " + filePath);
-//            String filePath =
-            WriteInfo writeInfo = new WriteInfo(ISBN, title, nickname, contents, getImagePath(), user.getUid(), upload_time, 0, 0);
-            postUploader(writeInfo);
+
+            if(imagePath != null){
+                String filePath = imagePath.toString(); //Uri to String
+                System.out.println("************************filePath: " + filePath);
+                WriteInfo writeInfo = new WriteInfo(ISBN, title, nickname, contents, getImagePath(), user.getUid(), upload_time, 0, 0);
+                postUploader(writeInfo);
+            }
+            else {
+                WriteInfo writeInfo = new WriteInfo(ISBN, title, nickname, contents, "", user.getUid(), upload_time, 0, 0);
+                postUploader(writeInfo);
+            }
+
         }else{
             toastMsg("제목 또는 내용을 입력해주세요.");
         }
@@ -233,7 +240,7 @@ public class WritingActivity extends AppCompatActivity {
                         }
                     });
         } else {
-            Toast.makeText(getApplicationContext(), "파일을 먼저 선택하세요.", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getApplicationContext(), "파일을 먼저 선택하세요.", Toast.LENGTH_SHORT).show();
         }
     }
 
