@@ -74,9 +74,10 @@
         android:background="#CAC9C9" />
 <ImageView
     android:id="@+id/post_image"
+    android:layout_marginTop="10dp"
     android:layout_width="match_parent"
-    android:layout_height="200dp"
-    android:background="@color/bg_ground" />
+    android:layout_height="wrap_content"
+    android:layout_gravity="center" />
     <TextView
         android:id="@+id/contents"
         android:layout_width="match_parent"

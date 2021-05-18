@@ -41,6 +41,7 @@ public class PostActivity extends AppCompatActivity {
     ImageView post_image;
     int int_num_heart;
     int int_num_comment;
+    String imagePath;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,10 +55,10 @@ public class PostActivity extends AppCompatActivity {
         TextView contents = (TextView)findViewById(R.id.contents);
         ImageButton heart = (ImageButton)findViewById(R.id.heart);
         TextView num_heart = (TextView)findViewById(R.id.num_heart);
-
         ImageButton comment = (ImageButton)findViewById(R.id.comment);
         TextView num_comment = (TextView)findViewById(R.id.num_comment);
-        //문서의 uid를 전달 받아서 해당 문서를 보여준다.
+
+        /*문서의 uid를 전달 받아서 해당 문서를 보여준다.*/
         Intent intent = getIntent();
         posts_id = intent.getStringExtra("posts_id");
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -72,6 +73,7 @@ public class PostActivity extends AppCompatActivity {
                         String txt_title = document.getData().get("title").toString();
                         String txt_nickname = document.getData().get("nickname").toString();
                         String txt_contents = document.getData().get("contents").toString();
+                        imagePath = document.getData().get("imagePath").toString();
                         int_num_heart = Integer.parseInt(String.valueOf(document.getData().get("num_heart")));
                         int_num_comment = Integer.parseInt(String.valueOf(document.getData().get("num_comment")));
                         title.setText(txt_title);
@@ -80,10 +82,10 @@ public class PostActivity extends AppCompatActivity {
                         contents.setText(txt_contents);
                         num_heart.setText(String.valueOf(int_num_heart));
                         num_comment.setText(String.valueOf(int_num_comment));
-
                         //이미지 불러오기 함수 실행
-                        getImage();
-
+                        if(imagePath != ""){
+                            getImage();
+                        }
                     } else {
                         Log.d(TAG, "No such document");
                     }
@@ -118,16 +120,14 @@ public class PostActivity extends AppCompatActivity {
         });
 
     }
-
+/*포스트의 이미지를 불러오는 메소드(미완성) - 이미지 로딩 실패 뜸
+* 이미지를 올리지 않은 경우는 아무 동작하지 않음*/
     public void getImage() {
-
-
         //storage
         FirebaseStorage storage = FirebaseStorage.getInstance();
         //storage 주소와 폴더 파일명을 지정해 준다.
         StorageReference storageRef = storage.getReferenceFromUrl("gs://mp-livre.appspot.com");
         user = FirebaseAuth.getInstance().getCurrentUser();
-
 
         String filename = ((WritingActivity) WritingActivity.mContext).filename;
         System.out.println("Post activity ************** filename : " + filename);
