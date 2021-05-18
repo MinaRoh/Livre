@@ -45,6 +45,7 @@ public class PostActivity extends AppCompatActivity {
     int int_num_heart;
     int int_num_comment;
     String imagePath;
+    Boolean heart_clicked = false;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -137,9 +138,19 @@ public class PostActivity extends AppCompatActivity {
                 });
         /*하트 눌렀을 때*/
         heart.setOnClickListener(new View.OnClickListener() {
+            //문제점: 이건 한정적으로 방금 자기가 업로드한 글에만 적용되는 코드
+            //자기가 눌렀던 걸 기억할 수 있으면 다른 사람 글이나 옛날에 올린 자기 글에도 적용가능.
             @Override
             public void onClick(View view) {
-                int_num_heart++;//하트 수 올리고
+                heart_clicked = !(heart_clicked);
+                if(heart_clicked){
+                    int_num_heart++;//하트 수 올리고
+                    heart.setImageResource(R.drawable.baseline_favorite_24);
+                }
+                else{
+                    int_num_heart--;//하트 수 내리고
+                    heart.setImageResource(R.drawable.baseline_favorite_border_24);
+                }
                 num_heart.setText(String.valueOf(int_num_heart));//포스트에 반영
                 docRef
                         .update("num_heart", int_num_heart)
