@@ -43,9 +43,8 @@ public class FeedSearchActivity extends AppCompatActivity {
     //데이터를 생성하기 위해서
     ArrayList<BookVO> array;
     String apiURL = "https://openapi.naver.com/v1/search/book.json?";
-    // 나중에 이부분은 좋아요 순으로 바꿀 것
-    String query = "고양이";
-    // query가 0일때 if 문 써서 추천순을 보이고, 0 아닐땐 recylcerview 보이게 못하나?
+
+    String query="";
     int start = 1;
 
     RecyclerView list;
@@ -62,6 +61,9 @@ public class FeedSearchActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feed_search);
 
+        Intent intent = getIntent();
+        query = intent.getStringExtra("query");
+
         list = findViewById(R.id.list);
         LinearLayoutManager manager=new LinearLayoutManager(this);
         list.setLayoutManager(manager);
@@ -76,7 +78,6 @@ public class FeedSearchActivity extends AppCompatActivity {
         edtsearch.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
-                start = 1;
                 array.clear();
                 query = edtsearch.getText().toString();
                 new BookThread().execute();

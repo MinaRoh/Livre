@@ -5,12 +5,15 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ScrollView;
@@ -36,6 +39,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 //import gachon.mp.livre_bottom_navigation.MainAdapter;
 import gachon.mp.livre_bottom_navigation.PostInfo;
@@ -47,6 +51,9 @@ public class FeedFragment extends Fragment {
     FirebaseFirestore firebaseFirestore;
     RecyclerView recyclerView;
     Button btn;
+    // 자동완성
+    // 데이터를 넣은 리스트 변수
+    private List<String> autotextviewlist;
 
     @Nullable
     @Override
@@ -59,14 +66,55 @@ public class FeedFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        btn = getView().findViewById(R.id.btn);
-        btn.setOnClickListener(new View.OnClickListener() {
+        // 자동완성
+        // 리스트를 생성한다
+        autotextviewlist = new ArrayList<String>();
+
+        // 리스트에 검색될 데이터(단어)를 추가한다
+        settingList();
+
+        final AutoCompleteTextView autoCompleteTextView = (AutoCompleteTextView) getView().findViewById(R.id.autoCompleteTextView);
+
+        // edtsearch 에 adapter 를 연결한다
+        autoCompleteTextView.setAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line, autotextviewlist));
+
+        final EditText edtsearch = getView().findViewById(R.id.autoCompleteTextView);
+        edtsearch.setOnKeyListener(new View.OnKeyListener() {
             @Override
-            public void onClick(View view) {
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                String query = edtsearch.getText().toString();
                 Intent intent = new Intent(getActivity(), FeedSearchActivity.class);
+                intent.putExtra("query", query);
+
                 startActivity(intent);
+                return false;
             }
         });
+    }
+
+    // 검색에 사용될 데이터를 리스트에 추가한다.
+    public void settingList() {
+        autotextviewlist.add("언어의 온도");
+        autotextviewlist.add("자존감 수업");
+        autotextviewlist.add("나는 나로 살기로 했다");
+        autotextviewlist.add("빨간 머리 앤");
+        autotextviewlist.add("Hello 마더구스 세트");
+        autotextviewlist.add("Hello Coding 프로그래밍");
+        autotextviewlist.add("Hello 부동산 Bravo! 멋진 인생");
+        autotextviewlist.add("Hello! 처음 만나는 전기기기");
+        autotextviewlist.add("우리는 안녕");
+        autotextviewlist.add("안녕, 나의 빨강머리 앤");
+        autotextviewlist.add("안녕, 앤");
+        autotextviewlist.add("안녕, 나는 익명이고 너를 조아해");
+        autotextviewlist.add("안녕, 우주");
+        autotextviewlist.add("안녕, 소중한 사람");
+        autotextviewlist.add("책 먹는 여우의 겨울 이야기");
+        autotextviewlist.add("매우 예민한 사람들을 위한 책");
+        autotextviewlist.add("사소해서 물어보지 못했지만 궁금했던 이야기");
+        autotextviewlist.add("주린이도 술술 읽는 주식책");
+        autotextviewlist.add("유저를 끌어당기는 모바일 게임 기획");
+        autotextviewlist.add("모바일 리얼리티");
+        autotextviewlist.add("모바일 게임 기획의 모든 것");
     }
 
     @Override

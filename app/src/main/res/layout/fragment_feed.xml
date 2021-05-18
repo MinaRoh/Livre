@@ -9,12 +9,6 @@
     android:id="@+id/fragment_feed_container"
     android:orientation="vertical">
 
-    <Button
-        android:id="@+id/btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="누르면 serach하는 곳을 간다"/>
-
     <LinearLayout
         android:id="@+id/linear"
         android:layout_width="match_parent"
