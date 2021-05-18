@@ -25,7 +25,6 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
@@ -146,11 +145,6 @@ public class WritingActivity extends AppCompatActivity {
         FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
         final DocumentReference documentReference = firebaseFirestore.collection("Posts").document();
 
-//        Date date=new Date();
-//        SimpleDateFormat sfd = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.getDefault());
-//        sfd.format(new Date());
-//        TimeSold.setText(String.valueOf(date));
-
         Date upload_time = new Date();
         String ISBN = "ISBNEXAMPLE"; // 예시 ISBN임. 실제로는 검색할 때 누른 책의 ISBN값을 전달 받아야함
 
@@ -218,7 +212,6 @@ public class WritingActivity extends AppCompatActivity {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 //                            progressDialog.dismiss(); //업로드 진행 Dialog 상자 닫기
-                            Toast.makeText(getApplicationContext(), "업로드 완료!", Toast.LENGTH_SHORT).show();
                         }
                     })
                     //실패시

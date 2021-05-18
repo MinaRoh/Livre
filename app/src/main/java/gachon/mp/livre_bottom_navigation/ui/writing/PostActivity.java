@@ -27,6 +27,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import gachon.mp.livre_bottom_navigation.R;
 
@@ -67,12 +68,11 @@ public class PostActivity extends AppCompatActivity {
                         String txt_title = document.getData().get("title").toString();
                         String txt_nickname = document.getData().get("nickname").toString();
                         String txt_contents = document.getData().get("contents").toString();
-                        String txt_uploadTime = document.getData().get("uploadTime").toString();
                         int int_num_heart = Integer.parseInt(String.valueOf(document.getData().get("num_heart")));
                         int int_num_comment = Integer.parseInt(String.valueOf(document.getData().get("num_comment")));
                         title.setText(txt_title);
                         nickname.setText(txt_nickname);
-                        upload_time.setText(txt_uploadTime);
+                        upload_time.setText(getTime());
                         contents.setText(txt_contents);
                         num_heart.setText(String.valueOf(int_num_heart));
                         num_comment.setText(String.valueOf(int_num_comment));
@@ -147,7 +147,10 @@ public class PostActivity extends AppCompatActivity {
 //                .into(imageView);
 
     }
-
+    static String getTime() {
+        SimpleDateFormat f = new SimpleDateFormat("yyyy.MM.dd HH:mm");
+        return f.format(new Date());
+    }
         private void toastMsg(String msg){
             Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
         }
