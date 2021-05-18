@@ -152,7 +152,6 @@ import java.util.HashMap;
                                     Toast.makeText(getApplicationContext(), "로그인 성공",
                                             Toast.LENGTH_SHORT).show();
                                     //해쉬맵 테이블을 파이어베이스 데이터베이스에 저장
-                                    sharedPreference();
                                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                                     startActivityForResult(intent, Protocol.SIGN_IN_OK);
                                     SA.finish();
@@ -209,7 +208,7 @@ import java.util.HashMap;
                                 FirebaseUser user = mAuth.getCurrentUser();
                                 Toast.makeText(SignInActivity.this, "로그인 성공",
                                         Toast.LENGTH_SHORT).show();
-                                sharedPreference();
+                                sharedPreference("UserEmail", email);
                                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                                 startActivityForResult(intent, Protocol.SIGN_IN_OK);
                                 SA.finish();
@@ -225,10 +224,10 @@ import java.util.HashMap;
                     });
         }
     }
-        public void sharedPreference() {
+        public void sharedPreference(String key, String value) {
             sh_Pref = getSharedPreferences("Login Credentials", MODE_PRIVATE);
             toEdit = sh_Pref.edit();
-            toEdit.putString("UserEmail", email);//쓴다
+            toEdit.putString(key, value);//쓴다
             toEdit.commit();
         }
         public void applySharedPreference(){

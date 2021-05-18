@@ -1,6 +1,7 @@
 package gachon.mp.livre_bottom_navigation.ui.more;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
 import android.os.Build;
@@ -52,7 +53,9 @@ public class ChangePersonalInfoActivity extends AppCompatActivity {
     private FirebaseUser user;
     private String profileImg = "";
     private final int GET_GALLERY_IMAGE = 200;
-
+    SharedPreferences sh_Pref;
+    EditText editText_nickname;
+    SharedPreferences.Editor toEdit;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -60,10 +63,12 @@ public class ChangePersonalInfoActivity extends AppCompatActivity {
         setContentView(R.layout.fragment_more_1personal_info);
         ImageView user_profile = (ImageView)findViewById(R.id.user_profile);
         ImageButton btn_gallery = (ImageButton)findViewById(R.id.btn_gallery);
-        EditText editText_nickname = (EditText)findViewById(R.id.editText_nickname);
+        editText_nickname = (EditText)findViewById(R.id.editText_nickname);
+        applySharedPreference();
         ImageButton btn_change_pw = (ImageButton)findViewById(R.id.btn_change_pw);
         ImageButton btn_save = (ImageButton)findViewById(R.id.btn_save);
         updateProfileImg(user_profile);
+
         /*유저 닉네임 파이어스토어에서 가져오기*/
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
@@ -83,6 +88,7 @@ public class ChangePersonalInfoActivity extends AppCompatActivity {
                                 document_id = document.getId();
                                 nickname = document.getData().get("nickname").toString();
                                 editText_nickname.setText(nickname);
+                                sharedPreference("Nickname", nickname);
                             }
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
@@ -254,5 +260,17 @@ public class ChangePersonalInfoActivity extends AppCompatActivity {
                     }
                 });
     }
-
+    public void sharedPreference(String key, String value) {
+        sh_Pref = getSharedPreferences("Login Credentials", MODE_PRIVATE);
+        toEdit = sh_Pref.edit();
+        toEdit.putString(key, value);//쓴다
+        toEdit.commit();
+    }
+    public void applySharedPreference(){
+        sh_Pref = getSharedPreferences("Login Credentials", MODE_PRIVATE);
+        if (sh_Pref!=null && sh_Pref.contains("Nickname")){ //null이면 noname
+            String userEmail = sh_Pref.getString("Nickname", "닉네임");//읽어온다
+            editText_nickname.setText(userEmail);
+        }
+    }
 }

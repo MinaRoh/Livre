@@ -1,6 +1,7 @@
 package gachon.mp.livre_bottom_navigation;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
@@ -67,7 +68,8 @@ public class SignUpActivity extends AppCompatActivity implements GoogleApiClient
     private static final int RC_SIGN_IN = 1000;
     private boolean nicknameCheck = false;
     private CallbackManager mCallbackManager;
-
+    SharedPreferences sh_Pref;
+    SharedPreferences.Editor toEdit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -237,7 +239,7 @@ public class SignUpActivity extends AppCompatActivity implements GoogleApiClient
                             String email = user.getEmail();
                             String uid = user.getUid();
                             String nickname = user.getDisplayName();
-
+                            sharedPreference("Nickname", nickname);
                             //해쉬맵 테이블을 파이어베이스 데이터베이스에 저장
                             HashMap<Object, String> hashMap = new HashMap<>();
                             hashMap.put("uid", uid);
@@ -284,6 +286,7 @@ public class SignUpActivity extends AppCompatActivity implements GoogleApiClient
         String email = emailEditText.getText().toString();
         String password = passwordEditText.getText().toString();
         String Nname = nicknameEditText.getText().toString();
+
         if(email.isEmpty()){
             Toast.makeText(gachon.mp.livre_bottom_navigation.SignUpActivity.this, "이메일을 입력해 주세요",
                     Toast.LENGTH_SHORT).show();
@@ -303,7 +306,7 @@ public class SignUpActivity extends AppCompatActivity implements GoogleApiClient
                                     String email = user.getEmail();
                                     String uid = user.getUid();
                                     String nickname = Nname;
-
+                                    sharedPreference("Nickname", Nname);
                                     //해쉬맵 테이블을 파이어베이스 데이터베이스에 저장
                                     HashMap<Object, String> hashMap = new HashMap<>();
                                     hashMap.put("uid", uid);
@@ -377,7 +380,7 @@ public class SignUpActivity extends AppCompatActivity implements GoogleApiClient
                             String email = user.getEmail();
                             String uid = user.getUid();
                             String nickname = user.getDisplayName();
-
+                            sharedPreference("Nickname", nickname);
                             //해쉬맵 테이블을 파이어베이스 데이터베이스에 저장
                             HashMap<Object, String> hashMap = new HashMap<>();
                             hashMap.put("uid", uid);
@@ -431,5 +434,10 @@ public class SignUpActivity extends AppCompatActivity implements GoogleApiClient
             }
         }
     }
-
+    public void sharedPreference(String key, String value) {
+        sh_Pref = getSharedPreferences("Login Credentials", MODE_PRIVATE);
+        toEdit = sh_Pref.edit();
+        toEdit.putString(key, value);//쓴다
+        toEdit.commit();
+    }
     }
