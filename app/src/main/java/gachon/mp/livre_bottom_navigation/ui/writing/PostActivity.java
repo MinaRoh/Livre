@@ -18,6 +18,9 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import gachon.mp.livre_bottom_navigation.R;
 
 /*글쓰기 완료한 포스트를 보여주는 액티비티
@@ -55,12 +58,12 @@ public class PostActivity extends AppCompatActivity {
                         String txt_title = document.getData().get("title").toString();
                         String txt_nickname = document.getData().get("nickname").toString();
                         String txt_contents = document.getData().get("contents").toString();
-                        String txt_uploadTime = document.getData().get("uploadTime").toString();
+                        //String txt_uploadTime = document.getData().get("uploadTime").toString();
                         int int_num_heart = Integer.parseInt(String.valueOf(document.getData().get("num_heart")));
                         int int_num_comment = Integer.parseInt(String.valueOf(document.getData().get("num_comment")));
                         title.setText(txt_title);
                         nickname.setText(txt_nickname);
-                        upload_time.setText(txt_uploadTime);
+                        upload_time.setText(getTime());
                         contents.setText(txt_contents);
                         num_heart.setText(String.valueOf(int_num_heart));
                         num_comment.setText(String.valueOf(int_num_comment));
@@ -74,5 +77,9 @@ public class PostActivity extends AppCompatActivity {
         });
 
 
+    }
+    static String getTime() {
+        SimpleDateFormat f = new SimpleDateFormat("yyyy.MM.dd HH:mm");
+        return f.format(new Date());
     }
 }

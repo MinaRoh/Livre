@@ -160,8 +160,12 @@ public class WritingActivity extends AppCompatActivity {
 
             // firestore 에 업로드
             user = FirebaseAuth.getInstance().getCurrentUser();
-            String filePath = imagePath.toString(); //Uri to String
-            System.out.println("************************filePath: " + filePath);
+            String filePath; //Uri to String
+            if(imagePath != null){
+                filePath = imagePath.toString(); //Uri to String
+                System.out.println("************************filePath: " + filePath);
+            }
+
 //            String filePath =
             WriteInfo writeInfo = new WriteInfo(ISBN, title, nickname, contents, getImagePath(), user.getUid(), upload_time, 0, 0);
             postUploader(writeInfo);
@@ -210,7 +214,7 @@ public class WritingActivity extends AppCompatActivity {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 //                            progressDialog.dismiss(); //업로드 진행 Dialog 상자 닫기
-                            Toast.makeText(getApplicationContext(), "업로드 완료!", Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(getApplicationContext(), "업로드 완료!", Toast.LENGTH_SHORT).show();
                         }
                     })
                     //실패시
@@ -231,8 +235,6 @@ public class WritingActivity extends AppCompatActivity {
 //                            progressDialog.setMessage("Uploaded " + ((int) progress) + "% ...");
                         }
                     });
-        } else {
-            Toast.makeText(getApplicationContext(), "파일을 먼저 선택하세요.", Toast.LENGTH_SHORT).show();
         }
     }
 

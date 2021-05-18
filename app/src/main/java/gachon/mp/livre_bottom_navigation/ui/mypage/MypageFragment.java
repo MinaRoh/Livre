@@ -28,6 +28,9 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.util.Objects;
+
+import gachon.mp.livre_bottom_navigation.MainActivity;
 import gachon.mp.livre_bottom_navigation.R;
 
 public class MypageFragment extends Fragment {
@@ -73,10 +76,15 @@ public class MypageFragment extends Fragment {
                                 public void onComplete(@NonNull Task<Uri> task) {
                                     if (task.isSuccessful()) {
                                         // Glide 이용하여 이미지뷰에 로딩
-                                        Glide.with(getActivity())
-                                                .load(task.getResult())
-                                                .override(1024, 980)
-                                                .into(imageView);
+                                        try {
+                                            Glide.with(requireActivity())
+                                                    .load(task.getResult())
+                                                    .override(1024, 980)
+                                                    .into(imageView);
+                                        }
+                                        catch (NullPointerException e){
+
+                                        }
                                     } else {
                                         // URL을 가져오지 못하면 토스트 메세지
                                         Toast.makeText(getActivity(), task.getException().getMessage(), Toast.LENGTH_SHORT).show();
