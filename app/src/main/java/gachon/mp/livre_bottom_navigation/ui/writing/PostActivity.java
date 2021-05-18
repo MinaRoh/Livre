@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -38,6 +39,8 @@ public class PostActivity extends AppCompatActivity {
     private String posts_id;
     private FirebaseUser user;
     ImageView post_image;
+    int int_num_heart;
+    int int_num_comment;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,6 +54,7 @@ public class PostActivity extends AppCompatActivity {
         TextView contents = (TextView)findViewById(R.id.contents);
         ImageButton heart = (ImageButton)findViewById(R.id.heart);
         TextView num_heart = (TextView)findViewById(R.id.num_heart);
+
         ImageButton comment = (ImageButton)findViewById(R.id.comment);
         TextView num_comment = (TextView)findViewById(R.id.num_comment);
         //문서의 uid를 전달 받아서 해당 문서를 보여준다.
@@ -68,8 +72,8 @@ public class PostActivity extends AppCompatActivity {
                         String txt_title = document.getData().get("title").toString();
                         String txt_nickname = document.getData().get("nickname").toString();
                         String txt_contents = document.getData().get("contents").toString();
-                        int int_num_heart = Integer.parseInt(String.valueOf(document.getData().get("num_heart")));
-                        int int_num_comment = Integer.parseInt(String.valueOf(document.getData().get("num_comment")));
+                        int_num_heart = Integer.parseInt(String.valueOf(document.getData().get("num_heart")));
+                        int_num_comment = Integer.parseInt(String.valueOf(document.getData().get("num_comment")));
                         title.setText(txt_title);
                         nickname.setText(txt_nickname);
                         upload_time.setText(getTime());
@@ -90,7 +94,28 @@ public class PostActivity extends AppCompatActivity {
 
 
         });
-
+        /*하트 눌렀을 때*/
+        heart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int_num_heart++;//하트 수 올리고
+                num_heart.setText(String.valueOf(int_num_heart));//포스트에 반영
+                docRef
+                        .update("num_heart", int_num_heart)
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Log.d(TAG, "DocumentSnapshot successfully updated!");
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.w(TAG, "Error updating document", e);
+                            }
+                        });
+            }
+        });
 
     }
 
