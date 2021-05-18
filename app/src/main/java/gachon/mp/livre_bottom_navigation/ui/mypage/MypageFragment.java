@@ -1,6 +1,9 @@
 package gachon.mp.livre_bottom_navigation.ui.mypage;
 
+import android.graphics.drawable.ShapeDrawable;
+import android.graphics.drawable.shapes.OvalShape;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -44,6 +47,14 @@ public class MypageFragment extends Fragment {
                 new ViewModelProvider(this).get(MypageViewModel.class);
         View root = inflater.inflate(R.layout.fragment_mypage, container, false);
         final TextView textView = root.findViewById(R.id.text_mypages);
+
+        ImageView imageView = root.findViewById(R.id.iv_profile);
+        //프로필 동그랗게 하기
+        imageView.setBackground(new ShapeDrawable(new OvalShape()));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {//롤리팝 이상만 지원하나봄?
+            imageView.setClipToOutline(true);
+        }
+        
         mypageViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
@@ -62,7 +73,6 @@ public class MypageFragment extends Fragment {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 profileImg = document.get("profileImage").toString();
                             }
-                            ImageView imageView = root.findViewById(R.id.iv_profile);
                             //FirebaseStorage 인스턴스를 생성
                             FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
                             // 위의 저장소를 참조하는 파일명으로 지정
