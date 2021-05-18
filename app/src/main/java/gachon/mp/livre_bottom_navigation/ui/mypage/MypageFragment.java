@@ -83,10 +83,13 @@ public class MypageFragment extends Fragment {
                                 public void onComplete(@NonNull Task<Uri> task) {
                                     if (task.isSuccessful()) {
                                         // Glide 이용하여 이미지뷰에 로딩
-                                        Glide.with(getActivity())
-                                                .load(task.getResult())
-                                                .override(1024, 980)
-                                                .into(imageView);
+                                        if(getActivity() != null){
+                                            Glide.with(getActivity())//네비게이션 왔다갔다 이동하다보면 여기서 맨날 에러남.
+                                                    .load(task.getResult())
+                                                    .override(1024, 980)
+                                                    .into(imageView);
+                                        }
+
                                     } else {
                                         // URL을 가져오지 못하면 토스트 메세지
                                         Toast.makeText(getActivity(), task.getException().getMessage(), Toast.LENGTH_SHORT).show();
