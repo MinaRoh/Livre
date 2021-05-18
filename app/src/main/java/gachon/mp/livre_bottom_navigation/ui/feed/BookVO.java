@@ -5,7 +5,7 @@ public class BookVO {
     private String image;
     private String author;
     private String description;
-    private int isbn;
+    private String isbn;
 
     public String getTitle() {
         return title;
@@ -23,9 +23,9 @@ public class BookVO {
         this.author = author;
     }
 
-    public int getIsbn() { return isbn; }
+    public String getIsbn() { return isbn; }
 
-    public void setIsbn(int isbn) { this.isbn = isbn; }
+    public void setIsbn(String isbn) { this.isbn = isbn; }
 
     public String getDescription() { return description; }
 

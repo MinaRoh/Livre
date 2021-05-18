@@ -154,7 +154,7 @@ public class FeedFragment extends Fragment {
                     vo.setImage(obj.getString("image"));
                     vo.setAuthor(stripHtml(obj.getString("author")));
                     vo.setDescription(stripHtml(obj.getString("description")));
-                    // vo.setIsbn(obj.getInt("isbn"));
+                    vo.setIsbn(obj.getString("isbn"));
 
                     array.add(vo);
                 }
@@ -201,7 +201,7 @@ public class FeedFragment extends Fragment {
                         intent.putExtra("description", vo.getDescription());
                         intent.putExtra("author", vo.getAuthor());
                         intent.putExtra("image", vo.getImage());
-                        // intent.putExtra("isbn", vo.getIsbn());
+                        intent.putExtra("isbn", vo.getIsbn());
                         startActivity(intent);
 
                         return true;
