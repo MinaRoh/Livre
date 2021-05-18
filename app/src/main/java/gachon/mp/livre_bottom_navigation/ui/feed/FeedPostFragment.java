@@ -36,7 +36,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.Date;
 
-import gachon.mp.livre_bottom_navigation.MainAdapter;
+//import gachon.mp.livre_bottom_navigation.MainAdapter;
 import gachon.mp.livre_bottom_navigation.PostInfo;
 import gachon.mp.livre_bottom_navigation.R;
 
