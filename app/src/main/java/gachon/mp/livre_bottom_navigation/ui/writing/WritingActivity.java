@@ -2,6 +2,7 @@ package gachon.mp.livre_bottom_navigation.ui.writing;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -62,18 +63,21 @@ public class WritingActivity extends AppCompatActivity {
     private String contents;
     private ArrayList<String> pathList = new ArrayList<>();
     private LinearLayout parent;
-
     SimpleDateFormat formatter;
+    String filename;
+    StorageReference storageRef;
+    public static Context mContext;    //외부참조용 context 선언
 
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_writing);
+        mContext = this;        //외부참조용 context 초기화 (onCreate 에서 해야함)
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         user = FirebaseAuth.getInstance().getCurrentUser();
-        FirebaseAuth mAuth = FirebaseAuth.getInstance();
-        FirebaseUser user = mAuth.getCurrentUser();//사용자
+//        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+//        FirebaseUser user = mAuth.getCurrentUser();//사용자
 
         assert user != null;
         String user_id = user.getUid();//사용자 uid
@@ -142,8 +146,12 @@ public class WritingActivity extends AppCompatActivity {
         FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
         final DocumentReference documentReference = firebaseFirestore.collection("Posts").document();
 
+//        Date date=new Date();
+//        SimpleDateFormat sfd = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.getDefault());
+//        sfd.format(new Date());
+//        TimeSold.setText(String.valueOf(date));
 
-        Timestamp upload_time = new Timestamp(new Date());
+        Date upload_time = new Date();
         String ISBN = "ISBNEXAMPLE"; // 예시 ISBN임. 실제로는 검색할 때 누른 책의 ISBN값을 전달 받아야함
 
         if(title.length() > 0 ){
@@ -200,9 +208,9 @@ public class WritingActivity extends AppCompatActivity {
             //Unique한 파일명을 만들자.
             formatter = new SimpleDateFormat("yyyyMMHH_mmss");
             Date now = new Date();
-            String filename = user.getUid() +"_" + formatter.format(now) + ".png";
+            filename = user.getUid() +"_" + formatter.format(now) + ".png";
             //storage 주소와 폴더 파일명을 지정해 준다.
-            StorageReference storageRef = storage.getReferenceFromUrl("gs://mp-livre.appspot.com").child("images/"+ user.getUid() + "/" + filename);
+            storageRef = storage.getReferenceFromUrl("gs://mp-livre.appspot.com").child("images/"+ user.getUid() + "/" + filename);
             //올라가거라...
             storageRef.putFile(imagePath)
                     //성공시

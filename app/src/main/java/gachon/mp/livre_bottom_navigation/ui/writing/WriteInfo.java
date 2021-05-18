@@ -4,18 +4,20 @@ import android.net.Uri;
 
 import com.google.firebase.Timestamp;
 
+import java.util.Date;
+
 public class WriteInfo {
     private String title;
     private String contents;
     private String publisher;
     private int num_heart;
     private int num_comment;
-    private Timestamp upload_time;
+    private Date upload_time;
     private String nickname;
     private String ISBN;
     private String imagePath;
 
-    public WriteInfo(String ISBN, String title, String nickname, String contents, String imagePath, String publisher, Timestamp upload_time, int num_heart, int num_comment){
+    public WriteInfo(String ISBN, String title, String nickname, String contents, String imagePath, String publisher, Date upload_time, int num_heart, int num_comment){
         this.ISBN = ISBN;
         this.title = title;
         this.nickname = nickname;
@@ -43,6 +45,6 @@ public class WriteInfo {
     public void setNum_heart(Integer num_heart){ this.num_heart = num_heart;}
     public int getNum_comment(){ return this.num_comment;}
     public void setNum_comment(Integer num_comment){ this.num_comment = num_comment;}
-    public Timestamp getUploadTime(){ return this.upload_time;}
-    public void setUploadTime(Timestamp upload_time){ this.upload_time= upload_time;}
+    public Date getUploadTime(){ return this.upload_time;}
+    public void setUploadTime(Date upload_time){ this.upload_time= upload_time;}
 }

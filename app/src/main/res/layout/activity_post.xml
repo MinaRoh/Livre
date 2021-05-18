@@ -74,8 +74,9 @@
         android:background="#CAC9C9" />
 <ImageView
     android:id="@+id/post_image"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"/>
+    android:layout_width="match_parent"
+    android:layout_height="200dp"
+    android:background="@color/bg_ground" />
     <TextView
         android:id="@+id/contents"
         android:layout_width="match_parent"
@@ -110,13 +111,14 @@
             android:background="@android:color/transparent"
             android:src="@drawable/outline_sms_24"
             android:layout_marginStart="10dp" />
+
         <TextView
             android:id="@+id/num_comment"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginStart="5dp"
             android:layout_marginLeft="5dp"
-            android:textSize="20sp"
-            android:layout_marginStart="5dp" />
+            android:textSize="20sp" />
     </LinearLayout>
 </LinearLayout>
 </ScrollView>

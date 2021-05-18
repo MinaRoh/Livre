@@ -48,6 +48,15 @@ public class MainActivity extends AppCompatActivity {
                 R.id.navigation_more)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+
+//          navigation 오류 고치는중
+//        final String prevLabel = (String) navController.getCurrentDestination().getLabel();
+//        String currLabel = (String) navController.getCurrentDestination().getLabel();
+//        System.out.println("************** prevLabel : " + prevLabel);
+//        System.out.println("************** currLabel : " + currLabel);
+
+
+
         NavigationUI.setupWithNavController(navView, navController);
 
 

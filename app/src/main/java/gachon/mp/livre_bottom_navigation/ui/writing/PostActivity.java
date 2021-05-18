@@ -1,22 +1,32 @@
 package gachon.mp.livre_bottom_navigation.ui.writing;
 
 import android.content.Intent;
-import android.media.Image;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
+import java.text.SimpleDateFormat;
 
 import gachon.mp.livre_bottom_navigation.R;
 
@@ -25,6 +35,8 @@ import gachon.mp.livre_bottom_navigation.R;
 public class PostActivity extends AppCompatActivity {
     private static final String TAG = "PostActivity";
     private String posts_id;
+    private FirebaseUser user;
+    ImageView post_image;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,7 +46,7 @@ public class PostActivity extends AppCompatActivity {
         TextView nickname = (TextView)findViewById(R.id.nickname);
         TextView upload_time = (TextView)findViewById(R.id.upload_time);
         ImageButton user_menu = (ImageButton)findViewById(R.id.user_menu);
-        ImageView post_image = (ImageView)findViewById(R.id.post_image);
+//        ImageView post_image = (ImageView)findViewById(R.id.post_image);
         TextView contents = (TextView)findViewById(R.id.contents);
         ImageButton heart = (ImageButton)findViewById(R.id.heart);
         TextView num_heart = (TextView)findViewById(R.id.num_heart);
@@ -64,6 +76,10 @@ public class PostActivity extends AppCompatActivity {
                         contents.setText(txt_contents);
                         num_heart.setText(String.valueOf(int_num_heart));
                         num_comment.setText(String.valueOf(int_num_comment));
+
+                        //이미지 불러오기 함수 실행
+                        getImage();
+
                     } else {
                         Log.d(TAG, "No such document");
                     }
@@ -71,8 +87,68 @@ public class PostActivity extends AppCompatActivity {
                     Log.d(TAG, "get failed with ", task.getException());
                 }
             }
+
+
         });
 
 
     }
+
+    public void getImage() {
+
+
+        //storage
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        //storage 주소와 폴더 파일명을 지정해 준다.
+        StorageReference storageRef = storage.getReferenceFromUrl("gs://mp-livre.appspot.com");
+        user = FirebaseAuth.getInstance().getCurrentUser();
+
+
+        String filename = ((WritingActivity) WritingActivity.mContext).filename;
+        System.out.println("Post activity ************** filename : " + filename);
+
+        //Storage 내부의 images 폴더 안의 image.jpg 파일명을 가리키는 참조 생성
+        StorageReference pathReference = storageRef.child("images");
+        System.out.println("Post activity **************스토리지 어느곳 참조?: " + pathReference);
+
+        if(pathReference == null){
+            toastMsg("저장소에 사진이 없습니다.");
+        }else{
+            StorageReference submitProfile = storage.getReferenceFromUrl("gs://mp-livre.appspot.com").child("images/" + user.getUid() + "/" + filename);
+            System.out.println("Post activity ************** submitProfile : " + submitProfile);
+            submitProfile.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                @Override
+                public void onSuccess(Uri uri) {
+
+                    Glide.with(PostActivity.this)
+                            .load(uri)
+                            .into(post_image);
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.w(TAG, "Error getting image", e);
+                    toastMsg("이미지 로딩에 실패하였습니다.");
+                }
+            });
+        }
+
+
+//        // Reference to an image file in Cloud Storage
+//        StorageReference storageRef = FirebaseStorage.getInstance().getReference();
+//
+//        // ImageView in your Activity
+//        ImageView imageView = findViewById(R.id.post_image);
+//
+//        // Download directly from StorageReference using Glide
+//        // (See MyAppGlideModule for Loader registration)
+//        Glide.with(this /* context */)
+//                .load(storageRef)
+//                .into(imageView);
+
+    }
+
+        private void toastMsg(String msg){
+            Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+        }
 }
