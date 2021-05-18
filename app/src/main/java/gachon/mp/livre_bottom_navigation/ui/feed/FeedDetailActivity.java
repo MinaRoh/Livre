@@ -27,7 +27,7 @@ public class FeedDetailActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_feed_detail);
+        setContentView(R.layout.activity_feed_detail);
 
         // activity_book_detail 에 put 할 것들
         title = findViewById(R.id.txttitle);
