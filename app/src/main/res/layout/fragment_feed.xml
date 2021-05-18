@@ -1,75 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/fragment_feed_container"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="10dp">
+    android:id="@+id/fragment_feed_container"
+    android:orientation="vertical">
 
     <LinearLayout
-        android:id="@+id/search_bar"
+        android:id="@+id/linear"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         tools:ignore="MissingConstraints">
 
-        <ImageView
-            android:id="@+id/btn_search"
-            android:layout_width="40dp"
-            android:layout_height="35dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="10dp"
-            android:gravity="center"
-            android:src="@drawable/baseline_search_24" />
+    <ImageView
+        android:id="@+id/btn_search"
+        android:layout_width="40dp"
+        android:layout_height="35dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="5dp"
+        android:src="@drawable/baseline_search_24"/>
 
-        <AutoCompleteTextView
-            android:id="@+id/autoCompleteTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:backgroundTint="#97b843"
-            android:completionHint="검색어를 입력하세요"
-            android:completionThreshold="1"
-            android:gravity="center_vertical"
-            android:singleLine="true"
-            android:textColor="#97b843"
-            android:textColorHint="#97b843"
-            tools:ignore="MissingConstraints" />
-    </LinearLayout>
-
-    <LinearLayout
+    <AutoCompleteTextView
+        android:id="@+id/autoCompleteTextView"
+        android:singleLine="true"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <Button
-            android:id="@+id/btn_post"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="post"/>
-        <Button
-            android:id="@+id/btn_searchresult"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="search result"/>
-
-        <Button
-            android:id="@+id/btn_exit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="현재 프래그먼트 닫기" />
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:gravity="center_vertical"
+        android:backgroundTint="#97b843"
+        android:textColor="#97b843"
+        android:completionHint="검색어를 입력하세요"
+        android:textColorHint="#97b843"
+        android:completionThreshold="1"
+        tools:ignore="MissingConstraints" />
     </LinearLayout>
 
-    <FrameLayout
-        android:id="@+id/nav_host_fragment"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical" />
+        android:layout_below="@id/linear"
+        android:layout_marginTop="50dp" />
 
 
-</LinearLayout>
+</FrameLayout>
+
