@@ -71,6 +71,14 @@
                 android:gravity="center"
                 android:text="Button" />
 
+            <Button
+                android:id="@+id/button_temp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="리스트 액티비티 열기(임시)" />
+
         </LinearLayout>
 
 

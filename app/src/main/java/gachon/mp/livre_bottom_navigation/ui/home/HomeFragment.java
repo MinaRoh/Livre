@@ -1,5 +1,6 @@
 package gachon.mp.livre_bottom_navigation.ui.home;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,7 +15,9 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import gachon.mp.livre_bottom_navigation.ListActivity;
 import gachon.mp.livre_bottom_navigation.R;
+import gachon.mp.livre_bottom_navigation.ui.more.AlarmActivity;
 
 public class HomeFragment extends Fragment {
 
@@ -91,6 +94,20 @@ public class HomeFragment extends Fragment {
             }
         });
 
+        //임시로 list acvitiy로 가는 버튼
+        Button button_temp = getActivity().findViewById(R.id.button_temp);
+        button_temp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startListActivity();
+            }
+        });
 
+
+    }
+
+    private void startListActivity() {
+        Intent intent = new Intent(getActivity(), ListActivity.class);
+        startActivity(intent);
     }
 }
