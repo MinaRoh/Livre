@@ -1,7 +1,10 @@
 package gachon.mp.livre_bottom_navigation.ui.writing;
 
 import android.content.Intent;
+import android.graphics.drawable.ShapeDrawable;
+import android.graphics.drawable.shapes.OvalShape;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -98,8 +101,14 @@ public class PostActivity extends AppCompatActivity {
                 }
             }
 
-
         });
+
+        //프로필 동그랗게 하기
+        user_profile.setBackground(new ShapeDrawable(new OvalShape()));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            user_profile.setClipToOutline(true);
+        }
+
         /*유저 프로필 이미지 불러오기*/
         FirebaseFirestore db_user = FirebaseFirestore.getInstance();
         user = FirebaseAuth.getInstance().getCurrentUser();
