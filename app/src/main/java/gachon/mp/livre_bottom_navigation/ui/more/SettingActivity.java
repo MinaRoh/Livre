@@ -80,7 +80,6 @@ public class SettingActivity extends AppCompatActivity {
         items.add("버전 정보");
         items.add("오류 신고");
         items.add("회원 탈퇴");
-        items.add("글쓰기(베타)");
 
         CustomAdapter adapter=new CustomAdapter(this, 0, items);
         listView.setAdapter(adapter);
@@ -102,7 +101,7 @@ public class SettingActivity extends AppCompatActivity {
                 }
                 else if(position==2){//로그아웃!
                     AlertDialog.Builder alBuilder = new AlertDialog.Builder(SettingActivity.this);
-                    alBuilder.setMessage("로그아웃하시겠습니까?");
+                    alBuilder.setMessage("로그아웃 하시겠습니까?");
 
                     // "예" 버튼을 누르면 실행되는 리스너
                     alBuilder.setPositiveButton("예", new DialogInterface.OnClickListener() {
@@ -159,11 +158,6 @@ public class SettingActivity extends AppCompatActivity {
                         startActivity(intent);
                         finish();
                     }
-                }
-                else if(position==7){
-                    intent=new Intent(getApplicationContext(), WritingActivity.class);
-                    startActivity(intent);
-                    finish();
                 }
             }
         });
