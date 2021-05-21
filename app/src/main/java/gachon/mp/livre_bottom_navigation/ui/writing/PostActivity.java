@@ -64,7 +64,7 @@ public class PostActivity extends AppCompatActivity {
         TextView num_heart = (TextView)findViewById(R.id.num_heart);
         ImageButton comment = (ImageButton)findViewById(R.id.comment);
         TextView num_comment = (TextView)findViewById(R.id.num_comment);
-
+        post_image = (ImageView)findViewById(R.id.post_image);
         /*문서의 uid를 전달 받아서 해당 문서를 보여준다.*/
         Intent intent = getIntent();
         posts_id = intent.getStringExtra("posts_id");
@@ -220,10 +220,9 @@ public class PostActivity extends AppCompatActivity {
             toastMsg("저장소에 사진이 없습니다.");
         }else{
             //Storage 내부의 images 폴더 안의 image.jpg 파일명을 가리키는 참조 생성
-
-
-            StorageReference submitProfile = storage.getReferenceFromUrl(imagePath);
+            StorageReference submitProfile = storage.getReferenceFromUrl("gs://mp-livre.appspot.com").child("images/"+ user.getUid().toString() + "/" + filename);
             System.out.println("Post activity ************** submitProfile : " + submitProfile);
+            
             submitProfile.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                 @Override
                 public void onSuccess(Uri uri) {

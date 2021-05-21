@@ -182,7 +182,7 @@ public class WritingActivity extends AppCompatActivity {
             if(imagePath != null){
                 String filePath = imagePath.toString(); //Uri to String
                 System.out.println("************************filePath: " + filePath);
-                WriteInfo writeInfo = new WriteInfo(posts_id, ISBN, book_title, title, nickname, contents, getImagePath(), user.getUid(), upload_time, 0, 0);
+                WriteInfo writeInfo = new WriteInfo(posts_id, ISBN, book_title, title, nickname, contents, filename, user.getUid(), upload_time, 0, 0);
                 postUploader(writeInfo);
             }
             else {
