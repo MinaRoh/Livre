@@ -75,6 +75,7 @@ public class ListActivity extends AppCompatActivity {
                                 WriteInfo writeInfo = new WriteInfo(
                                         doc.getString("posts_id"),
                                         doc.getString("isbn"),
+                                        doc.getString("book_title"),
                                         doc.getString("title"),
                                         doc.getString("nickname"),
                                         doc.getString("contents"),

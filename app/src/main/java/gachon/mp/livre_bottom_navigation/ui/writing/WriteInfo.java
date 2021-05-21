@@ -7,6 +7,7 @@ import com.google.firebase.Timestamp;
 import java.util.Date;
 
 public class WriteInfo {
+    private String book_title;
     private String title;
     private String contents;
     private String publisher;
@@ -18,9 +19,10 @@ public class WriteInfo {
     private String imagePath;
     private String posts_id;
 
-    public WriteInfo(String posts_id, String ISBN, String title, String nickname, String contents, String imagePath, String publisher, Timestamp upload_time, int num_heart, int num_comment){
+    public WriteInfo(String posts_id, String ISBN, String book_title, String title, String nickname, String contents, String imagePath, String publisher, Timestamp upload_time, int num_heart, int num_comment){
         this.posts_id = posts_id;
         this.ISBN = ISBN;
+        this.book_title = book_title;
         this.title = title;
         this.nickname = nickname;
         this.contents = contents;
@@ -36,8 +38,10 @@ public class WriteInfo {
     public void setPosts_id(String posts_id) { this.posts_id = posts_id; }
     public String getTitle(){ return this.title;}
     public void setTitle(String title){ this.title = title;}
+    public String getBookTitle(){ return this.book_title;}
+    public void setBookTitle(String title){ this.book_title = book_title;}
     public String getISBN(){ return this.ISBN;}
-    public void setISBN(String title){ this.ISBN = ISBN;}
+    public void setISBN(String ISBN){ this.ISBN = ISBN;}
     public String getNickname(){ return this.nickname;}
     public void setNickname(String nickname){ this.nickname = nickname;}
     public String getContents(){ return this.contents;}

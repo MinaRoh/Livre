@@ -158,7 +158,7 @@ public class FeedFragment extends Fragment {
         mRecyclerView.setLayoutManager(layoutManager);
 
         //show data in recyclerVeiw
-        showData();
+        //showData();
 
 
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -255,54 +255,54 @@ public class FeedFragment extends Fragment {
 //        void messageFromChildFragment(Uri uri);
 //    }
 
-
-    private void showData() {
-        final DocumentReference documentReference = firebaseFirestore.collection("Posts").document();
-
-        firebaseFirestore.collection("Posts")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-
-                        //show data
-                        for(DocumentSnapshot doc:task.getResult()){
-
-                            try {
-                                WriteInfo writeInfo = new WriteInfo(
-                                        doc.getString("posts_id"),
-                                        doc.getString("isbn"),
-                                        doc.getString("title"),
-                                        doc.getString("nickname"),
-                                        doc.getString("contents"),
-                                        doc.getString("imagePath"),
-                                        doc.getString("publisher"),
-                                        doc.getTimestamp("uploadTime"),
-                                        doc.getLong("num_heart").intValue(),
-                                        doc.getLong("num_comment").intValue());
-
-                                writeInfoList.add(writeInfo);
-
-                            } catch (RuntimeException e){
-                                System.out.println(e);
-                            }
-
-                        }
-                        // 지금은 오류남
-//                        //adapter
-//                        adapter = new CustomAdapter(gachon.mp.livre_bottom_navigation.FeedFragment.this, writeInfoList);
-//                        //set adapter to recyclerview
-//                        mRecyclerView.setAdapter(adapter);
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        //called when there is any error while retrieving
-                        startToast(e.getMessage());
-                    }
-                });
-    }
+//161번째 줄도 주석 풀어야 함
+//    private void showData() {
+//        final DocumentReference documentReference = firebaseFirestore.collection("Posts").document();
+//
+//        firebaseFirestore.collection("Posts")
+//                .get()
+//                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//
+//                        //show data
+//                        for(DocumentSnapshot doc:task.getResult()){
+//
+//                            try {
+//                                WriteInfo writeInfo = new WriteInfo(
+//                                        doc.getString("posts_id"),
+//                                        doc.getString("isbn"),
+//                                        doc.getString("title"),
+//                                        doc.getString("nickname"),
+//                                        doc.getString("contents"),
+//                                        doc.getString("imagePath"),
+//                                        doc.getString("publisher"),
+//                                        doc.getTimestamp("uploadTime"),
+//                                        doc.getLong("num_heart").intValue(),
+//                                        doc.getLong("num_comment").intValue());
+//
+//                                writeInfoList.add(writeInfo);
+//
+//                            } catch (RuntimeException e){
+//                                System.out.println(e);
+//                            }
+//
+//                        }
+//                        // 지금은 오류남
+////                        //adapter
+////                        adapter = new CustomAdapter(gachon.mp.livre_bottom_navigation.FeedFragment.this, writeInfoList);
+////                        //set adapter to recyclerview
+////                        mRecyclerView.setAdapter(adapter);
+//                    }
+//                })
+//                .addOnFailureListener(new OnFailureListener() {
+//                    @Override
+//                    public void onFailure(@NonNull Exception e) {
+//                        //called when there is any error while retrieving
+//                        startToast(e.getMessage());
+//                    }
+//                });
+//    }
 
 
     private void startToast(String msg){

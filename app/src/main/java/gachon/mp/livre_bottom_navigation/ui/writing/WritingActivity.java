@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -50,16 +51,20 @@ import gachon.mp.livre_bottom_navigation.Protocol;
 import gachon.mp.livre_bottom_navigation.R;
 
 
-
 public class WritingActivity extends AppCompatActivity {
     private static final String TAG = "WritingActivity";
     final int GET_GALLERY_IMAGE=200;
     private FirebaseUser user;
     private String posts_id;
     private String nickname = "샘플닉네임";
+    private String ISBN;
+    private String book_title;
+
     Uri imagePath;
     ImageView getImageView;
     Button getBtnUpload;
+    TextView textView_book_title;
+
     private String contents;
     private ArrayList<String> pathList = new ArrayList<>();
     private LinearLayout parent;
@@ -73,6 +78,14 @@ public class WritingActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_writing);
+
+        textView_book_title=findViewById(R.id.booktitle);
+
+        Intent intent=getIntent();
+        ISBN=intent.getExtras().getString("isbn");
+        book_title=intent.getExtras().getString("book_title");
+        textView_book_title.setText(book_title);
+
         mContext = this;        //외부참조용 context 초기화 (onCreate 에서 해야함)
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         user = FirebaseAuth.getInstance().getCurrentUser();
@@ -161,7 +174,6 @@ public class WritingActivity extends AppCompatActivity {
 
 
             Timestamp upload_time = new Timestamp(new Date()); // 현재시간으로 타임스탬프 생성
-            String ISBN = "ISBNEXAMPLE"; // 예시 ISBN임. 실제로는 검색할 때 누른 책의 ISBN값을 전달 받아야함
             posts_id ="temp_id";
 
             // firestore 에 업로드
@@ -170,11 +182,11 @@ public class WritingActivity extends AppCompatActivity {
             if(imagePath != null){
                 String filePath = imagePath.toString(); //Uri to String
                 System.out.println("************************filePath: " + filePath);
-                WriteInfo writeInfo = new WriteInfo(posts_id, ISBN, title, nickname, contents, getImagePath(), user.getUid(), upload_time, 0, 0);
+                WriteInfo writeInfo = new WriteInfo(posts_id, ISBN, book_title, title, nickname, contents, getImagePath(), user.getUid(), upload_time, 0, 0);
                 postUploader(writeInfo);
             }
             else {
-                WriteInfo writeInfo = new WriteInfo(posts_id, ISBN, title, nickname, contents, "", user.getUid(), upload_time, 0, 0);
+                WriteInfo writeInfo = new WriteInfo(posts_id, ISBN, book_title, title, nickname, contents, "", user.getUid(), upload_time, 0, 0);
                 postUploader(writeInfo);
             }
 

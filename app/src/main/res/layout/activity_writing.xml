@@ -24,11 +24,10 @@
             android:orientation="vertical"
             android:padding="10dp">
 
-            <EditText
-                android:id="@+id/et_booktitle"
+            <TextView
+                android:id="@+id/booktitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="책 제목"
                 android:textSize="18sp" />
 
             <EditText
@@ -53,7 +52,6 @@
                 android:layout_height="wrap_content"
                 android:gravity="top"
                 android:hint="내용"
-                android:lines="15"
                 android:textSize="16sp" />
 
             <Button

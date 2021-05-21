@@ -103,6 +103,16 @@
 <!--        android:layout_width="match_parent"-->
 <!--        android:layout_height="match_parent" />-->
 
+    <Button
+        android:id="@+id/btn_write_report"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="10dp"
+        android:backgroundTint="@color/themeColor"
+        android:text="독서감상문 작성하기" />
+
 </LinearLayout>
 
 
