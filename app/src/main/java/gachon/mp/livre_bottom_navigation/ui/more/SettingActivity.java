@@ -54,22 +54,6 @@ public class SettingActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_more_setting);
-
-        //뭘로 가입했는지 알아옴
-        user.getIdToken(false).addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
-            @Override
-            public void onComplete(@NonNull Task<GetTokenResult> task) {
-                if (task.isSuccessful()) {
-                    Log.d(TAG, "getProviderData():" + user.getProviderData());
-                    token = task.getResult().getToken();
-                    Toast.makeText(SettingActivity.this, "getProviderData().get(0): " + user.getProviderData().get(0), Toast.LENGTH_SHORT).show();
-                }
-                else {
-                    Toast.makeText(SettingActivity.this, (CharSequence) task.getException(), Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-
         listView=(ListView)this.findViewById(R.id.listView);
 
         ArrayList<String> items=new ArrayList<>();
@@ -140,12 +124,33 @@ public class SettingActivity extends AppCompatActivity {
                     startActivity(intent);
                     finish();
                 }
-                else if(position==6){//회원탈퇴!
+                else if(position==6){
+                    /*회원탈퇴
+                    * 참고 깃허브 주소 : https://gist.github.com/stack07142/cd5eaa22f5ff0971f9b76118d825a09b
+                    * 구글, 페이스북 가입은 그냥 token만 있으면 delete가 되는거 같은데
+                    * 이메일의 경우에는 token이랑 비밀번호가 있어야 함.
+                    * 그래서 구글, 페북 사용자는 바로 알림창으로 '탈퇴하시겠습니까? - 예' 누르면 탈퇴하게 했고
+                    * 이메일 가입자는 따로 DeleteActivity가 나와서 비밀번호 입력 받고 확인 버튼을 누르면 탈퇴되게 함
+                    * 근데 구글/페북/이메일 사용자 나누는 것부터 막혀서 탈퇴가 잘 되는지는 확인 못해봤음. 오류 있을 수 있음!*/
 
+                    //토큰 가져오기
+                    user.getIdToken(false).addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<GetTokenResult> task) {
+                            if (task.isSuccessful()) {
+                                token = task.getResult().getToken();
+                            }
+                            else {
+                                Toast.makeText(SettingActivity.this, (CharSequence) task.getException(), Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+
+                    //어떤 로그인 방식이었는지 알아오기 - 실패
                     if (user.getProviderId() != null && user.getProviderData().contains("google.com")) {
                         credential = GoogleAuthProvider.getCredential(token, null);
                         System.out.println("구글");
-                        alertFunction();
+                        alertFunction();//밑에 함수 있음
 
                     } else if (user.getProviderId() != null && user.getProviderData().contains("facebook.com")) {
                         credential = FacebookAuthProvider.getCredential(token);
