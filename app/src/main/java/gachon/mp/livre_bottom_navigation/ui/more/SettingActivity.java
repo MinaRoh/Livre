@@ -5,21 +5,37 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.EmailAuthProvider;
+import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GetTokenResult;
+import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import gachon.mp.livre_bottom_navigation.MainActivity;
 import gachon.mp.livre_bottom_navigation.Protocol;
@@ -30,10 +46,29 @@ import gachon.mp.livre_bottom_navigation.ui.writing.WritingActivity;
 public class SettingActivity extends AppCompatActivity {
     ListView listView;
     MainActivity MA = (MainActivity)MainActivity.Main_Activity;//메인 액티비티
+    String TAG = "SettingActivity";
+    String token;
+    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    AuthCredential credential;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_more_setting);
+
+        //뭘로 가입했는지 알아옴
+        user.getIdToken(false).addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
+            @Override
+            public void onComplete(@NonNull Task<GetTokenResult> task) {
+                if (task.isSuccessful()) {
+                    Log.d(TAG, "getProviderData():" + user.getProviderData());
+                    token = task.getResult().getToken();
+                    Toast.makeText(SettingActivity.this, "getProviderData().get(0): " + user.getProviderData().get(0), Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    Toast.makeText(SettingActivity.this, (CharSequence) task.getException(), Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
         listView=(ListView)this.findViewById(R.id.listView);
 
@@ -108,7 +143,22 @@ public class SettingActivity extends AppCompatActivity {
                 }
                 else if(position==6){//회원탈퇴!
 
-                    finish();
+                    if (user.getProviderId() != null && user.getProviderData().contains("google.com")) {
+                        credential = GoogleAuthProvider.getCredential(token, null);
+                        System.out.println("구글");
+                        alertFunction();
+
+                    } else if (user.getProviderId() != null && user.getProviderData().contains("facebook.com")) {
+                        credential = FacebookAuthProvider.getCredential(token);
+                        System.out.println("페북");
+                        alertFunction();
+                    } else {
+                        System.out.println("이메일");
+                        intent=new Intent(getApplicationContext(), DeleteActivity.class);
+                        intent.putExtra("token", token);
+                        startActivity(intent);
+                        finish();
+                    }
                 }
                 else if(position==7){
                     intent=new Intent(getApplicationContext(), WritingActivity.class);
@@ -157,5 +207,53 @@ public class SettingActivity extends AppCompatActivity {
             return view;
         }
     }
-
+    public void alertFunction(){
+        AlertDialog.Builder alBuilder = new AlertDialog.Builder(SettingActivity.this);
+        alBuilder.setMessage("회원탈퇴 하시겠습니까?");
+        // "예" 버튼을 누르면 실행되는 리스너
+        alBuilder.setPositiveButton("예", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int which) {
+                //탈퇴 전에 재인증 해야함
+                user.reauthenticate(credential)
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                final String Uid = user.getUid();
+                                Log.d(TAG, "User re-authenticated.");
+                                //사용자 삭제
+                                user.delete()
+                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                if (task.isSuccessful()) {
+                                                    FirebaseFirestore db = FirebaseFirestore.getInstance();
+                                                    DocumentReference userRef = db.collection("Users").document(Uid);
+                                                    Map<String, Object> recordUpdate = new HashMap<>();
+                                                    recordUpdate.put(Uid, null);
+                                                    userRef.update(recordUpdate);
+                                                    Log.d(TAG, "User account deleted.");
+                                                } else
+                                                    Log.d(TAG, "외않되냐", task.getException());
+                                            }
+                                        });
+                            }
+                        });
+                Toast.makeText(SettingActivity.this, "탈퇴 되었습니다", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getApplicationContext(), SplashActivity.class);
+                startActivity(intent);
+                MA.finish();//MainActivity 종료
+                finish(); //SettingActivity 종료
+            }
+        });
+        // "아니오" 버튼을 누르면 실행되는 리스너
+        alBuilder.setNegativeButton("아니오", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                return; // 아무런 작업도 하지 않고 돌아간다
+            }
+        });
+        alBuilder.setTitle("회원탈퇴");
+        alBuilder.show(); // AlertDialog.Bulider로 만든 AlertDialog를 보여준다.
+    }
 }

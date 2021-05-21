@@ -6,6 +6,7 @@ import android.graphics.drawable.shapes.OvalShape;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
@@ -49,6 +50,7 @@ public class PostActivity extends AppCompatActivity {
     int int_num_comment;
     String imagePath;
     Boolean heart_clicked = false;
+    Handler handler = new Handler();
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -113,7 +115,12 @@ public class PostActivity extends AppCompatActivity {
                         num_comment.setText(String.valueOf(int_num_comment));
                         //이미지 불러오기 함수 실행
                         if(imagePath != ""){
-                            getImage();
+                            handler.postDelayed(new Runnable(){
+                                public void run(){
+                                    //스플래시 -- 로딩중입니다.
+                                    getImage();
+                                }
+                            }, 3000); // 1sec
                         }
                     } else {
                         Log.d(TAG, "No such document");
