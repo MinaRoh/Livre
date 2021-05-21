@@ -25,6 +25,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
@@ -145,8 +146,7 @@ public class WritingActivity extends AppCompatActivity {
         FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
         final DocumentReference documentReference = firebaseFirestore.collection("Posts").document();
 
-        Date upload_time = new Date();
-        String ISBN = "ISBNEXAMPLE"; // 예시 ISBN임. 실제로는 검색할 때 누른 책의 ISBN값을 전달 받아야함
+
 
         if(title.length() > 0 ){
 //            // While the file names are the same, the references point to different files
@@ -160,17 +160,21 @@ public class WritingActivity extends AppCompatActivity {
             // 일단 위에 text 넣을때 imagePath도 추가함. Uri 형태. 저렇게 해서 잘 되면 무조건 사진도 최소 하나 넣게 하면 되것지.
 
 
+            Timestamp upload_time = new Timestamp(new Date()); // 현재시간으로 타임스탬프 생성
+            String ISBN = "ISBNEXAMPLE"; // 예시 ISBN임. 실제로는 검색할 때 누른 책의 ISBN값을 전달 받아야함
+            posts_id ="temp_id";
+
             // firestore 에 업로드
             user = FirebaseAuth.getInstance().getCurrentUser();
 
             if(imagePath != null){
                 String filePath = imagePath.toString(); //Uri to String
                 System.out.println("************************filePath: " + filePath);
-                WriteInfo writeInfo = new WriteInfo(ISBN, title, nickname, contents, getImagePath(), user.getUid(), upload_time, 0, 0);
+                WriteInfo writeInfo = new WriteInfo(posts_id, ISBN, title, nickname, contents, getImagePath(), user.getUid(), upload_time, 0, 0);
                 postUploader(writeInfo);
             }
             else {
-                WriteInfo writeInfo = new WriteInfo(ISBN, title, nickname, contents, "", user.getUid(), upload_time, 0, 0);
+                WriteInfo writeInfo = new WriteInfo(posts_id, ISBN, title, nickname, contents, "", user.getUid(), upload_time, 0, 0);
                 postUploader(writeInfo);
             }
 

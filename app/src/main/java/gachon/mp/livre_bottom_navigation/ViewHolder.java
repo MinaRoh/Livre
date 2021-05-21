@@ -1,10 +1,13 @@
 package gachon.mp.livre_bottom_navigation;
 
+import android.content.Intent;
 import android.view.View;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import gachon.mp.livre_bottom_navigation.ui.feed.FeedFragment;
 
 public class ViewHolder extends RecyclerView.ViewHolder {
     TextView vTitle, vContents, vNickname, vUploadTime;
@@ -20,6 +23,8 @@ public class ViewHolder extends RecyclerView.ViewHolder {
             @Override
             public void onClick(View v) {
                 mClickListener.onItemClick(v, getAdapterPosition());
+
+                Intent intent = new Intent(itemView.getContext(), ListDetailActivity.class);
 
             }
         });
@@ -41,7 +46,7 @@ public class ViewHolder extends RecyclerView.ViewHolder {
         vNickname = itemView.findViewById(R.id.lNickname);
         vUploadTime = itemView.findViewById(R.id.lUploadTime);
     }
-    private gachon.mp.livre_bottom_navigation.ViewHolder.ClickListener mClickListener;
+    private ViewHolder.ClickListener mClickListener;
 
     //interface for click listener
     public interface ClickListener{
@@ -50,7 +55,7 @@ public class ViewHolder extends RecyclerView.ViewHolder {
 
     }
 
-    public void setOnClickListener(gachon.mp.livre_bottom_navigation.ViewHolder.ClickListener clickListener){
+    public void setOnClickListener(ViewHolder.ClickListener clickListener){
         mClickListener = clickListener;
     }
 

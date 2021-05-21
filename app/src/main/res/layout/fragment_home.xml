@@ -78,6 +78,13 @@
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:text="리스트 액티비티 열기(임시)" />
+            <Button
+                android:id="@+id/btn_change_color"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="나뭇잎색상변경" />
 
         </LinearLayout>
 

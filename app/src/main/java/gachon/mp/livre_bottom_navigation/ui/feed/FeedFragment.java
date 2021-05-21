@@ -14,9 +14,11 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ScrollView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -26,6 +28,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -42,11 +45,25 @@ import java.util.Date;
 import java.util.List;
 
 //import gachon.mp.livre_bottom_navigation.MainAdapter;
+import gachon.mp.livre_bottom_navigation.CustomAdapter;
 import gachon.mp.livre_bottom_navigation.PostInfo;
 import gachon.mp.livre_bottom_navigation.R;
+import gachon.mp.livre_bottom_navigation.ui.writing.WriteInfo;
 
 public class FeedFragment extends Fragment {
     final String TAG = "FeedPostFragment";
+    //firestore instance
+    FirebaseFirestore db;
+    CustomAdapter adapter;
+
+
+    private FirebaseAuth mAuth;
+    List<WriteInfo> writeInfoList = new ArrayList<>();
+    RecyclerView mRecyclerView;
+    //layout manager for recyclerview
+    RecyclerView.LayoutManager layoutManager;
+
+
     FirebaseUser firebaseUser;
     FirebaseFirestore firebaseFirestore;
     RecyclerView recyclerView;
@@ -54,6 +71,11 @@ public class FeedFragment extends Fragment {
     // 자동완성
     // 데이터를 넣은 리스트 변수
     private List<String> autotextviewlist;
+    ArrayList<String> participants;
+    String posts_id;
+    int int_numOfRecruits, int_curRecruits;
+    TextView peopleNum;
+    TextView status;
 
     @Nullable
     @Override
@@ -90,6 +112,9 @@ public class FeedFragment extends Fragment {
                 return false;
             }
         });
+
+
+
     }
 
     // 검색에 사용될 데이터를 리스트에 추가한다.
@@ -121,10 +146,24 @@ public class FeedFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        //init firestore
+        db = FirebaseFirestore.getInstance();
 
-        firebaseFirestore = FirebaseFirestore.getInstance();
-        DocumentReference documentReference = firebaseFirestore.collection("users").document(firebaseUser.getUid());
+
+        //initialize views
+        mRecyclerView = getActivity().findViewById(R.id.recycler_view);
+        //set recycler view properties
+        mRecyclerView.setHasFixedSize(true);
+//        layoutManager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(layoutManager);
+
+        //show data in recyclerVeiw
+        showData();
+
+
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        db = FirebaseFirestore.getInstance();
+        DocumentReference documentReference = db.collection("users").document(firebaseUser.getUid());
         documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -215,5 +254,59 @@ public class FeedFragment extends Fragment {
 //        // TODO: Update argument type and name
 //        void messageFromChildFragment(Uri uri);
 //    }
+
+
+    private void showData() {
+        final DocumentReference documentReference = firebaseFirestore.collection("Posts").document();
+
+        firebaseFirestore.collection("Posts")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+
+                        //show data
+                        for(DocumentSnapshot doc:task.getResult()){
+
+                            try {
+                                WriteInfo writeInfo = new WriteInfo(
+                                        doc.getString("posts_id"),
+                                        doc.getString("isbn"),
+                                        doc.getString("title"),
+                                        doc.getString("nickname"),
+                                        doc.getString("contents"),
+                                        doc.getString("imagePath"),
+                                        doc.getString("publisher"),
+                                        doc.getTimestamp("uploadTime"),
+                                        doc.getLong("num_heart").intValue(),
+                                        doc.getLong("num_comment").intValue());
+
+                                writeInfoList.add(writeInfo);
+
+                            } catch (RuntimeException e){
+                                System.out.println(e);
+                            }
+
+                        }
+                        // 지금은 오류남
+//                        //adapter
+//                        adapter = new CustomAdapter(gachon.mp.livre_bottom_navigation.FeedFragment.this, writeInfoList);
+//                        //set adapter to recyclerview
+//                        mRecyclerView.setAdapter(adapter);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        //called when there is any error while retrieving
+                        startToast(e.getMessage());
+                    }
+                });
+    }
+
+
+    private void startToast(String msg){
+        Toast.makeText(getActivity(),msg, Toast.LENGTH_SHORT).show();
+    }
 
 }

@@ -12,12 +12,14 @@ public class WriteInfo {
     private String publisher;
     private int num_heart;
     private int num_comment;
-    private Date upload_time;
+    private Timestamp upload_time;
     private String nickname;
     private String ISBN;
     private String imagePath;
+    private String posts_id;
 
-    public WriteInfo(String ISBN, String title, String nickname, String contents, String imagePath, String publisher, Date upload_time, int num_heart, int num_comment){
+    public WriteInfo(String posts_id, String ISBN, String title, String nickname, String contents, String imagePath, String publisher, Timestamp upload_time, int num_heart, int num_comment){
+        this.posts_id = posts_id;
         this.ISBN = ISBN;
         this.title = title;
         this.nickname = nickname;
@@ -27,8 +29,11 @@ public class WriteInfo {
         this.upload_time = upload_time;
         this.num_heart = num_heart;
         this.num_comment = num_comment;
+
     }
 
+    public String getPosts_id() { return posts_id; }
+    public void setPosts_id(String posts_id) { this.posts_id = posts_id; }
     public String getTitle(){ return this.title;}
     public void setTitle(String title){ this.title = title;}
     public String getISBN(){ return this.ISBN;}
@@ -45,6 +50,6 @@ public class WriteInfo {
     public void setNum_heart(Integer num_heart){ this.num_heart = num_heart;}
     public int getNum_comment(){ return this.num_comment;}
     public void setNum_comment(Integer num_comment){ this.num_comment = num_comment;}
-    public Date getUploadTime(){ return this.upload_time;}
-    public void setUploadTime(Date upload_time){ this.upload_time= upload_time;}
+    public Timestamp getUploadTime(){ return this.upload_time;}
+    public void setUploadTime(Timestamp upload_time){ this.upload_time= upload_time;}
 }

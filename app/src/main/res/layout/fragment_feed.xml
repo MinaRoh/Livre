@@ -1,12 +1,10 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--feed main (post가 온다)-->
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<?xml version="1.0" encoding="utf-8"?><!--feed main (post가 온다)-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fragment_feed_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/fragment_feed_container"
     android:orientation="vertical">
 
     <LinearLayout
@@ -16,40 +14,41 @@
         android:orientation="horizontal"
         tools:ignore="MissingConstraints">
 
-    <ImageView
-        android:id="@+id/btn_search"
-        android:layout_width="40dp"
-        android:layout_height="35dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="5dp"
-        android:src="@drawable/baseline_search_24"/>
+        <ImageView
+            android:id="@+id/btn_search"
+            android:layout_width="40dp"
+            android:layout_height="35dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="10dp"
+            android:src="@drawable/baseline_search_24" />
 
-    <AutoCompleteTextView
-        android:id="@+id/autoCompleteTextView"
-        android:singleLine="true"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:gravity="center_vertical"
-        android:backgroundTint="#97b843"
-        android:textColor="#97b843"
-        android:completionHint="검색어를 입력하세요"
-        android:textColorHint="#97b843"
-        android:completionThreshold="1"
-        tools:ignore="MissingConstraints" />
+        <AutoCompleteTextView
+            android:id="@+id/autoCompleteTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:backgroundTint="#97b843"
+            android:completionHint="검색어를 입력하세요"
+            android:completionThreshold="1"
+            android:gravity="center_vertical"
+            android:singleLine="true"
+            android:textColor="#97b843"
+            android:textColorHint="#97b843"
+            tools:ignore="MissingConstraints" />
     </LinearLayout>
 
-<!--    <androidx.recyclerview.widget.RecyclerView-->
-<!--        android:id="@+id/list"-->
+
+<!--    <TextView-->
 <!--        android:layout_width="match_parent"-->
 <!--        android:layout_height="match_parent"-->
-<!--        android:layout_below="@id/linear"/>-->
-    <TextView
+<!--        android:layout_below="@+id/linear"-->
+<!--        android:text="여기에 post들이 추천순으로 뜨게됩니다" />-->
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/linear"
-        android:text="여기에 post들이 추천순으로 뜨게됩니다"/>
+        android:layout_height="match_parent" />
 
 
 </LinearLayout>

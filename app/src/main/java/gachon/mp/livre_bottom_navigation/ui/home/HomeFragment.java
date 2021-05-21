@@ -1,5 +1,6 @@
 package gachon.mp.livre_bottom_navigation.ui.home;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,6 +15,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+
+import com.skydoves.colorpickerpreference.ColorPickerDialog;
 
 import gachon.mp.livre_bottom_navigation.ListActivity;
 import gachon.mp.livre_bottom_navigation.R;
@@ -46,6 +49,8 @@ public class HomeFragment extends Fragment {
 
         button = getActivity().findViewById(R.id.button);
         leaves = getActivity().findViewById(R.id.leaves);
+
+        Button btn_change_color = getActivity().findViewById(R.id.btn_change_color);
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -94,7 +99,26 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        //임시로 list acvitiy로 가는 버튼
+//        btn_change_color.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//
+//                ColorPickerDialog.Builder builder = new ColorPickerDialog.Builder(getActivity().HomeFragment.this);
+//                builder.setTitle("MyColorPickerDialog");
+//                builder.setPreferenceName("MyColorPickerDialog");
+////                builder.setFlagView(new CustomFlag(HomeFragment.this, R.layout.custom_flag));
+//
+//                builder.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        dialogInterface.dismiss();
+//                    }
+//                });
+//            }
+//        });
+
+
+                //임시로 list acvitiy로 가는 버튼
         Button button_temp = getActivity().findViewById(R.id.button_temp);
         button_temp.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -103,6 +127,10 @@ public class HomeFragment extends Fragment {
             }
         });
 
+
+    }
+
+    private void changeColor(String color){
 
     }
 

@@ -69,7 +69,29 @@ public class PostActivity extends AppCompatActivity {
         Intent intent = getIntent();
         posts_id = intent.getStringExtra("posts_id");
         FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        //그 전에 posts_id 필드 추가
         DocumentReference docRef = db.collection("Posts").document(posts_id);
+        docRef
+                .update("posts_id", posts_id)// posts_id 필드를 WritingAvtivity 에서 받아온 id값으로 변경
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "DocumentSnapshot successfully updated!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error updating document", e);
+                    }
+                });
+
+
+
+
+
+        // 보여주기
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -198,7 +220,10 @@ public class PostActivity extends AppCompatActivity {
         if(pathReference == null){
             toastMsg("저장소에 사진이 없습니다.");
         }else{
-            StorageReference submitProfile = storage.getReferenceFromUrl("gs://mp-livre.appspot.com").child("images/" + user.getUid() + "/" + filename);
+            //Storage 내부의 images 폴더 안의 image.jpg 파일명을 가리키는 참조 생성
+
+
+            StorageReference submitProfile = storage.getReferenceFromUrl(imagePath);
             System.out.println("Post activity ************** submitProfile : " + submitProfile);
             submitProfile.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                 @Override
@@ -216,6 +241,47 @@ public class PostActivity extends AppCompatActivity {
                 }
             });
         }
+
+        // 프로필 변경에서 가져온 코드
+//        FirebaseFirestore db = FirebaseFirestore.getInstance();
+//        user = FirebaseAuth.getInstance().getCurrentUser();
+//        db.collection("Users")
+//                .whereEqualTo("uid", user.getUid())
+//                .get()
+//                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                        if (task.isSuccessful()) {
+//                            for (QueryDocumentSnapshot document : task.getResult()) {
+//                                profileImg = document.get("profileImage").toString();
+//                            }
+//                            //FirebaseStorage 인스턴스를 생성
+//                            FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
+//                            // 위의 저장소를 참조하는 파일명으로 지정
+//                            StorageReference storageReference = firebaseStorage.getReferenceFromUrl(imagePath);
+//                            //StorageReference에서 파일 다운로드 URL 가져옴
+//                            storageReference.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+//                                @Override
+//                                public void onComplete(@NonNull Task<Uri> task) {
+//                                    if (task.isSuccessful()) {
+//                                        // Glide 이용하여 이미지뷰에 로딩
+//                                        if(getActivity() != null){
+//                                            Glide.with(getActivity())//네비게이션 왔다갔다 이동하다보면 여기서 맨날 에러남.
+//                                                    .load(task.getResult())
+//                                                    .override(1024, 980)
+//                                                    .into(imageView);
+//                                        }
+//
+//                                    } else {
+//                                        // URL을 가져오지 못하면 토스트 메세지
+//                                        toastMsg( task.getException().getMessage());
+//
+//                                    }
+//                                }
+//                            });
+//                        }
+//                    }
+//                });
 
 
 //        // Reference to an image file in Cloud Storage

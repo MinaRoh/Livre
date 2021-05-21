@@ -28,6 +28,7 @@
         <activity android:name=".SignInActivity"/>
         <activity android:name=".ListActivity"
             tools:ignore="Instantiatable" />
+        <activity android:name=".ListDetailActivity" />
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
@@ -52,6 +53,7 @@
         <activity android:name="PasswordResetActivity"/>
         <activity android:name=".ui.feed.FeedDetailActivity"/>
         <activity android:name=".ui.feed.FeedSearchActivity"/>
+        <activity android:name=".ui.feed.FeedPostFragment"/>
 
         <!--for MORE fragment-->
         <activity android:name=".ui.more.SettingActivity"/>

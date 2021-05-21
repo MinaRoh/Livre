@@ -18,7 +18,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import gachon.mp.livre_bottom_navigation.ui.writing.WriteInfo;
@@ -74,13 +73,14 @@ public class ListActivity extends AppCompatActivity {
 
                             try {
                                 WriteInfo writeInfo = new WriteInfo(
+                                        doc.getString("posts_id"),
                                         doc.getString("isbn"),
                                         doc.getString("title"),
                                         doc.getString("nickname"),
                                         doc.getString("contents"),
                                         doc.getString("imagePath"),
                                         doc.getString("publisher"),
-                                        doc.getDate("uploadTime"),
+                                        doc.getTimestamp("uploadTime"),
                                         doc.getLong("num_heart").intValue(),
                                         doc.getLong("num_comment").intValue());
 
