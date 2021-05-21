@@ -174,11 +174,10 @@ public class PostActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 heart_clicked = !(heart_clicked);
-                if(heart_clicked){
+                if (heart_clicked) {
                     int_num_heart++;//하트 수 올리고
                     heart.setImageResource(R.drawable.baseline_favorite_24);
-                }
-                else{
+                } else {
                     int_num_heart--;//하트 수 내리고
                     heart.setImageResource(R.drawable.baseline_favorite_border_24);
                 }
