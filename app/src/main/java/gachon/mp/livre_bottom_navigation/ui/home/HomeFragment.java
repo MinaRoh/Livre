@@ -16,7 +16,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.skydoves.colorpickerpreference.ColorPickerDialog;
+//import com.skydoves.colorpickerpreference.ColorPickerDialog;
 
 import gachon.mp.livre_bottom_navigation.ListActivity;
 import gachon.mp.livre_bottom_navigation.R;

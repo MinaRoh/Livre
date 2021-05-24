@@ -17,6 +17,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -32,6 +34,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import gachon.mp.livre_bottom_navigation.R;
+import gachon.mp.livre_bottom_navigation.ui.writing.WriteInfo;
 
 public class MypageFragment extends Fragment {
 
@@ -51,10 +54,9 @@ public class MypageFragment extends Fragment {
         ImageView imageView = root.findViewById(R.id.iv_profile);
         //프로필 동그랗게 하기
         imageView.setBackground(new ShapeDrawable(new OvalShape()));
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {//롤리팝 이상만 지원하나봄?
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {//롤리팝 이상만 지원하나봄
             imageView.setClipToOutline(true);
         }
-        
         mypageViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
@@ -100,7 +102,12 @@ public class MypageFragment extends Fragment {
                     }
                 });
 
-
+        RecyclerView recyclerView = (RecyclerView)root.findViewById(R.id.recyclerView);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+        recyclerView.setLayoutManager(layoutManager);
+        MyPageAdapter adapter = new MyPageAdapter();
+        adapter.addItem(new MyPage("유미", "2021. 5. 24", "별 헤는 밤", "어쩌고 저쩌고", 1, 2));
+        recyclerView.setAdapter(adapter);
         return root;
     }
 }
