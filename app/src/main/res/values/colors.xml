@@ -9,8 +9,15 @@
     <color name="white">#FFFFFFFF</color>
 
     <color name="bg_night">#FF251942</color>
+    <color name="bg_pink">#FFdab0f0</color>
+    <color name="bg_sky1">#FFb0c5f0</color>
+    <color name="bg_blue1">#FF2e3cbc</color>
+    <color name="bg_sky2">#FF538cff</color>
+    <color name="bg_blue2">#FF0965c7</color>
+
     <color name="bg_ground">#FF75614e</color>
 
     <color name="themeColor">#97B843</color>
+    <color name="treeDefault">#3eb483</color>
 
 </resources>

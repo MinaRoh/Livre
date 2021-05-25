@@ -22,11 +22,17 @@ import gachon.mp.livre_bottom_navigation.ui.writing.WriteInfo;
 public class CustomAdapter extends RecyclerView.Adapter<ViewHolder> {
     ListActivity listActivity;
     List<WriteInfo> writeInfoList;
+    FeedFragment feedFragment;
 
-
-
+    //ListActivity용
     public CustomAdapter(ListActivity listActivity, List<WriteInfo> writeInfoList) {
         this.listActivity = listActivity;
+        this.writeInfoList = writeInfoList;
+    }
+
+    //FeedFragment용
+    public CustomAdapter(FeedFragment feedFragment, List<WriteInfo> writeInfoList) {
+        this.feedFragment = feedFragment;
         this.writeInfoList = writeInfoList;
     }
 
@@ -59,7 +65,9 @@ public class CustomAdapter extends RecyclerView.Adapter<ViewHolder> {
                 intent.putExtra("posts_id", writeInfoList.get(position).getPosts_id());
                 System.out.println("adapter 에서의 posts id: "+ writeInfoList.get(position).getPosts_id());
 
-                listActivity.startActivity(intent);
+//                listActivity.startActivity(intent);
+
+
                 startToast(position + "번째 아이템 클릭");
 
 

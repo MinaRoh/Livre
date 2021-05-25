@@ -14,6 +14,7 @@
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/bg_area"
             android:layout_width="match_parent"
             android:layout_height="325dp"
             android:background="@color/bg_night">
@@ -45,14 +46,34 @@
                 android:layout_width="274dp"
                 android:layout_height="142dp"
                 android:layout_marginEnd="20dp"
-                android:layout_marginRight="20dp"
                 android:layout_marginBottom="60dp"
-                android:src="@drawable/level11"
+                android:src="@drawable/level10"
                 app:layout_constraintBottom_toBottomOf="@+id/bg"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent" />
 
+            <ImageView
+                android:id="@+id/butterfly"
+                android:layout_width="274dp"
+                android:layout_height="142dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="60dp"
+                android:src="@drawable/butterfly"
+                app:layout_constraintBottom_toBottomOf="@+id/bg"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <ImageView
+                android:id="@+id/star"
+                android:layout_width="wrap_content"
+                android:layout_height="280dp"
+                android:layout_marginBottom="40dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/star"
+                app:layout_constraintBottom_toBottomOf="@+id/bg"
+                app:layout_constraintStart_toStartOf="@+id/bg" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -78,6 +99,7 @@
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:text="리스트 액티비티 열기(임시)" />
+
             <Button
                 android:id="@+id/btn_change_color"
                 android:layout_width="wrap_content"
@@ -85,6 +107,23 @@
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:text="나뭇잎색상변경" />
+
+            <Button
+                android:id="@+id/btn_change_bg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="배경 변경" />
+            <Button
+                android:id="@+id/btn_change_trunk"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="trunk 변경" />
+
+
 
         </LinearLayout>
 
