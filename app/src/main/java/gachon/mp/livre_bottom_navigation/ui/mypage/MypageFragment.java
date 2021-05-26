@@ -46,6 +46,15 @@ public class MypageFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
+        String time;
+        String nickname;
+        String title;
+        String contents;
+        int num_heart;
+        int num_comment;
+        ImageView profile;
+        ImageView post_image;
+
         mypageViewModel =
                 new ViewModelProvider(this).get(MypageViewModel.class);
         View root = inflater.inflate(R.layout.fragment_mypage, container, false);
@@ -106,6 +115,9 @@ public class MypageFragment extends Fragment {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
         MyPageAdapter adapter = new MyPageAdapter();
+
+
+        /*사용자가 WritingActivity에서 쓴 포스트 내용 가져오기*/
         adapter.addItem(new MyPage("유미", "2021. 5. 24", "별 헤는 밤", "어쩌고 저쩌고", 1, 2));
         recyclerView.setAdapter(adapter);
         return root;
