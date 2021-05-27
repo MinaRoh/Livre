@@ -20,6 +20,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -38,6 +40,7 @@ public class DeleteActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_delete);
         String token;
+
         Intent intent = getIntent();
         token = intent.getStringExtra("token");
         EditText passwordEditText = (EditText)findViewById(R.id.passwordEditText);
@@ -48,6 +51,7 @@ public class DeleteActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //탈퇴 전에 재인증 해야함
+
                 user.reauthenticate(credential)
                         .addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
@@ -74,6 +78,7 @@ public class DeleteActivity extends AppCompatActivity {
                         });
                 Toast.makeText(DeleteActivity.this, "탈퇴 되었습니다", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getApplicationContext(), SplashActivity.class);
+                FirebaseAuth.getInstance().signOut();
                 startActivity(intent);
                 MA.finish();//MainActivity 종료
                 finish(); //DeleteActivity 종료

@@ -32,6 +32,8 @@ import com.google.firebase.auth.GetTokenResult;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -48,7 +50,9 @@ public class SettingActivity extends AppCompatActivity {
     MainActivity MA = (MainActivity)MainActivity.Main_Activity;//메인 액티비티
     String TAG = "SettingActivity";
     String token;
+    String method;
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
     AuthCredential credential;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -132,7 +136,6 @@ public class SettingActivity extends AppCompatActivity {
                     * 그래서 구글, 페북 사용자는 바로 알림창으로 '탈퇴하시겠습니까? - 예' 누르면 탈퇴하게 했고
                     * 이메일 가입자는 따로 DeleteActivity가 나와서 비밀번호 입력 받고 확인 버튼을 누르면 탈퇴되게 함
                     * 근데 구글/페북/이메일 사용자 나누는 것부터 막혀서 탈퇴가 잘 되는지는 확인 못해봤음. 오류 있을 수 있음!*/
-
                     //토큰 가져오기
                     user.getIdToken(false).addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
                         @Override
@@ -145,24 +148,44 @@ public class SettingActivity extends AppCompatActivity {
                             }
                         }
                     });
+                    // 사용자의 로그인 방식 가져옴
+                    String user_id = user.getUid();//사용자 uid
+                    db.collection("Users")
+                            .whereEqualTo("uid", user_id)
+                            .get()
+                            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                    if (task.isSuccessful()) {
+                                        for (QueryDocumentSnapshot document : task.getResult()) {
+                                            Intent intent;
+                                            method = document.getData().get("method").toString();
+                                            //어떤 로그인 방식이었는지 알아오기 - 실패
+                                            if (method.equals("2")) {
+                                                credential = GoogleAuthProvider.getCredential(token, null);
+                                                System.out.println("구글");
+                                                alertFunction();//밑에 함수 있음
 
-                    //어떤 로그인 방식이었는지 알아오기 - 실패
-                    if (user.getProviderId() != null && user.getProviderData().contains("google.com")) {
-                        credential = GoogleAuthProvider.getCredential(token, null);
-                        System.out.println("구글");
-                        alertFunction();//밑에 함수 있음
+                                            } else if (method.equals("3")) {
+                                                credential = FacebookAuthProvider.getCredential(token);
+                                                System.out.println("페북");
+                                                alertFunction();
+                                            } else {
+                                                System.out.println("이메일");
+                                                intent=new Intent(getApplicationContext(), DeleteActivity.class);
+                                                intent.putExtra("token", token);
+                                                intent.putExtra("method", method);
+                                                startActivity(intent);
+                                                finish();
+                                            }
+                                        }
+                                    } else {
+                                        Log.d(TAG, "Error getting documents: ", task.getException());
+                                    }
 
-                    } else if (user.getProviderId() != null && user.getProviderData().contains("facebook.com")) {
-                        credential = FacebookAuthProvider.getCredential(token);
-                        System.out.println("페북");
-                        alertFunction();
-                    } else {
-                        System.out.println("이메일");
-                        intent=new Intent(getApplicationContext(), DeleteActivity.class);
-                        intent.putExtra("token", token);
-                        startActivity(intent);
-                        finish();
-                    }
+                                }
+                            });
+
                 }
             }
         });
@@ -238,7 +261,9 @@ public class SettingActivity extends AppCompatActivity {
                                         });
                             }
                         });
+                db.collection("Users").document(user.getUid()).delete();
                 Toast.makeText(SettingActivity.this, "탈퇴 되었습니다", Toast.LENGTH_SHORT).show();
+                FirebaseAuth.getInstance().signOut();
                 Intent intent = new Intent(getApplicationContext(), SplashActivity.class);
                 startActivity(intent);
                 MA.finish();//MainActivity 종료
