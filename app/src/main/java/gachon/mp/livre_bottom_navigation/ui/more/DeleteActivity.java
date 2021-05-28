@@ -39,14 +39,12 @@ public class DeleteActivity extends AppCompatActivity {
     AuthCredential credential;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     String token;
-    String method;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_delete);
         Intent intent = getIntent();
         token = intent.getStringExtra("token");
-        method = intent.getStringExtra("method");
         passwordEditText = (EditText)findViewById(R.id.passwordEditText);
         btn_continue = (ImageButton)findViewById(R.id.btn_continue);
 
@@ -69,6 +67,7 @@ public class DeleteActivity extends AppCompatActivity {
                                             @Override
                                             public void onComplete(@NonNull Task<Void> task) {
                                                 if (task.isSuccessful()) {
+                                                    // Database에서 user 정보 삭제
                                                     db.collection("Users").document(user.getUid()).delete();
                                                     Log.d(TAG, "User account deleted.");
                                                 } else

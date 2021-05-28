@@ -393,9 +393,17 @@ public class SignUpActivity extends AppCompatActivity implements GoogleApiClient
                             hashMap.put("nightTimeAlarm", "on");
                             hashMap.put("profileImage", "profile_img/profile.png");
                             hashMap.put("method", "3");
-
                             FirebaseFirestore database = FirebaseFirestore.getInstance();
                             database.collection("Users").document(user.getUid()).set(hashMap);
+
+                            // 나무 추가
+                            HashMap<Object, String> hashMap2 = new HashMap<>();
+                            hashMap.put("uid", uid);
+                            hashMap.put("level", "1");
+                            hashMap.put("color_leaf", "");
+                            hashMap.put("color_trunk", "trunk_brown");
+                            hashMap.put("background", "morning");
+                            database.collection("Tree_current").document(user.getUid()).set(hashMap2);
 
                             Intent intent = new Intent(getApplicationContext(), SignInActivity.class);
                             startActivityForResult(intent, Protocol.SIGN_IN_CLICKED);

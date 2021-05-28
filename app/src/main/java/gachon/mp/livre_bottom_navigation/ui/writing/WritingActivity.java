@@ -189,6 +189,8 @@ public class WritingActivity extends AppCompatActivity {
                 WriteInfo writeInfo = new WriteInfo(posts_id, ISBN, book_title, title, nickname, contents, "", user.getUid(), upload_time, 0, 0);
                 postUploader(writeInfo);
             }
+            // 여기에서 나무 레벨업
+
 
         }else{
             toastMsg("제목 또는 내용을 입력해주세요.");

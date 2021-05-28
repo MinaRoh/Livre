@@ -160,20 +160,20 @@ public class SettingActivity extends AppCompatActivity {
                                         for (QueryDocumentSnapshot document : task.getResult()) {
                                             Intent intent;
                                             method = document.getData().get("method").toString();
-                                            if (method.equals("2")) {
+
+                                            if (method.equals("2")) { // 구글 유저
                                                 credential = GoogleAuthProvider.getCredential(token, null);
                                                 System.out.println("구글");
                                                 alertFunction();//밑에 함수 있음
 
-                                            } else if (method.equals("3")) {
+                                            } else if (method.equals("3")) { // 페이스북 유저
                                                 credential = FacebookAuthProvider.getCredential(token);
                                                 System.out.println("페북");
                                                 alertFunction();
-                                            } else {
+                                            } else { // 이메일 유저
                                                 System.out.println("이메일");
                                                 intent=new Intent(getApplicationContext(), DeleteActivity.class);
                                                 intent.putExtra("token", token);
-                                                intent.putExtra("method", method);
                                                 startActivity(intent);
                                                 finish();
                                             }
@@ -248,10 +248,11 @@ public class SettingActivity extends AppCompatActivity {
                                             @Override
                                             public void onComplete(@NonNull Task<Void> task) {
                                                 if (task.isSuccessful()) {
+                                                    // Database에서 user 정보 삭제
                                                     db.collection("Users").document(user.getUid()).delete();
                                                     Log.d(TAG, "User account deleted.");
                                                 } else
-                                                    Log.d(TAG, "외않되냐", task.getException());
+                                                    Log.d(TAG, "User account isn't deleted.", task.getException());
                                             }
                                         });
                             }

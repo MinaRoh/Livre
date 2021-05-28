@@ -3,7 +3,9 @@ package gachon.mp.livre_bottom_navigation.ui.home;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,10 +19,20 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 
+import com.bumptech.glide.Glide;
 import com.github.dhaval2404.colorpicker.ColorPickerDialog;
 import com.github.dhaval2404.colorpicker.listener.ColorListener;
 import com.github.dhaval2404.colorpicker.listener.DismissListener;
 import com.github.dhaval2404.colorpicker.model.ColorShape;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 
 import org.jetbrains.annotations.NotNull;
@@ -33,7 +45,13 @@ import static android.graphics.Color.parseColor;
 
 public class HomeFragment extends Fragment {
     private static final String TAG = "HomeFragment";
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private FirebaseUser user;
     public static Context context_home;
+    private String level;
+    private String trunk_color;
+    private String leaf_color;
+    private String background;
     ConstraintLayout bg_area;
     Button button;
     ImageView colorView;
@@ -78,15 +96,44 @@ public class HomeFragment extends Fragment {
         Button btn_change_bg = getActivity().findViewById(R.id.btn_change_bg);
         Button btn_change_trunk = getActivity().findViewById(R.id.btn_change_trunk);
 
+
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        db.collection("Tree_current")
+                .whereEqualTo("uid", user.getUid())
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                level = document.get("level").toString();
+                                trunk_color = document.get("color_trunk").toString();
+                                leaf_color = document.get("color_leaf").toString();
+                                background = document.get("background").toString();
+
+                                if(leaf_color.isEmpty()) {
+                                    changeLeavesStatus(Integer.parseInt(level));
+                                    changeTrunk(Integer.parseInt(trunk_color));
+                                    changeBGStatus(Integer.parseInt(background));
+                                    leaves.setColorFilter(Color.parseColor(leaf_color));
+                                }
+                                else{
+                                    changeLeavesStatus(Integer.parseInt(level));
+                                    changeTrunk(Integer.parseInt(trunk_color));
+                                    changeBGStatus(Integer.parseInt(background));
+                                }
+                            }
+                        }
+                    }
+                });
+
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                if(number==11) number=0;
-                else number++;
-                changeLeavesStatus(number);
-
-
+                int data = (Integer.parseInt(level)+1)%11;
+                db.collection("Tree_current").document(user.getUid()).update("level", Integer.toString(data));
+                changeLeavesStatus(data);
+                level = Integer.toString(data);
             }
         });
 
@@ -102,9 +149,10 @@ public class HomeFragment extends Fragment {
         btn_change_bg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(bgnum==6) bgnum=1;
-                else bgnum++;
-                changeBGStatus(bgnum);
+                int data = (Integer.parseInt(background)+1)%6;
+                db.collection("Tree_current").document(user.getUid()).update("background", Integer.toString(data));
+                changeBGStatus(data);
+                background = Integer.toString(data);
             }
         });
 
@@ -112,9 +160,10 @@ public class HomeFragment extends Fragment {
         btn_change_trunk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(trunknum==2) trunknum=1;
-                else trunknum++;
-                changeTrunk(trunknum);
+                int data = (Integer.parseInt(trunk_color)+1)%2;
+                db.collection("Tree_current").document(user.getUid()).update("color_trunk", Integer.toString(data));
+                changeTrunk(data);
+                trunk_color = Integer.toString(data);
             }
         });
 
@@ -142,6 +191,7 @@ public class HomeFragment extends Fragment {
                 .setColorListener(new ColorListener() {
                     @Override
                     public void onColorSelected(int color, @NotNull String colorHex) {
+                        db.collection("Tree_current").document(user.getUid()).update("color_leaf", colorHex);
                         System.out.println("색상 int값: " + color + "/ String colorHex: "+colorHex);
                         // Handle Color Selection
                         leaves.setColorFilter(Color.parseColor(colorHex));//나뭇잎 색 변경
@@ -196,10 +246,10 @@ public class HomeFragment extends Fragment {
             case 10:
                 leaves.setImageResource(R.drawable.level10);
                 break;
-            case 11:
+            case 0:
                 butterfly.setVisibility(View.VISIBLE);
                 break;
-            default: number=0; break;
+            default: break;
 
         }
     }
@@ -229,12 +279,12 @@ public class HomeFragment extends Fragment {
                 bg_color = getResources().getColor(R.color.bg_sky2);
                 bg.setImageResource(R.drawable.bg_sky_white);
                 break;
-            case 6:
+            case 0:
                 bg_color = getResources().getColor(R.color.bg_pink);
                 bg.setImageResource(R.drawable.bg_pink_orange);
                 break;
 
-            default: bgnum=0; break;
+            default: break;
 
         }
 
@@ -247,11 +297,11 @@ public class HomeFragment extends Fragment {
             case 1:
                 trunk.setImageResource(R.drawable.trunk_white);
                 break;
-            case 2:
+            case 0:
                 trunk.setImageResource(R.drawable.trunk_brown);
                 break;
 
-            default: bgnum=0; break;
+            default:  break;
 
         }
     }
