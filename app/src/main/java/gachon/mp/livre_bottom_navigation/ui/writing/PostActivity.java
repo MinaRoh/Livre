@@ -60,7 +60,6 @@ public class PostActivity extends AppCompatActivity {
         TextView nickname = (TextView)findViewById(R.id.nickname);
         TextView upload_time = (TextView)findViewById(R.id.upload_time);
         ImageButton user_menu = (ImageButton)findViewById(R.id.user_menu);
-//        ImageView post_image = (ImageView)findViewById(R.id.post_image);
         TextView contents = (TextView)findViewById(R.id.contents);
         ImageButton heart = (ImageButton)findViewById(R.id.heart);
         TextView num_heart = (TextView)findViewById(R.id.num_heart);
@@ -207,7 +206,7 @@ public class PostActivity extends AppCompatActivity {
         });
 
     }
-/*포스트의 이미지를 불러오는 메소드(미완성) - 이미지 로딩 실패 뜸
+/*포스트의 이미지를 불러오는 메소드
 * 이미지를 올리지 않은 경우는 아무 동작하지 않음*/
     public void getImage() {
         //storage
@@ -246,61 +245,6 @@ public class PostActivity extends AppCompatActivity {
                 }
             });
         }
-
-        // 프로필 변경에서 가져온 코드
-//        FirebaseFirestore db = FirebaseFirestore.getInstance();
-//        user = FirebaseAuth.getInstance().getCurrentUser();
-//        db.collection("Users")
-//                .whereEqualTo("uid", user.getUid())
-//                .get()
-//                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                        if (task.isSuccessful()) {
-//                            for (QueryDocumentSnapshot document : task.getResult()) {
-//                                profileImg = document.get("profileImage").toString();
-//                            }
-//                            //FirebaseStorage 인스턴스를 생성
-//                            FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
-//                            // 위의 저장소를 참조하는 파일명으로 지정
-//                            StorageReference storageReference = firebaseStorage.getReferenceFromUrl(imagePath);
-//                            //StorageReference에서 파일 다운로드 URL 가져옴
-//                            storageReference.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
-//                                @Override
-//                                public void onComplete(@NonNull Task<Uri> task) {
-//                                    if (task.isSuccessful()) {
-//                                        // Glide 이용하여 이미지뷰에 로딩
-//                                        if(getActivity() != null){
-//                                            Glide.with(getActivity())//네비게이션 왔다갔다 이동하다보면 여기서 맨날 에러남.
-//                                                    .load(task.getResult())
-//                                                    .override(1024, 980)
-//                                                    .into(imageView);
-//                                        }
-//
-//                                    } else {
-//                                        // URL을 가져오지 못하면 토스트 메세지
-//                                        toastMsg( task.getException().getMessage());
-//
-//                                    }
-//                                }
-//                            });
-//                        }
-//                    }
-//                });
-
-
-//        // Reference to an image file in Cloud Storage
-//        StorageReference storageRef = FirebaseStorage.getInstance().getReference();
-//
-//        // ImageView in your Activity
-//        ImageView imageView = findViewById(R.id.post_image);
-//
-//        // Download directly from StorageReference using Glide
-//        // (See MyAppGlideModule for Loader registration)
-//        Glide.with(this /* context */)
-//                .load(storageRef)
-//                .into(imageView);
-
     }
     static String getTime() {
         SimpleDateFormat f = new SimpleDateFormat("yyyy.MM.dd HH:mm");

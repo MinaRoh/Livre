@@ -3,14 +3,16 @@ package gachon.mp.livre_bottom_navigation.ui.mypage;
 public class MyPage {
     String nickname;
     String time;
+    String postImage;
     String title;
     String contents;
     int num_heart;
     int num_comment;
 
-    public MyPage(String nickname, String time, String title, String contents, int num_heart, int num_comment) {
+    public MyPage(String nickname, String time, String postImage, String title, String contents, int num_heart, int num_comment) {
         this.nickname = nickname;
         this.time = time;
+        this.postImage = postImage;
         this.title = title;
         this.contents = contents;
         this.num_heart = num_heart;
@@ -33,6 +35,13 @@ public class MyPage {
         this.time = time;
     }
 
+    public String getPostImage() {
+        return postImage;
+    }
+
+    public void setPostImage(String postImage) {
+        this.postImage = postImage;
+    }
 
     public String getTitle() {
         return title;

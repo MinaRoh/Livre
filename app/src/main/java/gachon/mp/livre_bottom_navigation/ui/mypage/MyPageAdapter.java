@@ -5,6 +5,7 @@ import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
 import android.net.Uri;
 import android.os.Build;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -27,19 +30,21 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
+
+import gachon.mp.livre_bottom_navigation.MainActivity;
 import gachon.mp.livre_bottom_navigation.R;
 import gachon.mp.livre_bottom_navigation.ui.writing.PostActivity;
 import gachon.mp.livre_bottom_navigation.ui.writing.WriteInfo;
+import gachon.mp.livre_bottom_navigation.ui.writing.WritingActivity;
 
 public class MyPageAdapter extends RecyclerView.Adapter<MyPageAdapter.ViewHolder>{
     ArrayList<MyPage> items = new ArrayList<MyPage>();
-
+    private static final String TAG = "MyPageAdapter";
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
         View itemView = inflater.inflate(R.layout.mypage_item, viewGroup, false);
-
         return new ViewHolder(itemView);
     }
 
@@ -58,18 +63,20 @@ public class MyPageAdapter extends RecyclerView.Adapter<MyPageAdapter.ViewHolder
         ImageView imageView;//프로필
         TextView textView;
         TextView textView2;
+        ImageView imageView2;//포스트 이미지
         TextView textView3;
         TextView textView4;
         TextView textView5;
         TextView textView6;
         FirebaseUser user;
-        String profileImg = "";
+        String profileImg;//프로필 이미지 저장소 URL
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             imageView = itemView.findViewById(R.id.user_profile);
             textView = itemView.findViewById(R.id.nickname);
             textView2 = (TextView)itemView.findViewById(R.id.time);
+            imageView2 = (ImageView)itemView.findViewById(R.id.content_image);
             textView3 = (TextView)itemView.findViewById(R.id.title);
             textView4 = (TextView)itemView.findViewById(R.id.contents);
             textView5 = (TextView)itemView.findViewById(R.id.num_heart);
@@ -85,11 +92,11 @@ public class MyPageAdapter extends RecyclerView.Adapter<MyPageAdapter.ViewHolder
             textView5.setText(String.valueOf(item.getNum_heart()));//하트 개수
             textView6.setText(String.valueOf(item.getNum_comment()));//댓글 개수
 
+            /*유저 프로필 이미지 불러오기*/
             imageView.setBackground(new ShapeDrawable(new OvalShape()));
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 imageView.setClipToOutline(true);
             }
-            /*유저 프로필 이미지 불러오기*/
             FirebaseFirestore db_user = FirebaseFirestore.getInstance();
             user = FirebaseAuth.getInstance().getCurrentUser();
             db_user.collection("Users")
@@ -123,9 +130,38 @@ public class MyPageAdapter extends RecyclerView.Adapter<MyPageAdapter.ViewHolder
                         }
                     });
 
+            /*포스트 이미지 불러오기*/
+            FirebaseStorage storage = FirebaseStorage.getInstance();
+            StorageReference storageRef = storage.getReferenceFromUrl("gs://mp-livre.appspot.com");
+            String filename = item.getPostImage();
+            StorageReference pathReference = storageRef.child("images");
+            if(pathReference != null){
+                StorageReference submitProfile = storage.getReferenceFromUrl("gs://mp-livre.appspot.com").child("images/"+ user.getUid() + "/" + filename);
+                submitProfile.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        Log.d(TAG, "on Success 들어옴");
+                        Log.d(TAG, "uri: " + uri);
+                        if(imageView2!=null){
+                            Log.d(TAG, "if문 들어옴");
+                            Glide.with(itemView)
+                                    .load(uri)
+                                    .into(imageView2);
+                        }
+                        else {
+                            Log.d(TAG, "imageView2가 null이래");
+                        }
+
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error getting image", e);
+                    }
+                });
+            }
         }
     }
-
     public void addItem(MyPage item){
         items.add(item);
     }
