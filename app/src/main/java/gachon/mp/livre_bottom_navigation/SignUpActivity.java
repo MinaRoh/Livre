@@ -401,8 +401,8 @@ public class SignUpActivity extends AppCompatActivity implements GoogleApiClient
                             hashMap.put("uid", uid);
                             hashMap.put("level", "1");
                             hashMap.put("color_leaf", "");
-                            hashMap.put("color_trunk", "trunk_brown");
-                            hashMap.put("background", "morning");
+                            hashMap.put("color_trunk", "1");
+                            hashMap.put("background", "1");
                             database.collection("Tree_current").document(user.getUid()).set(hashMap2);
 
                             Intent intent = new Intent(getApplicationContext(), SignInActivity.class);
