@@ -1,6 +1,8 @@
 package gachon.mp.livre_bottom_navigation.ui.mypage;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
 import android.net.Uri;
@@ -32,6 +34,7 @@ import com.google.firebase.storage.StorageReference;
 import java.util.ArrayList;
 
 import gachon.mp.livre_bottom_navigation.MainActivity;
+import gachon.mp.livre_bottom_navigation.Protocol;
 import gachon.mp.livre_bottom_navigation.R;
 import gachon.mp.livre_bottom_navigation.ui.writing.PostActivity;
 import gachon.mp.livre_bottom_navigation.ui.writing.WriteInfo;
@@ -70,7 +73,7 @@ public class MyPageAdapter extends RecyclerView.Adapter<MyPageAdapter.ViewHolder
         TextView textView6;
         FirebaseUser user;
         String profileImg;//프로필 이미지 저장소 URL
-
+        String post_id;//포스트 아이디
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             imageView = itemView.findViewById(R.id.user_profile);
@@ -82,9 +85,22 @@ public class MyPageAdapter extends RecyclerView.Adapter<MyPageAdapter.ViewHolder
             textView5 = (TextView)itemView.findViewById(R.id.num_heart);
             textView6 = (TextView)itemView.findViewById(R.id.num_comment);
 
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Context context = view.getContext();
+                    Intent intent;
+                    intent = new Intent(context, PostViewActivity.class);
+                    intent.putExtra("posts_id", post_id);//포스트 액티비티에 문서 id 전달
+                    Log.d(TAG, "posts_id: " + post_id);
+                    context.startActivity(intent);
+                }
+            });
         }
 
         public void setItem(MyPage item){
+            post_id = item.getPost_id();
+
             textView.setText(item.getNickname());//작성자 닉네임
             textView2.setText(item.getTime());//업로드 시간
             textView3.setText(item.getTitle());//글 제목
@@ -154,6 +170,8 @@ public class MyPageAdapter extends RecyclerView.Adapter<MyPageAdapter.ViewHolder
                 });
             }
         }
+
+
     }
     public void addItem(MyPage item){
         items.add(item);

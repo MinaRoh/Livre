@@ -117,7 +117,8 @@ public class MypageFragment extends Fragment {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.d(TAG, document.getId() + " => " + document.getData());
+                                //Log.d(TAG, document.getId() + " => " + document.getData());
+                                String post_id = document.getId();
                                 String nickname = document.getData().get("nickname").toString();
                                 Timestamp time = (Timestamp) document.getData().get("uploadTime");
                                 String upload_time = getTime(time);
@@ -126,7 +127,7 @@ public class MypageFragment extends Fragment {
                                 String imagePath = document.getData().get("imagePath").toString();
                                 Integer num_heart = Integer.parseInt(String.valueOf(document.getData().get("num_heart")));
                                 Integer num_comment = Integer.parseInt(String.valueOf(document.getData().get("num_comment")));
-                                adapter.addItem(new MyPage(nickname, upload_time, imagePath, title, contents, num_heart, num_comment));
+                                adapter.addItem(new MyPage(user.getUid(), post_id, nickname, upload_time, imagePath, title, contents, num_heart, num_comment));
                                 recyclerView.setAdapter(adapter);
                             }
                         } else {
@@ -139,7 +140,7 @@ public class MypageFragment extends Fragment {
 
     static String getTime(Timestamp time) {
         Date date_createdAt = time.toDate();//Date형식으로 변경
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy년 MM월 HH시 mm분 ss초");
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy년 MM월 dd일 HH:mm:ss");
         String txt_createdAt = formatter.format(date_createdAt).toString();
         return txt_createdAt;
     }

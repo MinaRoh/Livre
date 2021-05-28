@@ -68,6 +68,7 @@
 
         <activity android:name=".ui.writing.WritingActivity"/>
         <activity android:name=".ui.writing.PostActivity"/>
+        <activity android:name=".ui.mypage.PostViewActivity"/>
     </application>
 
 </manifest>
