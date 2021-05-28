@@ -69,9 +69,7 @@ public class DeleteActivity extends AppCompatActivity {
                                             @Override
                                             public void onComplete(@NonNull Task<Void> task) {
                                                 if (task.isSuccessful()) {
-                                                    FirebaseFirestore db = FirebaseFirestore.getInstance();
-                                                    DocumentReference userRef = db.collection("Users").document("uid");
-                                                    userRef.update("uid", null);
+                                                    db.collection("Users").document(user.getUid()).delete();
                                                     Log.d(TAG, "User account deleted.");
                                                 } else
                                                     Log.d(TAG, "User account isn't deleted.", task.getException());
@@ -79,7 +77,6 @@ public class DeleteActivity extends AppCompatActivity {
                                         });
                             }
                         });
-//                db.collection("Users").document(user.getUid()).delete();
                 Toast.makeText(DeleteActivity.this, "탈퇴 되었습니다", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getApplicationContext(), SplashActivity.class);
                 FirebaseAuth.getInstance().signOut();

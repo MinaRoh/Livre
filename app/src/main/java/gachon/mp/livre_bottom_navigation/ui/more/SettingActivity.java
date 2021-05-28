@@ -248,9 +248,7 @@ public class SettingActivity extends AppCompatActivity {
                                             @Override
                                             public void onComplete(@NonNull Task<Void> task) {
                                                 if (task.isSuccessful()) {
-                                                    FirebaseFirestore db = FirebaseFirestore.getInstance();
-                                                    DocumentReference userRef = db.collection("Users").document("uid");
-                                                    userRef.update("uid", null);
+                                                    db.collection("Users").document(user.getUid()).delete();
                                                     Log.d(TAG, "User account deleted.");
                                                 } else
                                                     Log.d(TAG, "외않되냐", task.getException());
@@ -258,7 +256,6 @@ public class SettingActivity extends AppCompatActivity {
                                         });
                             }
                         });
-//                db.collection("Users").document(user.getUid()).delete();
                 Toast.makeText(SettingActivity.this, "탈퇴 되었습니다", Toast.LENGTH_SHORT).show();
                 FirebaseAuth.getInstance().signOut();
                 Intent intent = new Intent(getApplicationContext(), SplashActivity.class);
