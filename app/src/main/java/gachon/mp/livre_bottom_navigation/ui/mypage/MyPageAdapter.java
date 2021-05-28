@@ -117,7 +117,6 @@ public class MyPageAdapter extends RecyclerView.Adapter<MyPageAdapter.ViewHolder
                                 storageReference.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
                                     @Override
                                     public void onComplete(@NonNull Task<Uri> task) {
-                                        // Glide 이용하여 이미지뷰에 로딩
                                         if (task.isSuccessful()) {
                                             Glide.with(itemView)
                                                     .load(task.getResult())
@@ -135,23 +134,17 @@ public class MyPageAdapter extends RecyclerView.Adapter<MyPageAdapter.ViewHolder
             StorageReference storageRef = storage.getReferenceFromUrl("gs://mp-livre.appspot.com");
             String filename = item.getPostImage();
             StorageReference pathReference = storageRef.child("images");
-            if(pathReference != null){
+            if(filename!=null && pathReference != null){
                 StorageReference submitProfile = storage.getReferenceFromUrl("gs://mp-livre.appspot.com").child("images/"+ user.getUid() + "/" + filename);
                 submitProfile.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                     @Override
                     public void onSuccess(Uri uri) {
-                        Log.d(TAG, "on Success 들어옴");
-                        Log.d(TAG, "uri: " + uri);
                         if(imageView2!=null){
-                            Log.d(TAG, "if문 들어옴");
                             Glide.with(itemView)
                                     .load(uri)
+                                    .override(1024, 980)
                                     .into(imageView2);
                         }
-                        else {
-                            Log.d(TAG, "imageView2가 null이래");
-                        }
-
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
