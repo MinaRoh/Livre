@@ -254,6 +254,15 @@ public class SignUpActivity extends AppCompatActivity implements GoogleApiClient
                             FirebaseFirestore database = FirebaseFirestore.getInstance();
                             database.collection("Users").document(user.getUid()).set(hashMap);
 
+                            // 나무 추가
+                            HashMap<Object, String> hashMap2 = new HashMap<>();
+                            hashMap2.put("uid", uid);
+                            hashMap2.put("level", "1");
+                            hashMap2.put("color_leaf", "");
+                            hashMap2.put("color_trunk", "1");
+                            hashMap2.put("background", "1");
+                            database.collection("Tree_current").document(user.getUid()).set(hashMap2);
+
                             Intent intent = new Intent(getApplicationContext(), SignInActivity.class);
                             startActivityForResult(intent, Protocol.SIGN_IN_CLICKED);
                             finish();
@@ -321,6 +330,15 @@ public class SignUpActivity extends AppCompatActivity implements GoogleApiClient
 
                                     FirebaseFirestore database = FirebaseFirestore.getInstance();
                                     database.collection("Users").document(user.getUid()).set(hashMap);
+
+                                    // 나무 추가
+                                    HashMap<Object, String> hashMap2 = new HashMap<>();
+                                    hashMap2.put("uid", uid);
+                                    hashMap2.put("level", "1");
+                                    hashMap2.put("color_leaf", "");
+                                    hashMap2.put("color_trunk", "1");
+                                    hashMap2.put("background", "1");
+                                    database.collection("Tree_current").document(user.getUid()).set(hashMap2);
 
                                     // Sign in success, update UI with the signed-in user's information
                                     Log.d(TAG, "createUserWithEmail:success");
@@ -399,11 +417,11 @@ public class SignUpActivity extends AppCompatActivity implements GoogleApiClient
 
                             // 나무 추가
                             HashMap<Object, String> hashMap2 = new HashMap<>();
-                            hashMap.put("uid", uid);
-                            hashMap.put("level", "1");
-                            hashMap.put("color_leaf", "");
-                            hashMap.put("color_trunk", "1");
-                            hashMap.put("background", "1");
+                            hashMap2.put("uid", uid);
+                            hashMap2.put("level", "1");
+                            hashMap2.put("color_leaf", "");
+                            hashMap2.put("color_trunk", "1");
+                            hashMap2.put("background", "1");
                             database.collection("Tree_current").document(user.getUid()).set(hashMap2);
 
                             Intent intent = new Intent(getApplicationContext(), SignInActivity.class);

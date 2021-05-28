@@ -113,12 +113,12 @@ public class HomeFragment extends Fragment {
                                     changeLeavesStatus(Integer.parseInt(level));
                                     changeTrunk(Integer.parseInt(trunk_color));
                                     changeBGStatus(Integer.parseInt(background));
-                                    leaves.setColorFilter(Color.parseColor(leaf_color));
-                                }
+                                                                    }
                                 else{
                                     changeLeavesStatus(Integer.parseInt(level));
                                     changeTrunk(Integer.parseInt(trunk_color));
                                     changeBGStatus(Integer.parseInt(background));
+                                    leaves.setColorFilter(Color.parseColor(leaf_color));
                                 }
                             }
                         }
