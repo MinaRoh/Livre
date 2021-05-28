@@ -74,6 +74,7 @@ public class MypageFragment extends Fragment {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
+                                textView.setText(document.get("nickname").toString());
                                 profileImg = document.get("profileImage").toString();
                             }
                             //FirebaseStorage 인스턴스를 생성

@@ -123,37 +123,43 @@ public class PostViewActivity extends AppCompatActivity {
             user_profile.setClipToOutline(true);
         }
 
-        /*글쓴이 프로필 이미지 불러오기*/
-        FirebaseFirestore db_user = FirebaseFirestore.getInstance();
-        db_user.collection("Users")
-                .whereEqualTo("nickname", nick) //포스트의 닉네임과 동일한 행을 Users에서 찾는다
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                publisher_email = document.get("email").toString(); //글쓴이의 이메일 주소 얻어옴
-                                Log.d(TAG, "user_email: " + publisher_email);
-                            }
-                            //FirebaseStorage(사진) 인스턴스를 생성
-                            FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
-                            // 위의 저장소를 참조하는 파일명으로 지정
-                            StorageReference storageReference = firebaseStorage.getReferenceFromUrl("gs://mp-livre.appspot.com/").child("profile_img/profile_" + publisher_email + ".jpg");
-                            System.out.println("***************storageReference : " + storageReference.toString());
-                            //StorageReference에서 파일 다운로드 URL 가져옴
-                            storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                @Override
-                                public void onSuccess(Uri uri) {
-                                    Glide.with(PostViewActivity.this)
-                                            .load(task.getResult())
-                                            .override(1024, 980)
-                                            .into(user_profile);
+        try {
+            /*글쓴이 프로필 이미지 불러오기*/
+            FirebaseFirestore db_user = FirebaseFirestore.getInstance();
+            db_user.collection("Users")
+                    .whereEqualTo("nickname", nick) //포스트의 닉네임과 동일한 행을 Users에서 찾는다
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                    publisher_email = document.get("email").toString(); //글쓴이의 이메일 주소 얻어옴
+                                    Log.d(TAG, "user_email: " + publisher_email);
                                 }
-                            });
+                                //FirebaseStorage(사진) 인스턴스를 생성
+                                FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
+                                // 위의 저장소를 참조하는 파일명으로 지정
+                                StorageReference storageReference = firebaseStorage.getReferenceFromUrl("gs://mp-livre.appspot.com/").child("profile_img/profile_" + publisher_email + ".jpg");
+                                System.out.println("***************storageReference : " + storageReference.toString());
+                                //StorageReference에서 파일 다운로드 URL 가져옴
+                                storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                    @Override
+                                    public void onSuccess(Uri uri) {
+                                        Glide.with(PostViewActivity.this)
+                                                .load(task.getResult())
+                                                .override(1024, 980)
+                                                .into(user_profile);
+                                    }
+                                });
+                            }
                         }
-                    }
-                });
+                    });
+        }
+        catch (Exception e){
+            System.out.println("Error!!!!!!!!!!!!!!!!!!!!!!!!!");
+            e.printStackTrace();
+        }
         /*하트 눌렀을 때*/
         heart.setOnClickListener(new View.OnClickListener() {
             //문제점: 이건 한정적으로 방금 자기가 업로드한 글에만 적용되는 코드
