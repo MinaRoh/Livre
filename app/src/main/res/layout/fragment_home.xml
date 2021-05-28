@@ -80,6 +80,14 @@
 
         <LinearLayout
             android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:background="@color/bg_ground"
+            android:orientation="vertical">
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="406dp"
             android:background="@color/bg_ground"
             android:orientation="vertical">
@@ -115,6 +123,7 @@
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:text="배경 변경" />
+
             <Button
                 android:id="@+id/btn_change_trunk"
                 android:layout_width="wrap_content"
@@ -122,7 +131,6 @@
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:text="trunk 변경" />
-
 
 
         </LinearLayout>

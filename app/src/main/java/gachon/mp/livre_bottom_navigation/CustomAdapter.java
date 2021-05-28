@@ -16,7 +16,6 @@ import java.util.Date;
 import java.util.List;
 
 import gachon.mp.livre_bottom_navigation.ui.feed.FeedFragment;
-import gachon.mp.livre_bottom_navigation.ui.feed.FeedPostFragment;
 import gachon.mp.livre_bottom_navigation.ui.writing.WriteInfo;
 
 public class CustomAdapter extends RecyclerView.Adapter<ViewHolder> {

@@ -245,10 +245,10 @@ public class HomeFragment extends Fragment {
 
         switch (num) {
             case 1:
-                trunk.setImageResource(R.drawable.trunk_brown);
+                trunk.setImageResource(R.drawable.trunk_white);
                 break;
             case 2:
-                trunk.setImageResource(R.drawable.trunk_white);
+                trunk.setImageResource(R.drawable.trunk_brown);
                 break;
 
             default: bgnum=0; break;

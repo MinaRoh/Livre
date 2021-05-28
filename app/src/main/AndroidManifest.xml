@@ -53,7 +53,6 @@
         <activity android:name="PasswordResetActivity"/>
         <activity android:name=".ui.feed.FeedDetailActivity"/>
         <activity android:name=".ui.feed.FeedSearchActivity"/>
-        <activity android:name=".ui.feed.FeedPostFragment"/>
 
         <!--for MORE fragment-->
         <activity android:name=".ui.more.SettingActivity"/>

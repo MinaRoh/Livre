@@ -44,7 +44,7 @@ public class FeedSearchActivity extends AppCompatActivity {
     ArrayList<BookVO> array;
     String apiURL = "https://openapi.naver.com/v1/search/book.json?";
 
-    String query="";
+    String query="고양이";
     int start = 1;
 
     RecyclerView list;
@@ -60,9 +60,7 @@ public class FeedSearchActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feed_search);
-
-        Intent intent = getIntent();
-        query = intent.getStringExtra("query");
+        
 
         list = findViewById(R.id.list);
         LinearLayoutManager manager=new LinearLayoutManager(this);

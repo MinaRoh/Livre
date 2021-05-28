@@ -5,7 +5,18 @@
     android:id="@+id/fragment_feed_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_margin="10dp"
     android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:text="피드"
+        android:textSize="20sp"
+        android:textColor="@color/themeColor"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center"/>
+
 
     <LinearLayout
         android:id="@+id/linear"
@@ -22,20 +33,29 @@
             android:layout_marginTop="10dp"
             android:src="@drawable/baseline_search_24" />
 
-        <AutoCompleteTextView
-            android:id="@+id/autoCompleteTextView"
+        <View
+            android:id="@+id/view_search"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:backgroundTint="#97b843"
-            android:completionHint="검색어를 입력하세요"
-            android:completionThreshold="1"
-            android:gravity="center_vertical"
-            android:singleLine="true"
-            android:textColor="#97b843"
-            android:textColorHint="#97b843"
-            tools:ignore="MissingConstraints" />
+            android:layout_height="2dp"
+            android:layout_gravity="bottom"
+            android:layout_margin="5dp"
+            android:layout_marginEnd="10dp"
+            android:background="@color/themeColor" />
+
+        <!--        <AutoCompleteTextView-->
+        <!--            android:id="@+id/autoCompleteTextView"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_marginStart="8dp"-->
+        <!--            android:layout_marginEnd="8dp"-->
+        <!--            android:backgroundTint="#97b843"-->
+        <!--            android:completionHint="검색어를 입력하세요"-->
+        <!--            android:completionThreshold="1"-->
+        <!--            android:gravity="center_vertical"-->
+        <!--            android:singleLine="true"-->
+        <!--            android:textColor="#97b843"-->
+        <!--            android:textColorHint="#97b843"-->
+        <!--            tools:ignore="MissingConstraints" />-->
     </LinearLayout>
 
 
