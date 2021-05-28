@@ -89,8 +89,6 @@ public class WritingActivity extends AppCompatActivity {
         mContext = this;        //외부참조용 context 초기화 (onCreate 에서 해야함)
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         user = FirebaseAuth.getInstance().getCurrentUser();
-//        FirebaseAuth mAuth = FirebaseAuth.getInstance();
-//        FirebaseUser user = mAuth.getCurrentUser();//사용자
 
         assert user != null;
         String user_id = user.getUid();//사용자 uid
@@ -190,7 +188,6 @@ public class WritingActivity extends AppCompatActivity {
                 postUploader(writeInfo);
             }
             // 여기에서 나무 레벨업
-
 
         }else{
             toastMsg("제목 또는 내용을 입력해주세요.");

@@ -393,6 +393,7 @@ public class SignUpActivity extends AppCompatActivity implements GoogleApiClient
                             hashMap.put("nightTimeAlarm", "on");
                             hashMap.put("profileImage", "profile_img/profile.png");
                             hashMap.put("method", "3");
+
                             FirebaseFirestore database = FirebaseFirestore.getInstance();
                             database.collection("Users").document(user.getUid()).set(hashMap);
 

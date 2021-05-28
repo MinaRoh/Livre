@@ -42,34 +42,14 @@
             android:layout_marginEnd="10dp"
             android:background="@color/themeColor" />
 
-        <!--        <AutoCompleteTextView-->
-        <!--            android:id="@+id/autoCompleteTextView"-->
-        <!--            android:layout_width="match_parent"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:layout_marginStart="8dp"-->
-        <!--            android:layout_marginEnd="8dp"-->
-        <!--            android:backgroundTint="#97b843"-->
-        <!--            android:completionHint="검색어를 입력하세요"-->
-        <!--            android:completionThreshold="1"-->
-        <!--            android:gravity="center_vertical"-->
-        <!--            android:singleLine="true"-->
-        <!--            android:textColor="#97b843"-->
-        <!--            android:textColorHint="#97b843"-->
-        <!--            tools:ignore="MissingConstraints" />-->
     </LinearLayout>
-
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/linear"
-        android:text="여기에 post들이 추천순으로 뜨게됩니다. 공사중" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
+        android:layout_height="match_parent"
+        android:nestedScrollingEnabled="false"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 </LinearLayout>
 

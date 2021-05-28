@@ -62,7 +62,8 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical"
                 android:layout_weight="1"
-                android:layout_marginLeft="5dp">
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="13dp">
 
                 <TextView
                     android:id="@+id/txttitle"
@@ -71,7 +72,7 @@
                     android:layout_marginTop="10dp"
                     android:textColor="@color/black"
                     android:text="책제목"
-                    android:textSize="13sp" />
+                    android:textSize="15sp" />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -80,7 +81,7 @@
                     android:textColor="@color/black"
                     android:text="책저자"
                     android:layout_marginTop="10dp"
-                    android:textSize="13sp"
+                    android:textSize="15sp"
                     android:layout_centerVertical="true" />
 
                 <TextView
@@ -89,19 +90,12 @@
                     android:id="@+id/txtdescription"
                     android:text="책설명"
                     android:layout_marginTop="10dp"
-                    android:textSize="13sp"
+                    android:textSize="15sp"
                     android:textColor="@color/black"
                     android:layout_centerVertical="true" />
             </LinearLayout>
 
         </LinearLayout>
-
-<!--    This is for 독후감-->
-
-<!--    <fragment-->
-<!--        android:layout_below="@id/relative"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent" />-->
 
     <Button
         android:id="@+id/btn_write_report"
@@ -109,9 +103,17 @@
         android:layout_height="wrap_content"
         android:layout_gravity="end"
         android:layout_marginTop="10dp"
-        android:layout_marginRight="10dp"
+        android:layout_marginRight="13dp"
         android:backgroundTint="@color/themeColor"
         android:text="독서감상문 작성하기" />
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:nestedScrollingEnabled="false"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 </LinearLayout>
 

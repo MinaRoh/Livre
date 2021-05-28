@@ -30,6 +30,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
@@ -40,6 +41,7 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -48,6 +50,8 @@ import java.util.List;
 import gachon.mp.livre_bottom_navigation.CustomAdapter;
 import gachon.mp.livre_bottom_navigation.PostInfo;
 import gachon.mp.livre_bottom_navigation.R;
+import gachon.mp.livre_bottom_navigation.ui.mypage.MyPage;
+import gachon.mp.livre_bottom_navigation.ui.mypage.MyPageAdapter;
 import gachon.mp.livre_bottom_navigation.ui.writing.WriteInfo;
 
 public class FeedFragment extends Fragment {
@@ -63,10 +67,8 @@ public class FeedFragment extends Fragment {
     //layout manager for recyclerview
     RecyclerView.LayoutManager layoutManager;
 
-
-    FirebaseUser firebaseUser;
-    FirebaseFirestore firebaseFirestore;
     RecyclerView recyclerView;
+    FirebaseUser user;
     Button btn;
     // 자동완성
     // 데이터를 넣은 리스트 변수
@@ -82,7 +84,47 @@ public class FeedFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         LinearLayout layout = (LinearLayout) inflater.inflate(R.layout.fragment_feed, container, false);
 
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        /*피드-하트 순으로 포스트 나열*/
+        recyclerView = (RecyclerView)layout.findViewById(R.id.recycler_view);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+        recyclerView.setLayoutManager(layoutManager);
+        FeedAdapter adapter = new FeedAdapter();
+
+        /*사용자가 WritingActivity에서 쓴 포스트 내용 가져오기*/
+        db.collection("Posts").orderBy("num_heart", Query.Direction.DESCENDING).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        String post_id = document.getId();
+                        String nickname = document.getData().get("nickname").toString();
+                        Timestamp time = (Timestamp) document.getData().get("uploadTime");
+                        String upload_time = getTime(time);
+                        String title = document.getData().get("title").toString();
+                        String contents = document.getData().get("contents").toString();
+                        String imagePath = document.getData().get("imagePath").toString();
+                        Integer num_heart = Integer.parseInt(String.valueOf(document.getData().get("num_heart")));
+                        Integer num_comment = Integer.parseInt(String.valueOf(document.getData().get("num_comment")));
+
+                        user = FirebaseAuth.getInstance().getCurrentUser();
+                        adapter.addItem(new Feed(user.getUid(), post_id, nickname, upload_time, imagePath, title, contents, num_heart, num_comment));
+                        recyclerView.setAdapter(adapter);
+                    }
+                } else {
+                    Log.d(TAG, "Error getting documents: ", task.getException());
+                }
+            }
+        });
         return layout;
+    }
+
+    static String getTime(Timestamp time) {
+        Date date_createdAt = time.toDate();//Date형식으로 변경
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy년 MM월 dd일 HH:mm:ss");
+        String txt_createdAt = formatter.format(date_createdAt).toString();
+        return txt_createdAt;
     }
 
     @Override
@@ -111,19 +153,13 @@ public class FeedFragment extends Fragment {
             }
         });
 
-
     }
-
-
 
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-
     }
-
 
     private void startToast(String msg){
         Toast.makeText(getActivity(),msg, Toast.LENGTH_SHORT).show();
