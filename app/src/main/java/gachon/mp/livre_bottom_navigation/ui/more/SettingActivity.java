@@ -160,7 +160,6 @@ public class SettingActivity extends AppCompatActivity {
                                         for (QueryDocumentSnapshot document : task.getResult()) {
                                             Intent intent;
                                             method = document.getData().get("method").toString();
-                                            //어떤 로그인 방식이었는지 알아오기 - 실패
                                             if (method.equals("2")) {
                                                 credential = GoogleAuthProvider.getCredential(token, null);
                                                 System.out.println("구글");
@@ -250,10 +249,8 @@ public class SettingActivity extends AppCompatActivity {
                                             public void onComplete(@NonNull Task<Void> task) {
                                                 if (task.isSuccessful()) {
                                                     FirebaseFirestore db = FirebaseFirestore.getInstance();
-                                                    DocumentReference userRef = db.collection("Users").document(Uid);
-                                                    Map<String, Object> recordUpdate = new HashMap<>();
-                                                    recordUpdate.put(Uid, null);
-                                                    userRef.update(recordUpdate);
+                                                    DocumentReference userRef = db.collection("Users").document("uid");
+                                                    userRef.update("uid", Uid);
                                                     Log.d(TAG, "User account deleted.");
                                                 } else
                                                     Log.d(TAG, "외않되냐", task.getException());
@@ -261,7 +258,7 @@ public class SettingActivity extends AppCompatActivity {
                                         });
                             }
                         });
-                db.collection("Users").document(user.getUid()).delete();
+//                db.collection("Users").document(user.getUid()).delete();
                 Toast.makeText(SettingActivity.this, "탈퇴 되었습니다", Toast.LENGTH_SHORT).show();
                 FirebaseAuth.getInstance().signOut();
                 Intent intent = new Intent(getApplicationContext(), SplashActivity.class);
