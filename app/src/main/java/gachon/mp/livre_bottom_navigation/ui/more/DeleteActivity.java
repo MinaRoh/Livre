@@ -71,7 +71,7 @@ public class DeleteActivity extends AppCompatActivity {
                                                 if (task.isSuccessful()) {
                                                     FirebaseFirestore db = FirebaseFirestore.getInstance();
                                                     DocumentReference userRef = db.collection("Users").document("uid");
-                                                    userRef.update("uid", Uid);
+                                                    userRef.update("uid", null);
                                                     Log.d(TAG, "User account deleted.");
                                                 } else
                                                     Log.d(TAG, "User account isn't deleted.", task.getException());
