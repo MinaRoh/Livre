@@ -230,13 +230,7 @@ public class SignUpActivity extends AppCompatActivity implements GoogleApiClient
 
     private void resultLogin(GoogleSignInAccount account) {//결과값 출력 메소드
         AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
-
-        EditText emailEditText = findViewById(R.id.emailEditText);
-        EditText passwordEditText = findViewById(R.id.passwordEditText);
         EditText nicknameEditText = findViewById(R.id.nicknameEditText);
-        String email = emailEditText.getText().toString();
-        String password = passwordEditText.getText().toString();
-        String Nname = nicknameEditText.getText().toString();
 
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -265,8 +259,8 @@ public class SignUpActivity extends AppCompatActivity implements GoogleApiClient
 
                             String email = user.getEmail();
                             String uid = user.getUid();
-                            String nickname = Nname;
-                            sharedPreference("Nickname", Nname);
+                            String nickname = user.getDisplayName();
+
                             //해쉬맵 테이블을 파이어베이스 데이터베이스에 저장
 
                             handler.postDelayed(new Runnable() {
@@ -455,9 +449,7 @@ public class SignUpActivity extends AppCompatActivity implements GoogleApiClient
         EditText emailEditText = findViewById(R.id.emailEditText);
         EditText passwordEditText = findViewById(R.id.passwordEditText);
         EditText nicknameEditText = findViewById(R.id.nicknameEditText);
-        String email = emailEditText.getText().toString();
-        String password = passwordEditText.getText().toString();
-        String Nname = nicknameEditText.getText().toString();
+
 
         AuthCredential credential = FacebookAuthProvider.getCredential(accessToken.getToken());
         mAuth.signInWithCredential(credential)
@@ -489,10 +481,10 @@ public class SignUpActivity extends AppCompatActivity implements GoogleApiClient
                                     });
 
 
+
                             String email = user.getEmail();
                             String uid = user.getUid();
-                            String nickname = Nname;
-                            sharedPreference("Nickname", Nname);
+                            String nickname = user.getDisplayName();
                             //해쉬맵 테이블을 파이어베이스 데이터베이스에 저장
 
                             handler.postDelayed(new Runnable() {
@@ -523,7 +515,7 @@ public class SignUpActivity extends AppCompatActivity implements GoogleApiClient
 
                                     // Sign in success, update UI with the signed-in user's information
                                     Log.d(TAG, "createUserWithEmail:success");
-                                    Toast.makeText(gachon.mp.livre_bottom_navigation.SignUpActivity.this, "환영합니다",
+                                    Toast.makeText(gachon.mp.livre_bottom_navigation.SignUpActivity.this, "회원가입이 완료되었습니다!",
                                             Toast.LENGTH_SHORT).show();
                                     Intent intent = new Intent(getApplicationContext(), SignInActivity.class);
                                     startActivityForResult(intent, Protocol.SIGN_IN_CLICKED);
