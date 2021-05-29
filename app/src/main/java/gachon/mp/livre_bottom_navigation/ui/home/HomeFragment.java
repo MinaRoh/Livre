@@ -44,11 +44,13 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.ByteArrayOutputStream;
 import java.text.SimpleDateFormat;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 
 import gachon.mp.livre_bottom_navigation.ListActivity;
 import gachon.mp.livre_bottom_navigation.R;
+import gachon.mp.livre_bottom_navigation.pushNoti.SendMessage;
 
 
 import static android.graphics.Color.parseColor;
@@ -107,6 +109,7 @@ public class HomeFragment extends Fragment {
         Button btn_change_color = getActivity().findViewById(R.id.btn_change_color);
         Button btn_change_bg = getActivity().findViewById(R.id.btn_change_bg);
         Button btn_change_trunk = getActivity().findViewById(R.id.btn_change_trunk);
+        Button btn_get_push_notice = getActivity().findViewById(R.id.btn_get_push_notice);
 
         user = FirebaseAuth.getInstance().getCurrentUser();
         db.collection("Tree_current")
@@ -187,6 +190,17 @@ public class HomeFragment extends Fragment {
                 startListActivity();
             }
         });
+
+        //임시 푸시알림 버튼
+        btn_get_push_notice.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String msgTitle = "좋아요 알림";
+                String msgContent = "민하님이 좋아요를 누르셨습니다!";
+                SendMessage sendMessage = new SendMessage(Collections.singletonList(user.getUid()), msgTitle, msgContent);
+            }
+        });
+
 
     }
 

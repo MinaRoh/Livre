@@ -78,13 +78,7 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:background="@color/bg_ground"
-            android:orientation="vertical">
 
-        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -131,6 +125,15 @@
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:text="trunk 변경" />
+
+            <Button
+                android:id="@+id/btn_get_push_notice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="푸시알림받기^^" />
+
 
 
         </LinearLayout>
