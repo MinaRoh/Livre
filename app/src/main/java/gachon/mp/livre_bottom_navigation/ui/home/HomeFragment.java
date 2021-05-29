@@ -45,6 +45,7 @@ import org.jetbrains.annotations.NotNull;
 import java.io.ByteArrayOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 
 import gachon.mp.livre_bottom_navigation.ListActivity;
 import gachon.mp.livre_bottom_navigation.R;
@@ -261,7 +262,6 @@ public class HomeFragment extends Fragment {
                 try{
                     // 나무 사진 저장
                     onCap(bm);
-                    Toast.makeText(getActivity(),"나무를 완성했어요!", Toast.LENGTH_SHORT);
                 } catch(Exception e){
                 }
 
@@ -354,6 +354,14 @@ public class HomeFragment extends Fragment {
                     db.collection("Tree_current").document(user.getUid()).update("level", Integer.toString(data));
                     changeLeavesStatus(data);
                     level = Integer.toString(data);
+
+                    HashMap<Object, String> hashMap = new HashMap<>();
+                    hashMap.put("uid", user.getUid());
+                    hashMap.put("img", filename);
+
+                    FirebaseFirestore database = FirebaseFirestore.getInstance();
+                    database.collection("Tree_complete").add(hashMap);
+
                 }
             });
 
