@@ -2,6 +2,7 @@ package gachon.mp.livre_bottom_navigation.ui.home;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
@@ -24,17 +25,26 @@ import com.github.dhaval2404.colorpicker.listener.ColorListener;
 import com.github.dhaval2404.colorpicker.listener.DismissListener;
 import com.github.dhaval2404.colorpicker.model.ColorShape;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+import com.google.type.DateTime;
 
 
 import org.jetbrains.annotations.NotNull;
+
+import java.io.ByteArrayOutputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import gachon.mp.livre_bottom_navigation.ListActivity;
 import gachon.mp.livre_bottom_navigation.R;
@@ -51,6 +61,7 @@ public class HomeFragment extends Fragment {
     private String trunk_color;
     private String leaf_color;
     private String background;
+    SimpleDateFormat formatter;
     ConstraintLayout bg_area;
     Button button;
     ImageView colorView;
@@ -87,6 +98,7 @@ public class HomeFragment extends Fragment {
         trunk = getActivity().findViewById(R.id.trunk);
         colorView = getActivity().findViewById(R.id.colorView);
         butterfly = getActivity().findViewById(R.id.butterfly);
+        bg_area = (ConstraintLayout)getActivity().findViewById(R.id.bg_area);
 
         butterfly.setVisibility(View.GONE);//처음엔 나비 안보이게
 
@@ -242,8 +254,17 @@ public class HomeFragment extends Fragment {
             case 10:
                 leaves.setImageResource(R.drawable.level10);
                 break;
-            case 0:
+            case 0: // 나무 완성
                 butterfly.setVisibility(View.VISIBLE);
+                bg_area.setDrawingCacheEnabled(true);
+                Bitmap bm = bg_area.getDrawingCache();
+                try{
+                    // 나무 사진 저장
+                    onCap(bm);
+                    Toast.makeText(getActivity(),"나무를 완성했어요!", Toast.LENGTH_SHORT);
+                } catch(Exception e){
+                }
+
                 break;
             default: break;
 
@@ -304,5 +325,44 @@ public class HomeFragment extends Fragment {
 
     private void toastMsg(String msg){
         Toast.makeText(getActivity(), msg, Toast.LENGTH_SHORT).show();
+    }
+
+    private void onCap(Bitmap bm) throws Exception{
+        try{
+            FirebaseStorage storage = FirebaseStorage.getInstance();
+            StorageReference storageRef = storage.getReference();
+
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            bm.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+            byte[] data = baos.toByteArray();
+
+            //Unique한 파일명을 만들자.
+            formatter = new SimpleDateFormat("yyyyMMdd_HHmmss");
+            Date now = new Date();
+            String filename = "tree_complete/"+user.getUid()+"/"+ formatter.format(now) +".jpg";
+            // 저장소에 사진 저장
+            StorageReference riverRef = storageRef.child(filename);
+            UploadTask uploadTask = riverRef.putBytes(data);
+            uploadTask.addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                }
+            }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) { // db 업데이트
+                    int data = (Integer.parseInt(level)+1)%11;
+                    db.collection("Tree_current").document(user.getUid()).update("level", Integer.toString(data));
+                    changeLeavesStatus(data);
+                    level = Integer.toString(data);
+                }
+            });
+
+
+        } catch (Exception e) {
+
+        } finally {
+
+        }
+
     }
 }
