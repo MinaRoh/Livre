@@ -38,6 +38,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import gachon.mp.livre_bottom_navigation.R;
+import gachon.mp.livre_bottom_navigation.ui.writing.CommentActivity;
+import gachon.mp.livre_bottom_navigation.ui.writing.PostActivity;
 
 /*미리보기 리스트에서 누른 포스트를 보여주는 액티비티
 * 글쓴이는 수정, 삭제가 가능해야 함*/
@@ -45,7 +47,6 @@ public class PostViewActivity extends AppCompatActivity {
     private static final String TAG = "PostViewActivity";
     private String posts_id;
     private FirebaseUser user;
-    private String publisher_email = "";
     ImageView post_image;
     ImageView user_profile;
     int int_num_heart;
@@ -106,7 +107,7 @@ public class PostViewActivity extends AppCompatActivity {
                                     //스플래시 -- 로딩중입니다.
                                     getImage();
                                 }
-                            }, 3000); // 1sec
+                            }, 4000); // 1sec
                         }
                     } else {
                         Log.d(TAG, "No such document");
@@ -152,6 +153,15 @@ public class PostViewActivity extends AppCompatActivity {
                                 Log.w(TAG, "Error updating document", e);
                             }
                         });
+            }
+        });
+
+        comment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(PostViewActivity.this, CommentActivity.class);
+                intent.putExtra("posts_id", posts_id);//코멘트 액티비티에 문서 id 전달
+                startActivity(intent);
             }
         });
     }
