@@ -47,18 +47,21 @@ public class PostViewActivity extends AppCompatActivity {
     private FirebaseUser user;
     private String publisher_email = "";
     ImageView post_image;
+    ImageView user_profile;
     int int_num_heart;
     int int_num_comment;
     String imagePath;
     Boolean heart_clicked = false;
     String nick;
+    String publisher_uid;
+    String profileImage;
     Handler handler = new Handler();
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post);
         TextView title = (TextView)findViewById(R.id.title);
-        ImageView user_profile = (ImageView)findViewById(R.id.user_profile);
+        user_profile = (ImageView)findViewById(R.id.user_profile);
         TextView nickname = (TextView)findViewById(R.id.nickname);
         TextView upload_time = (TextView)findViewById(R.id.upload_time);
         ImageButton user_menu = (ImageButton)findViewById(R.id.user_menu);
@@ -72,11 +75,7 @@ public class PostViewActivity extends AppCompatActivity {
         Intent intent = getIntent();
         posts_id = intent.getStringExtra("posts_id");
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-
-        //그 전에 posts_id 필드 추가
         DocumentReference docRef = db.collection("Posts").document(posts_id);
-
-        // 보여주기
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -86,6 +85,8 @@ public class PostViewActivity extends AppCompatActivity {
                         Log.d(TAG, "DocumentSnapshot data: " + document.getData());
                         String txt_title = document.getData().get("title").toString();
                         String txt_nickname = document.getData().get("nickname").toString();
+                        publisher_uid = document.getData().get("publisher").toString();
+                        upload_profile();
                         nick = txt_nickname;
                         Timestamp time = (Timestamp) document.getData().get("uploadTime");
                         String txt_contents = document.getData().get("contents").toString();
@@ -116,50 +117,12 @@ public class PostViewActivity extends AppCompatActivity {
             }
 
         });
-
         //프로필 동그랗게 하기
         user_profile.setBackground(new ShapeDrawable(new OvalShape()));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             user_profile.setClipToOutline(true);
         }
 
-        try {
-            /*글쓴이 프로필 이미지 불러오기*/
-            FirebaseFirestore db_user = FirebaseFirestore.getInstance();
-            db_user.collection("Users")
-                    .whereEqualTo("nickname", nick) //포스트의 닉네임과 동일한 행을 Users에서 찾는다
-                    .get()
-                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                            if (task.isSuccessful()) {
-                                for (QueryDocumentSnapshot document : task.getResult()) {
-                                    publisher_email = document.get("email").toString(); //글쓴이의 이메일 주소 얻어옴
-                                    Log.d(TAG, "user_email: " + publisher_email);
-                                }
-                                //FirebaseStorage(사진) 인스턴스를 생성
-                                FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
-                                // 위의 저장소를 참조하는 파일명으로 지정
-                                StorageReference storageReference = firebaseStorage.getReferenceFromUrl("gs://mp-livre.appspot.com/").child("profile_img/profile_" + publisher_email + ".jpg");
-                                System.out.println("***************storageReference : " + storageReference.toString());
-                                //StorageReference에서 파일 다운로드 URL 가져옴
-                                storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                    @Override
-                                    public void onSuccess(Uri uri) {
-                                        Glide.with(PostViewActivity.this)
-                                                .load(task.getResult())
-                                                .override(1024, 980)
-                                                .into(user_profile);
-                                    }
-                                });
-                            }
-                        }
-                    });
-        }
-        catch (Exception e){
-            System.out.println("Error!!!!!!!!!!!!!!!!!!!!!!!!!");
-            e.printStackTrace();
-        }
         /*하트 눌렀을 때*/
         heart.setOnClickListener(new View.OnClickListener() {
             //문제점: 이건 한정적으로 방금 자기가 업로드한 글에만 적용되는 코드
@@ -191,7 +154,6 @@ public class PostViewActivity extends AppCompatActivity {
                         });
             }
         });
-
     }
 /*포스트의 이미지를 불러오는 메소드
 * 이미지를 올리지 않은 경우는 아무 동작하지 않음*/
@@ -243,4 +205,41 @@ public class PostViewActivity extends AppCompatActivity {
         private void toastMsg(String msg){
             Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
         }
+      public void upload_profile(){
+          /*글쓴이 프로필 이미지 불러오기*/
+          FirebaseFirestore db_user = FirebaseFirestore.getInstance();
+          db_user.collection("Users")
+                  .whereEqualTo("uid", publisher_uid) //포스트의 닉네임과 동일한 행을 Users에서 찾는다
+                  .get()
+                  .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                      @Override
+                      public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                          if (task.isSuccessful()) {
+                              for (QueryDocumentSnapshot document : task.getResult()) {
+                                  profileImage = document.get("profileImage").toString();
+                              }
+                              //FirebaseStorage(사진) 인스턴스를 생성
+                              FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
+                              // 위의 저장소를 참조하는 파일명으로 지정
+                              StorageReference storageReference = firebaseStorage.getReferenceFromUrl("gs://mp-livre.appspot.com/" + profileImage);
+                              System.out.println("***************storageReference : " + storageReference.toString());
+                              storageReference.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+                                  @Override
+                                  public void onComplete(@NonNull Task<Uri> task) {
+                                      if (task.isSuccessful()) {
+                                          // Glide 이용하여 이미지뷰에 로딩
+                                          Glide.with(getApplication())
+                                                  .load(task.getResult())
+                                                  .override(1024, 980)
+                                                  .into(user_profile);
+                                      } else {
+                                          // URL을 가져오지 못하면 토스트 메세지
+                                          Toast.makeText(getApplication(), task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                      }
+                                  }
+                              });
+                          }
+                      }
+                  });
+      }
 }
