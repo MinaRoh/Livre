@@ -98,6 +98,7 @@ public class FeedFragment extends Fragment {
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
                     for (QueryDocumentSnapshot document : task.getResult()) {
+                        String publisher = document.getData().get("publisher").toString();
                         String post_id = document.getId();
                         String nickname = document.getData().get("nickname").toString();
                         Timestamp time = (Timestamp) document.getData().get("uploadTime");
@@ -109,7 +110,7 @@ public class FeedFragment extends Fragment {
                         Integer num_comment = Integer.parseInt(String.valueOf(document.getData().get("num_comment")));
 
                         user = FirebaseAuth.getInstance().getCurrentUser();
-                        adapter.addItem(new Feed(user.getUid(), post_id, nickname, upload_time, imagePath, title, contents, num_heart, num_comment));
+                        adapter.addItem(new Feed(publisher, post_id, nickname, upload_time, imagePath, title, contents, num_heart, num_comment));
                         recyclerView.setAdapter(adapter);
                     }
                 } else {
