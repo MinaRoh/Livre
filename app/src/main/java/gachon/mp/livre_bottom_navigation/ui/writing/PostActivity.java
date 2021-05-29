@@ -36,6 +36,7 @@ import com.google.firebase.storage.StorageReference;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import gachon.mp.livre_bottom_navigation.Protocol;
 import gachon.mp.livre_bottom_navigation.R;
 
 /*글쓰기 완료한 포스트를 보여주는 액티비티
@@ -87,11 +88,6 @@ public class PostActivity extends AppCompatActivity {
                         Log.w(TAG, "Error updating document", e);
                     }
                 });
-
-
-
-
-
         // 보여주기
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -119,7 +115,7 @@ public class PostActivity extends AppCompatActivity {
                                     //스플래시 -- 로딩중입니다.
                                     getImage();
                                 }
-                            }, 3000); // 1sec
+                            }, 4000); // 1sec
                         }
                     } else {
                         Log.d(TAG, "No such document");
@@ -204,8 +200,17 @@ public class PostActivity extends AppCompatActivity {
                         });
             }
         });
-
+        comment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(PostActivity.this, CommentActivity.class);
+                intent.putExtra("posts_id", posts_id);//코멘트 액티비티에 문서 id 전달
+                startActivity(intent);
+            }
+        });
     }
+
+
 /*포스트의 이미지를 불러오는 메소드
 * 이미지를 올리지 않은 경우는 아무 동작하지 않음*/
     public void getImage() {
