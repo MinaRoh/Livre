@@ -69,6 +69,7 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.ViewHolder>{
         FirebaseUser user;
         String profileImg;//프로필 이미지 저장소 URL
         String post_id;//포스트 아이디
+        String publisher_id;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             imageView = itemView.findViewById(R.id.user_profile);
@@ -95,6 +96,7 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.ViewHolder>{
 
         public void setItem(Feed item){
             post_id = item.getPost_id();
+            publisher_id = item.getPublisher_id();
 
             textView.setText(item.getNickname());//작성자 닉네임
             textView2.setText(item.getTime());//업로드 시간
@@ -111,7 +113,7 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.ViewHolder>{
             FirebaseFirestore db_user = FirebaseFirestore.getInstance();
             user = FirebaseAuth.getInstance().getCurrentUser();
             db_user.collection("Users")
-                    .whereEqualTo("uid", user.getUid())
+                    .whereEqualTo("uid", publisher_id)
                     .get()
                     .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                         @Override
@@ -146,7 +148,7 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.ViewHolder>{
             String filename = item.getPostImage();
             StorageReference pathReference = storageRef.child("images");
             if(filename!=null && pathReference != null){
-                StorageReference submitProfile = storage.getReferenceFromUrl("gs://mp-livre.appspot.com").child("images/"+ user.getUid() + "/" + filename);
+                StorageReference submitProfile = storage.getReferenceFromUrl("gs://mp-livre.appspot.com").child("images/"+ publisher_id + "/" + filename);
                 submitProfile.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                     @Override
                     public void onSuccess(Uri uri) {
