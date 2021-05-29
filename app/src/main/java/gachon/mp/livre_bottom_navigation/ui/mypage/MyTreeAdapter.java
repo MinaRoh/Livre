@@ -44,6 +44,7 @@ public class MyTreeAdapter extends RecyclerView.Adapter<MyTreeAdapter.ViewHolder
 
         public void setItem(MyTree item){
             //스토리지에 있는 사진 가져와서 imageView에 glide로 넣는 코드를 쓰슈.
+            String tree_url = item.getTree_url();
         }
     }
     public void addItem(MyTree item){
