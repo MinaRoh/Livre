@@ -45,7 +45,6 @@ import gachon.mp.livre_bottom_navigation.ui.writing.WriteInfo;
 
 public class MypageFragment extends Fragment {
     private static final String TAG = "MyPageFragment";
-    private MypageViewModel mypageViewModel;
     private FirebaseAuth mAuth;
     private FirebaseUser user;
     private String profileImg = "";
@@ -53,8 +52,6 @@ public class MypageFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        mypageViewModel =
-                new ViewModelProvider(this).get(MypageViewModel.class);
         View root = inflater.inflate(R.layout.fragment_mypage, container, false);
         final TextView textView = root.findViewById(R.id.text_mypages);
 
@@ -104,6 +101,16 @@ public class MypageFragment extends Fragment {
                         }
                     }
                 });
+        /*사용자 트리 이미지 파트*/
+        RecyclerView recyclerView2 = (RecyclerView)root.findViewById(R.id.recyclerView2);
+        LinearLayoutManager layoutManager2 = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+        recyclerView2.setLayoutManager(layoutManager2);
+        MyTreeAdapter adapter2 = new MyTreeAdapter();
+        adapter2.addItem(new MyTree("tree url1"));
+        adapter2.addItem(new MyTree("tree url2"));
+        adapter2.addItem(new MyTree("tree url3"));
+        recyclerView2.setAdapter(adapter2);
+
         /*마이페이지 - 글 목록 파트*/
         RecyclerView recyclerView = (RecyclerView)root.findViewById(R.id.recyclerView);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
@@ -137,6 +144,8 @@ public class MypageFragment extends Fragment {
                         }
                     }
                 });
+
+
         return root;
     }
 
