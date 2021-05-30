@@ -39,7 +39,7 @@ import java.util.Date;
 import gachon.mp.livre_bottom_navigation.Protocol;
 import gachon.mp.livre_bottom_navigation.R;
 
-/*글쓰기 완료한 포스트를 보여주는 액티비티
+/* 자기가 쓴 포스트를 보여주는 액티비티
 * 하트수, 댓글, 메뉴(수정,삭제) 기능이 연결 돼 있음*/
 public class PostActivity extends AppCompatActivity {
     private static final String TAG = "PostActivity";
@@ -50,6 +50,7 @@ public class PostActivity extends AppCompatActivity {
     int int_num_heart;
     int int_num_comment;
     String imagePath;
+    String publisher_uid;
     Boolean heart_clicked = false;
     Handler handler = new Handler();
     @Override
@@ -203,6 +204,7 @@ public class PostActivity extends AppCompatActivity {
                         });
             }
         });
+        /*댓글 버튼 눌렀을 때*/
         comment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -222,26 +224,17 @@ public class PostActivity extends AppCompatActivity {
         //storage 주소와 폴더 파일명을 지정해 준다.
         StorageReference storageRef = storage.getReferenceFromUrl("gs://mp-livre.appspot.com");
         user = FirebaseAuth.getInstance().getCurrentUser();
-
-        String filename = ((WritingActivity) WritingActivity.mContext).filename;
-        System.out.println("Post activity ************** filename : " + filename);
-
         //Storage 내부의 images 폴더 안의 image.jpg 파일명을 가리키는 참조 생성
         StorageReference pathReference = storageRef.child("images");
-        System.out.println("Post activity **************스토리지 어느곳 참조?: " + pathReference);
-
         if(pathReference == null){
             toastMsg("저장소에 사진이 없습니다.");
         }else{
-            //Storage 내부의 images 폴더 안의 image.jpg 파일명을 가리키는 참조 생성
-            StorageReference submitProfile = storage.getReferenceFromUrl("gs://mp-livre.appspot.com").child("images/"+ user.getUid().toString() + "/" + filename);
+            StorageReference submitProfile = storage.getReferenceFromUrl("gs://mp-livre.appspot.com").child("images/"+ user.getUid() + "/" + imagePath);
             System.out.println("Post activity ************** submitProfile : " + submitProfile);
-            
             submitProfile.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                 @Override
                 public void onSuccess(Uri uri) {
-
-                    Glide.with(PostActivity.this)
+                    Glide.with(getApplicationContext())
                             .load(uri)
                             .into(post_image);
                 }
@@ -249,7 +242,6 @@ public class PostActivity extends AppCompatActivity {
                 @Override
                 public void onFailure(@NonNull Exception e) {
                     Log.w(TAG, "Error getting image", e);
-                    toastMsg("이미지 로딩에 실패하였습니다.");
                 }
             });
         }

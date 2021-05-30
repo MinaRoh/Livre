@@ -41,8 +41,8 @@ import gachon.mp.livre_bottom_navigation.R;
 import gachon.mp.livre_bottom_navigation.ui.writing.CommentActivity;
 import gachon.mp.livre_bottom_navigation.ui.writing.PostActivity;
 
-/*미리보기 리스트에서 누른 포스트를 보여주는 액티비티
-* 글쓴이는 수정, 삭제가 가능해야 함*/
+/*다른 사람이 쓴 포스트를 보여주는 액티비티
+* 수정, 삭제 불가*/
 public class PostViewActivity extends AppCompatActivity {
     private static final String TAG = "PostViewActivity";
     private String posts_id;
@@ -60,7 +60,7 @@ public class PostViewActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_post);
+        setContentView(R.layout.activity_post_view);
         TextView title = (TextView)findViewById(R.id.title);
         TextView book_title = (TextView)findViewById(R.id.book_title);
         user_profile = (ImageView)findViewById(R.id.user_profile);
@@ -158,7 +158,7 @@ public class PostViewActivity extends AppCompatActivity {
                         });
             }
         });
-
+       /*댓글 버튼 눌렀을 때*/
         comment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -185,7 +185,7 @@ public class PostViewActivity extends AppCompatActivity {
             toastMsg("저장소에 사진이 없습니다.");
         }else{
             //Storage 내부의 images 폴더 안의 image.jpg 파일명을 가리키는 참조 생성
-            StorageReference submitProfile = storage.getReferenceFromUrl("gs://mp-livre.appspot.com").child("images/"+ user.getUid().toString() + "/" + imagePath);
+            StorageReference submitProfile = storage.getReferenceFromUrl("gs://mp-livre.appspot.com").child("images/"+ publisher_uid + "/" + imagePath);
             System.out.println("Post activity ************** submitProfile : " + submitProfile);
             
             submitProfile.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {

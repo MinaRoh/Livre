@@ -91,7 +91,7 @@ public class MyPageAdapter extends RecyclerView.Adapter<MyPageAdapter.ViewHolder
                 public void onClick(View view) {
                     Context context = view.getContext();
                     Intent intent;
-                    intent = new Intent(context, PostViewActivity.class);
+                    intent = new Intent(context, PostActivity.class);
                     intent.putExtra("posts_id", post_id);//포스트 액티비티에 문서 id 전달
                     Log.d(TAG, "posts_id: " + post_id);
                     context.startActivity(intent);
