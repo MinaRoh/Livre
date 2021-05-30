@@ -66,6 +66,7 @@ public class ReadingBookAdapter extends RecyclerView.Adapter<ReadingBookAdapter.
         ImageView reading_img;
         TextView reading_book_title;
         TextView reading_author;
+        String isbn;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -83,6 +84,7 @@ public class ReadingBookAdapter extends RecyclerView.Adapter<ReadingBookAdapter.
         String user_id = user.getUid();//사용자 uid
         reading_book_title.setText(item.getBook_title());
         reading_author.setText(item.getAuthor());
+        isbn = item.getIsbn();
 
         Picasso.get().load(item.getImageUrl()).resize(200,270).into(reading_img);
         }

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -51,6 +52,7 @@ public class FeedDetailActivity extends AppCompatActivity {
     TextView description;
     ImageView image;
 
+    ImageButton back_btn;
     Button writing_report;
     Button reading;
 
@@ -108,6 +110,14 @@ public class FeedDetailActivity extends AppCompatActivity {
             }
         });
 
+        // 뒤로가기 버튼 클릭
+        back_btn = findViewById(R.id.feed_detail_btn_back);
+        back_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
@@ -157,7 +167,7 @@ public class FeedDetailActivity extends AppCompatActivity {
 
     private void bookUpdate() {
         user = FirebaseAuth.getInstance().getCurrentUser();
-        Book book = new Book(titleFromMain, authorFromMain, imageFromMain, user.getUid());
+        Book book = new Book(titleFromMain, authorFromMain, imageFromMain, user.getUid(), isbnFromMain);
         bookUploader(book);
     }
 

@@ -56,6 +56,7 @@ import gachon.mp.livre_bottom_navigation.R;
 import gachon.mp.livre_bottom_navigation.pushNoti.SendMessage;
 import gachon.mp.livre_bottom_navigation.ui.feed.Book;
 import gachon.mp.livre_bottom_navigation.ui.mypage.CommentInfo;
+import gachon.mp.livre_bottom_navigation.ui.writing.WritingActivity;
 
 
 import static android.graphics.Color.parseColor;
@@ -86,6 +87,11 @@ public class HomeFragment extends Fragment {
     TextView reading_book_title;
     TextView reading_author;
     ViewPager2 reading_pager;
+    Button btn_toWriting;
+    String reading_book_title_txt;
+    String reading_author_txt;
+    String reading_img_url_txt;
+    String isbn_txt;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -229,17 +235,34 @@ public class HomeFragment extends Fragment {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document:task.getResult()) {
-                                String reading_book_title_txt = document.getData().get("book_title").toString();
-                                String reading_author_txt = document.getData().get("author").toString();
-                                String reading_img_url_txt = document.getData().get("imageUrl").toString();
+                                reading_book_title_txt = document.getData().get("book_title").toString();
+                                reading_author_txt = document.getData().get("author").toString();
+                                reading_img_url_txt = document.getData().get("imageUrl").toString();
+                                isbn_txt = document.getData().get("isbn").toString();
 
-                                adapter.addItem(new Book(reading_book_title_txt, reading_author_txt, reading_img_url_txt, user.getUid()));
+                                adapter.addItem(new Book(reading_book_title_txt, reading_author_txt, reading_img_url_txt, user.getUid(), isbn_txt));
                                 reading_pager.setAdapter(adapter);
 
                             }
                         }
                     }
                 });
+
+//        //ISBN과 책 제목을 WritingActivity로 전달
+//        btn_toWriting = getActivity().findViewById(R.id.btn_reading);
+//        btn_toWriting.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                String isbn_toWriting = isbn_txt;
+//                String title_toWriting = reading_book_title_txt;
+//
+//                Intent writing_intent = new Intent(getActivity(), WritingActivity.class);
+//                writing_intent.putExtra("isbn", isbn_toWriting);
+//                writing_intent.putExtra("book_title", title_toWriting);
+//
+//                startActivity(writing_intent);
+//            }
+//        });
     }
 
 

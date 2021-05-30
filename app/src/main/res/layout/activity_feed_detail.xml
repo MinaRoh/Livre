@@ -51,7 +51,7 @@
 
         <ImageView
             android:id="@+id/image_detail"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="10dp"
             android:layout_width="134dp"
             android:layout_height="match_parent"
             android:layout_marginLeft="6dp"
@@ -69,10 +69,10 @@
                     android:id="@+id/txttitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="15dp"
                     android:textColor="@color/black"
                     android:text="책제목"
-                    android:textSize="15sp" />
+                    android:textSize="13sp" />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -81,7 +81,7 @@
                     android:textColor="@color/black"
                     android:text="책저자"
                     android:layout_marginTop="10dp"
-                    android:textSize="15sp"
+                    android:textSize="13sp"
                     android:layout_centerVertical="true" />
 
                 <TextView
@@ -90,7 +90,7 @@
                     android:id="@+id/txtdescription"
                     android:text="책설명"
                     android:layout_marginTop="10dp"
-                    android:textSize="15sp"
+                    android:textSize="12sp"
                     android:textColor="@color/black"
                     android:layout_centerVertical="true" />
             </LinearLayout>

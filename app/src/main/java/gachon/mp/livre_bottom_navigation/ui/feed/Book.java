@@ -5,12 +5,14 @@ public class Book {
     private String author;
     private String imageUrl;
     private String uid;
+    private String isbn;
 
-    public Book (String book_title, String author, String imageUrl, String uid) {
+    public Book (String book_title, String author, String imageUrl, String uid, String isbn) {
         this.book_title = book_title;
         this.author = author;
         this.imageUrl = imageUrl;
         this.uid = uid;
+        this.isbn = isbn;
     }
 
     public String getUid() {
@@ -44,4 +46,8 @@ public class Book {
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
     }
+
+    public String getIsbn() { return isbn; }
+
+    public void setIsbn(String isbn) { this.isbn = isbn; }
 }
