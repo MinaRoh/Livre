@@ -57,6 +57,7 @@ public class PostActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post);
         TextView title = (TextView)findViewById(R.id.title);
+        TextView book_title = (TextView)findViewById(R.id.book_title);
         ImageView user_profile = (ImageView)findViewById(R.id.user_profile);
         TextView nickname = (TextView)findViewById(R.id.nickname);
         TextView upload_time = (TextView)findViewById(R.id.upload_time);
@@ -97,12 +98,14 @@ public class PostActivity extends AppCompatActivity {
                     if (document.exists()) {
                         Log.d(TAG, "DocumentSnapshot data: " + document.getData());
                         String txt_title = document.getData().get("title").toString();
+                        String txt_book = document.getData().get("bookTitle").toString();
                         String txt_nickname = document.getData().get("nickname").toString();
                         String txt_contents = document.getData().get("contents").toString();
                         imagePath = document.getData().get("imagePath").toString();
                         int_num_heart = Integer.parseInt(String.valueOf(document.getData().get("num_heart")));
                         int_num_comment = Integer.parseInt(String.valueOf(document.getData().get("num_comment")));
                         title.setText(txt_title);
+                        book_title.setText(txt_book);
                         nickname.setText(txt_nickname);
                         upload_time.setText(getTime());
                         contents.setText(txt_contents);
@@ -115,7 +118,7 @@ public class PostActivity extends AppCompatActivity {
                                     //스플래시 -- 로딩중입니다.
                                     getImage();
                                 }
-                            }, 4000); // 1sec
+                            }, 4500); // 1sec
                         }
                     } else {
                         Log.d(TAG, "No such document");

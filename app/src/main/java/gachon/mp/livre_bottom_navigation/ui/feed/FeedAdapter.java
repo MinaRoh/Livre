@@ -66,6 +66,7 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.ViewHolder>{
         TextView textView4;
         TextView textView5;
         TextView textView6;
+        TextView textView7;
         FirebaseUser user;
         String profileImg;//프로필 이미지 저장소 URL
         String post_id;//포스트 아이디
@@ -80,6 +81,7 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.ViewHolder>{
             textView4 = (TextView)itemView.findViewById(R.id.contents);
             textView5 = (TextView)itemView.findViewById(R.id.num_heart);
             textView6 = (TextView)itemView.findViewById(R.id.num_comment);
+            textView7 = (TextView)itemView.findViewById(R.id.book_title);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -104,7 +106,7 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.ViewHolder>{
             textView4.setText(item.getContents());//글 내용
             textView5.setText(String.valueOf(item.getNum_heart()));//하트 개수
             textView6.setText(String.valueOf(item.getNum_comment()));//댓글 개수
-
+            textView7.setText(item.getBook_title());
             /*유저 프로필 이미지 불러오기*/
             imageView.setBackground(new ShapeDrawable(new OvalShape()));
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

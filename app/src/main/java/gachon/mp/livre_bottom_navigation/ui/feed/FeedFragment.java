@@ -104,13 +104,14 @@ public class FeedFragment extends Fragment {
                         Timestamp time = (Timestamp) document.getData().get("uploadTime");
                         String upload_time = getTime(time);
                         String title = document.getData().get("title").toString();
+                        String txt_book = document.getData().get("bookTitle").toString();
                         String contents = document.getData().get("contents").toString();
                         String imagePath = document.getData().get("imagePath").toString();
                         Integer num_heart = Integer.parseInt(String.valueOf(document.getData().get("num_heart")));
                         Integer num_comment = Integer.parseInt(String.valueOf(document.getData().get("num_comment")));
 
                         user = FirebaseAuth.getInstance().getCurrentUser();
-                        adapter.addItem(new Feed(publisher, post_id, nickname, upload_time, imagePath, title, contents, num_heart, num_comment));
+                        adapter.addItem(new Feed(publisher, post_id, nickname, upload_time, imagePath, title, txt_book,  contents, num_heart, num_comment));
                         recyclerView.setAdapter(adapter);
                     }
                 } else {

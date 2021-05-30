@@ -7,17 +7,19 @@ public class Feed {
     String time;
     String postImage;
     String title;
+    String book_title;
     String contents;
     int num_heart;
     int num_comment;
 
-    public Feed(String publisher_id, String post_id, String nickname, String time, String postImage, String title, String contents, int num_heart, int num_comment) {
+    public Feed(String publisher_id, String post_id, String nickname, String time, String postImage, String title, String book_title, String contents, int num_heart, int num_comment) {
         this.publisher_id = publisher_id;
         this.post_id = post_id;
         this.nickname = nickname;
         this.time = time;
         this.postImage = postImage;
         this.title = title;
+        this.book_title = book_title;
         this.contents = contents;
         this.num_heart = num_heart;
         this.num_comment = num_comment;
@@ -69,6 +71,14 @@ public class Feed {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getBook_title() {
+        return book_title;
+    }
+
+    public void setBook_title(String book_title) {
+        this.book_title = book_title;
     }
 
     public String getContents() {

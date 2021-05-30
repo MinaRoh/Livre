@@ -62,6 +62,7 @@ public class PostViewActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post);
         TextView title = (TextView)findViewById(R.id.title);
+        TextView book_title = (TextView)findViewById(R.id.book_title);
         user_profile = (ImageView)findViewById(R.id.user_profile);
         TextView nickname = (TextView)findViewById(R.id.nickname);
         TextView upload_time = (TextView)findViewById(R.id.upload_time);
@@ -85,6 +86,7 @@ public class PostViewActivity extends AppCompatActivity {
                     if (document.exists()) {
                         Log.d(TAG, "DocumentSnapshot data: " + document.getData());
                         String txt_title = document.getData().get("title").toString();
+                        String txt_book = document.getData().get("bookTitle").toString();
                         String txt_nickname = document.getData().get("nickname").toString();
                         publisher_uid = document.getData().get("publisher").toString();
                         upload_profile();
@@ -100,6 +102,7 @@ public class PostViewActivity extends AppCompatActivity {
                         contents.setText(txt_contents);
                         num_heart.setText(String.valueOf(int_num_heart));
                         num_comment.setText(String.valueOf(int_num_comment));
+                        book_title.setText(txt_book);
                         //이미지 불러오기 함수 실행
                         if(imagePath != ""){
                             handler.postDelayed(new Runnable(){
@@ -107,7 +110,7 @@ public class PostViewActivity extends AppCompatActivity {
                                     //스플래시 -- 로딩중입니다.
                                     getImage();
                                 }
-                            }, 4000); // 1sec
+                            }, 4500); // 1sec
                         }
                     } else {
                         Log.d(TAG, "No such document");
@@ -201,7 +204,6 @@ public class PostViewActivity extends AppCompatActivity {
                 @Override
                 public void onFailure(@NonNull Exception e) {
                     Log.w(TAG, "Error getting image", e);
-                    toastMsg("이미지 로딩에 실패하였습니다.");
                 }
             });
         }

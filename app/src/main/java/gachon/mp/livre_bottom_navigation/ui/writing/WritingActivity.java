@@ -160,23 +160,12 @@ public class WritingActivity extends AppCompatActivity {
 
 
         if(title.length() > 0 ){
-//            // While the file names are the same, the references point to different files
-//            imageRef.getName().equals(imageRef.getName());    // true
-
-
             // 이미지라면 storage에 업로드
             uploadFile();
-            // 이미지 주소를 추가해서 upload하기(아직 안함 이미지 주소 들어갈곳도 없을걸?)
-            // uploadFile()의 리턴으로 이미지 주소를 받아서 postUploader에 넣으면 되려나?
-            // 일단 위에 text 넣을때 imagePath도 추가함. Uri 형태. 저렇게 해서 잘 되면 무조건 사진도 최소 하나 넣게 하면 되것지.
-
-
             Timestamp upload_time = new Timestamp(new Date()); // 현재시간으로 타임스탬프 생성
             posts_id ="temp_id";
-
             // firestore 에 업로드
             user = FirebaseAuth.getInstance().getCurrentUser();
-
             if(imagePath != null){
                 String filePath = imagePath.toString(); //Uri to String
                 System.out.println("************************filePath: " + filePath);
@@ -194,11 +183,8 @@ public class WritingActivity extends AppCompatActivity {
         }
 
     }
-
     //storage에 올린 사진 주소를 posts에 imagePath에 넣자
     private String getImagePath(){
-
-
         //storage
         FirebaseStorage storage = FirebaseStorage.getInstance();
         //storage 주소와 폴더 파일명을 지정해 준다.
@@ -209,7 +195,6 @@ public class WritingActivity extends AppCompatActivity {
         System.out.println("**************스토리지 에서 가져온 주소: " + pathReference);
         return pathReference.toString();
     }
-
     private void uploadFile() {
         //업로드할 파일이 있으면 수행
         if (imagePath != null) {
@@ -220,7 +205,6 @@ public class WritingActivity extends AppCompatActivity {
 
             //storage
             FirebaseStorage storage = FirebaseStorage.getInstance();
-
             //Unique한 파일명을 만들자.
             formatter = new SimpleDateFormat("yyyyMMHH_mmss");
             Date now = new Date();
@@ -255,10 +239,8 @@ public class WritingActivity extends AppCompatActivity {
                         }
                     });
         } else {
-            //Toast.makeText(getApplicationContext(), "파일을 먼저 선택하세요.", Toast.LENGTH_SHORT).show();
         }
     }
-
     /*Firestore Posts에 포스트를 업로드 하는 메소드*/
     private void postUploader(WriteInfo writeInfo){
         FirebaseFirestore db = FirebaseFirestore.getInstance();
