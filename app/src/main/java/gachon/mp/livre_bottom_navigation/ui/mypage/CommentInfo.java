@@ -1,6 +1,6 @@
 package gachon.mp.livre_bottom_navigation.ui.mypage;
 
-public class MyPage {
+public class CommentInfo {
     String publisher_id;
     String post_id;
     String nickname;
@@ -12,7 +12,7 @@ public class MyPage {
     int num_heart;
     int num_comment;
 
-    public MyPage(String publisher_id, String post_id, String nickname, String time, String postImage, String title, String book_title, String contents, int num_heart, int num_comment) {
+    public CommentInfo(String publisher_id, String post_id, String nickname, String time, String postImage, String title, String book_title, String contents, int num_heart, int num_comment) {
         this.publisher_id = publisher_id;
         this.post_id = post_id;
         this.nickname = nickname;

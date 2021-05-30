@@ -34,7 +34,7 @@ import java.util.ArrayList;
 import gachon.mp.livre_bottom_navigation.R;
 
 public class MyPageAdapter extends RecyclerView.Adapter<MyPageAdapter.ViewHolder>{
-    ArrayList<MyPage> items = new ArrayList<MyPage>();
+    ArrayList<CommentInfo> items = new ArrayList<CommentInfo>();
     private static final String TAG = "MyPageAdapter";
     @NonNull
     @Override
@@ -46,7 +46,7 @@ public class MyPageAdapter extends RecyclerView.Adapter<MyPageAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
-        MyPage item = items.get(position);
+        CommentInfo item = items.get(position);
         viewHolder.setItem(item);
     }
 
@@ -92,7 +92,7 @@ public class MyPageAdapter extends RecyclerView.Adapter<MyPageAdapter.ViewHolder
             });
         }
 
-        public void setItem(MyPage item){
+        public void setItem(CommentInfo item){
             post_id = item.getPost_id();
 
             textView.setText(item.getNickname());//작성자 닉네임
@@ -167,18 +167,18 @@ public class MyPageAdapter extends RecyclerView.Adapter<MyPageAdapter.ViewHolder
 
 
     }
-    public void addItem(MyPage item){
+    public void addItem(CommentInfo item){
         items.add(item);
     }
-    public void setItems(ArrayList<MyPage> items){
+    public void setItems(ArrayList<CommentInfo> items){
         this.items = items;
     }
 
-    public MyPage getItem(int position){
+    public CommentInfo getItem(int position){
         return items.get(position);
     }
 
-    public void setItem(int position, MyPage item){
+    public void setItem(int position, CommentInfo item){
         items.set(position, item);
     }
 }

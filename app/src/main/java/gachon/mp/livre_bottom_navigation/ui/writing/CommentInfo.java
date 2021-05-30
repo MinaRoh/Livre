@@ -6,15 +6,13 @@ public class CommentInfo {
     String post_id;
     String profile_image;
     String time;
-    String uid;
 
-    public CommentInfo(String comment, String nickname, String post_id, String profile_image, String time, String uid) {
+    public CommentInfo(String comment, String nickname, String post_id, String profile_image, String time) {
         this.comment = comment;
         this.nickname = nickname;
         this.post_id = post_id;
         this.profile_image = profile_image;
         this.time = time;
-        this.uid = uid;
     }
 
     public String getComment() {
@@ -57,11 +55,4 @@ public class CommentInfo {
         this.time = time;
     }
 
-    public String getUid() {
-        return uid;
-    }
-
-    public void setUid(String uid) {
-        this.uid = uid;
-    }
 }

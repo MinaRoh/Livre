@@ -1,23 +1,15 @@
 package gachon.mp.livre_bottom_navigation.ui.feed;
 // feed main (posts)
-import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,14 +20,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -48,10 +36,7 @@ import java.util.List;
 
 //import gachon.mp.livre_bottom_navigation.MainAdapter;
 import gachon.mp.livre_bottom_navigation.CustomAdapter;
-import gachon.mp.livre_bottom_navigation.PostInfo;
 import gachon.mp.livre_bottom_navigation.R;
-import gachon.mp.livre_bottom_navigation.ui.mypage.MyPage;
-import gachon.mp.livre_bottom_navigation.ui.mypage.MyPageAdapter;
 import gachon.mp.livre_bottom_navigation.ui.writing.WriteInfo;
 
 public class FeedFragment extends Fragment {

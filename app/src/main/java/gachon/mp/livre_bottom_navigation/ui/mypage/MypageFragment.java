@@ -14,34 +14,26 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import gachon.mp.livre_bottom_navigation.R;
-import gachon.mp.livre_bottom_navigation.ui.writing.WriteInfo;
 
 public class MypageFragment extends Fragment {
     private static final String TAG = "MyPageFragment";
@@ -137,7 +129,7 @@ public class MypageFragment extends Fragment {
                                 String imagePath = document.getData().get("imagePath").toString();
                                 Integer num_heart = Integer.parseInt(String.valueOf(document.getData().get("num_heart")));
                                 Integer num_comment = Integer.parseInt(String.valueOf(document.getData().get("num_comment")));
-                                adapter.addItem(new MyPage(user.getUid(), post_id, nickname, upload_time, imagePath, title, txt_book, contents, num_heart, num_comment));
+                                adapter.addItem(new CommentInfo(user.getUid(), post_id, nickname, upload_time, imagePath, title, txt_book, contents, num_heart, num_comment));
                                 recyclerView.setAdapter(adapter);
                             }
                         } else {

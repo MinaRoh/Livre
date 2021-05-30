@@ -6,11 +6,12 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -40,18 +41,24 @@ public class CommentActivity extends AppCompatActivity {
     String time;
     Timestamp timestamp;
     private FirebaseUser user;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_comment);
         user = FirebaseAuth.getInstance().getCurrentUser();
-        EditText edit_comment = (EditText)findViewById(R.id.edit_comment);
-        Button btn_button = (Button)findViewById(R.id.btn_submit);
+        EditText edit_comment = (EditText) findViewById(R.id.edit_comment);
+        Button btn_button = (Button) findViewById(R.id.btn_submit);
 
         /*문서의 uid를 전달 받아서 해당 문서의 댓글 내용을 보여준다.*/
         Intent intent = getIntent();
         post_id = intent.getStringExtra("posts_id");
         FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(CommentActivity.this, LinearLayoutManager.VERTICAL, false);
+        recyclerView.setLayoutManager(layoutManager);
+        CommentAdapter adapter = new CommentAdapter();
 
         db.collection("Comment")
                 .whereEqualTo("postID", post_id)
@@ -64,9 +71,11 @@ public class CommentActivity extends AppCompatActivity {
                                 profile_image = document.get("profile_image").toString();
                                 nickname = document.get("nickname").toString();
                                 comment = document.get("content").toString();
-                                timestamp = (Timestamp)document.get("time");
+                                timestamp = (Timestamp) document.get("time");
                                 time = getTime(timestamp);
                                 //어댑터 add
+                                adapter.addItem(new CommentInfo(comment, nickname, post_id, profile_image, time));
+                                recyclerView.setAdapter(adapter);
                             }
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
@@ -80,6 +89,7 @@ public class CommentActivity extends AppCompatActivity {
                 comment = edit_comment.getText().toString();
                 String uid = user.getUid(); // 댓글 쓴 유저의 uid
                 timestamp = new Timestamp(new Date()); // 댓글 등록한 시간
+                time = getTime(timestamp);
                 // 유저 닉네임 가져오기
                 db.collection("Users")
                         .whereEqualTo("uid", uid)
@@ -91,7 +101,6 @@ public class CommentActivity extends AppCompatActivity {
                                     for (QueryDocumentSnapshot document : task.getResult()) {
                                         nickname = document.get("nickname").toString();
                                         profile_image = document.get("profileImage").toString();
-//데이터 Comment
                                         //Comment DB에 데이터 추가
                                         Map<String, Object> data = new HashMap<>();
                                         data.put("content", comment);
@@ -99,7 +108,6 @@ public class CommentActivity extends AppCompatActivity {
                                         data.put("postID", post_id);
                                         data.put("profile_image", profile_image);
                                         data.put("time", timestamp);
-                                        data.put("uid", user.getUid());
 
                                         db.collection("Comment")
                                                 .add(data)
@@ -116,6 +124,9 @@ public class CommentActivity extends AppCompatActivity {
                                                     }
                                                 });
                                         //어댑터에 값 전달
+                                        adapter.addItem(new CommentInfo(comment, nickname, post_id, profile_image, time));
+                                        recyclerView.setAdapter(adapter);
+                                        edit_comment.setText("");
                                     }
                                 } else {
                                     Log.d(TAG, "Error getting documents: ", task.getException());
@@ -129,6 +140,7 @@ public class CommentActivity extends AppCompatActivity {
 
 
     }
+
     static String getTime(Timestamp time) {
         Date date_createdAt = time.toDate();//Date형식으로 변경
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy년 MM월 dd일 HH:mm");
