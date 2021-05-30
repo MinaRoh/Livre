@@ -12,12 +12,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.bumptech.glide.Glide;
 import com.github.dhaval2404.colorpicker.ColorPickerDialog;
@@ -38,6 +40,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.google.type.DateTime;
+import com.squareup.picasso.Picasso;
 
 
 import org.jetbrains.annotations.NotNull;
@@ -51,6 +54,8 @@ import java.util.HashMap;
 import gachon.mp.livre_bottom_navigation.ListActivity;
 import gachon.mp.livre_bottom_navigation.R;
 import gachon.mp.livre_bottom_navigation.pushNoti.SendMessage;
+import gachon.mp.livre_bottom_navigation.ui.feed.Book;
+import gachon.mp.livre_bottom_navigation.ui.mypage.CommentInfo;
 
 
 import static android.graphics.Color.parseColor;
@@ -76,6 +81,11 @@ public class HomeFragment extends Fragment {
     int bgnum = 1;
     int trunknum = 1;
     private HomeViewModel homeViewModel;
+
+    ImageView reading_img;
+    TextView reading_book_title;
+    TextView reading_author;
+    ViewPager2 reading_pager;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -134,7 +144,7 @@ public class HomeFragment extends Fragment {
                                     changeLeavesStatus(Integer.parseInt(level));
                                     changeTrunk(Integer.parseInt(trunk_color));
                                     changeBGStatus(Integer.parseInt(background));
-                                    leaves.setColorFilter(Color.parseColor(leaf_color));
+                                    leaves.setColorFilter(parseColor(leaf_color));
                                 }
                             }
                         }
@@ -201,7 +211,41 @@ public class HomeFragment extends Fragment {
             }
         });
 
+        reading_pager = getActivity().findViewById(R.id.reading_pager);
+        reading_pager.setOrientation(reading_pager.ORIENTATION_HORIZONTAL);
+        ReadingBookAdapter adapter = new ReadingBookAdapter();
 
+        // 읽고 있는 책 정보 db 에서 가져오기
+        // user id 가 같은 경우에~
+        assert user != null;
+        String user_id = user.getUid();//사용자 uid
+
+        reading_book_title = getActivity().findViewById(R.id.reading_book_title);
+        reading_author = getActivity().findViewById(R.id.reading_author);
+        reading_img = getActivity().findViewById(R.id.reading_img);
+        db.collection("Books")
+                .whereEqualTo("uid", user_id)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document:task.getResult()) {
+                                String reading_book_title_txt = document.getData().get("book_title").toString();
+                                String reading_author_txt = document.getData().get("author").toString();
+                                String reading_img_url_txt = document.getData().get("imageUrl").toString();
+
+                                adapter.addItem(new Book(reading_book_title_txt, reading_author_txt, reading_img_url_txt, user.getUid()));
+                                reading_pager.setAdapter(adapter);
+
+//                                reading_book_title.setText(reading_book_title_txt);
+//                                reading_author.setText(reading_author_txt);
+//                                // load image
+//                                Picasso.get().load(reading_img_url_txt).into(reading_img);
+                            }
+                        }
+                    }
+                });
     }
 
 
