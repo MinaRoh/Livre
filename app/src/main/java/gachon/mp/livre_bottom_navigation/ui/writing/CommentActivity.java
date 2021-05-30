@@ -6,7 +6,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -149,7 +148,6 @@ public class CommentActivity extends AppCompatActivity {
                                     for (QueryDocumentSnapshot document : task.getResult()) {
                                         num_comment = (long) document.get("num_comment");
                                         num_comment++;
-                                        Toast.makeText(CommentActivity.this, "1. num_comment: " + num_comment, Toast.LENGTH_SHORT).show();
                                         updateNumComment();
                                     }
                                 } else {
@@ -172,7 +170,6 @@ public class CommentActivity extends AppCompatActivity {
     }
     public void updateNumComment(){
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        Toast.makeText(CommentActivity.this, "2. num_comment: " + num_comment, Toast.LENGTH_SHORT).show();
         DocumentReference washingtonRef = db.collection("Posts").document(post_id);
         washingtonRef
                 .update("num_comment", num_comment)
