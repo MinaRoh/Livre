@@ -40,7 +40,7 @@ public class CommentActivity extends AppCompatActivity {
     String profile_image;
     String time;
     Timestamp timestamp;
-    int num_comment;
+    long num_comment;
     private FirebaseUser user;
 
     @Override
@@ -92,7 +92,7 @@ public class CommentActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                num_comment = (int) document.get("num_comment");
+                                num_comment = (long) document.get("num_comment");
                                 num_comment++;
                                 //Comment DB에 데이터 업데이트
                                 Map<String, Object> data = new HashMap<>();
