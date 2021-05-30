@@ -236,10 +236,6 @@ public class HomeFragment extends Fragment {
                                 adapter.addItem(new Book(reading_book_title_txt, reading_author_txt, reading_img_url_txt, user.getUid()));
                                 reading_pager.setAdapter(adapter);
 
-//                                reading_book_title.setText(reading_book_title_txt);
-//                                reading_author.setText(reading_author_txt);
-//                                // load image
-//                                Picasso.get().load(reading_img_url_txt).into(reading_img);
                             }
                         }
                     }

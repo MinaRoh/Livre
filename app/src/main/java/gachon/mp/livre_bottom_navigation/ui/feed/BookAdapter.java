@@ -40,7 +40,7 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
         holder.txttitle.setText(Html.fromHtml(array.get(position).getTitle()));
         holder.txtauthor.setText(Html.fromHtml(array.get(position).getAuthor()));
 
-        Picasso.get().load(image).into(holder.image);
+        Picasso.get().load(image).resize(200,270).into(holder.image);
     }
 
     @Override

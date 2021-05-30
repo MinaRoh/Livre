@@ -84,28 +84,7 @@ public class ReadingBookAdapter extends RecyclerView.Adapter<ReadingBookAdapter.
         reading_book_title.setText(item.getBook_title());
         reading_author.setText(item.getAuthor());
 
-//        db.collection("Books")
-//                .whereEqualTo("uid", user_id)
-//                .get()
-//                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                        if (task.isSuccessful()) {
-//                            for (QueryDocumentSnapshot document : task.getResult()) {
-//                                String reading_book_title_txt = document.getData().get("book_title").toString();
-//                                String reading_author_txt = document.getData().get("author").toString();
-//                                String reading_img_url_txt = document.getData().get("imageUrl").toString();
-//
-////                                reading_book_title.setText(book.get);
-////                                reading_author.setText(reading_author_txt);
-////                                reading_book_title.setText(reading_book_title_txt);
-////                                reading_author.setText(reading_author_txt);
-//                                // load image
-//                                Picasso.get().load(reading_img_url_txt).into(reading_img);
-//                            }
-//                        }
-//                    }
-//                });
+        Picasso.get().load(item.getImageUrl()).resize(200,270).into(reading_img);
         }
 
     }

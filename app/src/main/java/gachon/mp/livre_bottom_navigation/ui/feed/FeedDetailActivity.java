@@ -81,7 +81,7 @@ public class FeedDetailActivity extends AppCompatActivity {
         author.setText(authorFromMain);
 
         // load image
-        Picasso.get().load(imageFromMain).into(image);
+        Picasso.get().load(imageFromMain).resize(200, 270).into(image);
 
         //ISBN과 책 제목을 WritingActivity로 전달
         writing_report = findViewById(R.id.btn_write_report);
