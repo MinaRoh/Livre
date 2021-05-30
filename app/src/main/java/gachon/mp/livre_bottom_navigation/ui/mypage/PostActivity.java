@@ -8,6 +8,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -17,6 +18,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.PopupMenu;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -133,6 +135,29 @@ public class PostActivity extends AppCompatActivity {
 
         });
 
+        /*글 수정, 삭제 메뉴*/
+        user_menu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View view) {
+                final PopupMenu popup = new PopupMenu(PostActivity.this, view);//view는 클릭된 뷰를 의미
+
+                getMenuInflater().inflate(R.menu.activity_post_popup, popup.getMenu());
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        if (item.getItemId() == R.id.menu_modify){
+                            //수정 기능
+                        }else if (item.getItemId() == R.id.menu_delete){
+                            //삭제 기능
+                        }
+                        return false;
+                    }
+                });
+                popup.show();
+            }
+
+        });
+
         //프로필 동그랗게 하기
         user_profile.setBackground(new ShapeDrawable(new OvalShape()));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -217,7 +242,6 @@ public class PostActivity extends AppCompatActivity {
         });
     }
 
-
 /*포스트의 이미지를 불러오는 메소드
 * 이미지를 올리지 않은 경우는 아무 동작하지 않음*/
     public void getImage() {
@@ -248,6 +272,7 @@ public class PostActivity extends AppCompatActivity {
             });
         }
     }
+
     static String getTime(Timestamp time) {
         Date date_createdAt = time.toDate();//Date형식으로 변경
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy년 MM월 dd일 HH:mm");
