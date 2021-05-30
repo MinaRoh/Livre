@@ -76,8 +76,8 @@
         <!--for MORE fragment END-->
 
         <activity android:name=".ui.writing.WritingActivity"/>
-        <activity android:name=".ui.writing.PostActivity"/>
-        <activity android:name=".ui.mypage.PostViewActivity"/>
+        <activity android:name=".ui.mypage.PostActivity"/>
+        <activity android:name=".ui.feed.PostViewActivity"/>
         <activity android:name=".ui.writing.CommentActivity"/>
     </application>
 

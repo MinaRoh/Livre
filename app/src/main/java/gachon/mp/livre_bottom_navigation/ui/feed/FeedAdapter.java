@@ -32,8 +32,6 @@ import com.google.firebase.storage.StorageReference;
 import java.util.ArrayList;
 
 import gachon.mp.livre_bottom_navigation.R;
-import gachon.mp.livre_bottom_navigation.ui.mypage.MyPage;
-import gachon.mp.livre_bottom_navigation.ui.mypage.PostViewActivity;
 
 public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.ViewHolder>{
     ArrayList<Feed> items = new ArrayList<Feed>();

@@ -124,7 +124,7 @@ public class FeedFragment extends Fragment {
 
     static String getTime(Timestamp time) {
         Date date_createdAt = time.toDate();//Date형식으로 변경
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy년 MM월 dd일 HH:mm:ss");
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy년 MM월 dd일 HH:mm");
         String txt_createdAt = formatter.format(date_createdAt).toString();
         return txt_createdAt;
     }
