@@ -22,10 +22,14 @@
             android:id="@+id/commentSwich"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:checked="true"
+            android:switchPadding="20dp"
             android:text="댓글 알람"/>
 
         <Switch
             android:id="@+id/heartSwich"
+            android:switchPadding="20dp"
+            android:checked="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="좋아요 알람"/>
