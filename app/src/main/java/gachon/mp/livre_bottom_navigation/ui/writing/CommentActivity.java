@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -83,40 +84,7 @@ public class CommentActivity extends AppCompatActivity {
                         }
                     }
                 });
-        /*포스트 댓글 수 가져오기*/
-        db.collection("Posts")
-                .whereEqualTo("posts_id", post_id)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                num_comment = (long) document.get("num_comment");
-                                num_comment++;
-                                //Comment DB에 데이터 업데이트
-                                Map<String, Object> data = new HashMap<>();
-                                data.put("num_comment", num_comment);
-                                db.collection("Comment")
-                                        .add(data)
-                                        .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                                            @Override
-                                            public void onSuccess(DocumentReference documentReference) {
-                                                Log.d(TAG, "DocumentSnapshot written with ID: " + documentReference.getId());
-                                            }
-                                        })
-                                        .addOnFailureListener(new OnFailureListener() {
-                                            @Override
-                                            public void onFailure(@NonNull Exception e) {
-                                                Log.w(TAG, "Error adding document", e);
-                                            }
-                                        });
-                            }
-                        } else {
-                            Log.d(TAG, "Error getting documents: ", task.getException());
-                        }
-                    }
-                });
+
 
         /*사용자가 댓글을 입력했을 때*/
         btn_button.setOnClickListener(new View.OnClickListener() {
@@ -170,6 +138,25 @@ public class CommentActivity extends AppCompatActivity {
                             }
                         });
 
+                /*포스트 댓글 수 가져오기*/
+                db.collection("Posts")
+                        .whereEqualTo("posts_id", post_id)
+                        .get()
+                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                if (task.isSuccessful()) {
+                                    for (QueryDocumentSnapshot document : task.getResult()) {
+                                        num_comment = (long) document.get("num_comment");
+                                        num_comment++;
+                                        Toast.makeText(CommentActivity.this, "1. num_comment: " + num_comment, Toast.LENGTH_SHORT).show();
+                                        updateNumComment();
+                                    }
+                                } else {
+                                    Log.d(TAG, "Error getting documents: ", task.getException());
+                                }
+                            }
+                        });
 
             }
         });
@@ -182,5 +169,24 @@ public class CommentActivity extends AppCompatActivity {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy년 MM월 dd일 HH:mm");
         String txt_createdAt = formatter.format(date_createdAt).toString();
         return txt_createdAt;
+    }
+    public void updateNumComment(){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        Toast.makeText(CommentActivity.this, "2. num_comment: " + num_comment, Toast.LENGTH_SHORT).show();
+        DocumentReference washingtonRef = db.collection("Posts").document(post_id);
+        washingtonRef
+                .update("num_comment", num_comment)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "DocumentSnapshot successfully updated!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error updating document", e);
+                    }
+                });
     }
 }
