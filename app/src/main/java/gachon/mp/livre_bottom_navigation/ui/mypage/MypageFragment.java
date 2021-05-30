@@ -1,5 +1,6 @@
 package gachon.mp.livre_bottom_navigation.ui.mypage;
 
+import android.content.Context;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
 import android.net.Uri;
@@ -40,10 +41,13 @@ public class MypageFragment extends Fragment {
     private FirebaseAuth mAuth;
     private FirebaseUser user;
     private String profileImg = "";
+    private String currentUserNick;
+    public static Context mypageContext;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
+        mypageContext = getActivity();
         View root = inflater.inflate(R.layout.fragment_mypage, container, false);
         final TextView textView = root.findViewById(R.id.text_mypages);
 

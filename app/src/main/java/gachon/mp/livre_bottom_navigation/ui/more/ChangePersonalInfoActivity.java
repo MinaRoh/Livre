@@ -1,5 +1,6 @@
 package gachon.mp.livre_bottom_navigation.ui.more;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.ShapeDrawable;
@@ -45,9 +46,10 @@ import com.google.firebase.storage.UploadTask;
 import gachon.mp.livre_bottom_navigation.R;
 
 public class ChangePersonalInfoActivity extends AppCompatActivity {
+    public static Context cginfoContext;
     private static final String TAG = "ChangePersonalInfo";
     private FirebaseAuth mAuth;
-    private String nickname;
+    public String nickname;
     private boolean nicknameCheck = false;
     private String document_id;
     private FirebaseUser user;
@@ -59,6 +61,7 @@ public class ChangePersonalInfoActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
+        cginfoContext = this;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_more_1personal_info);
         ImageView user_profile = (ImageView)findViewById(R.id.user_profile);

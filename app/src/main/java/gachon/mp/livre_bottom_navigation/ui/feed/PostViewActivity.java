@@ -28,22 +28,31 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.io.ObjectInputStream;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 
+import gachon.mp.livre_bottom_navigation.MainActivity;
 import gachon.mp.livre_bottom_navigation.R;
+import gachon.mp.livre_bottom_navigation.pushNoti.SendMessage;
+import gachon.mp.livre_bottom_navigation.ui.more.ChangePersonalInfoActivity;
+import gachon.mp.livre_bottom_navigation.ui.mypage.MypageFragment;
 import gachon.mp.livre_bottom_navigation.ui.writing.CommentActivity;
 
 /*다른 사람이 쓴 포스트를 보여주는 액티비티
 * 수정, 삭제 불가*/
 public class PostViewActivity extends AppCompatActivity {
     private static final String TAG = "PostViewActivity";
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
     private String posts_id;
     private FirebaseUser user;
     ImageView post_image;
@@ -55,6 +64,9 @@ public class PostViewActivity extends AppCompatActivity {
     String nick;
     String publisher_uid;
     String profileImage;
+    String txt_title;
+    ArrayList userlist_heart;
+    String sender_uid;
     Handler handler = new Handler();
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -75,7 +87,7 @@ public class PostViewActivity extends AppCompatActivity {
         /*문서의 uid를 전달 받아서 해당 문서를 보여준다.*/
         Intent intent = getIntent();
         posts_id = intent.getStringExtra("posts_id");
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
         DocumentReference docRef = db.collection("Posts").document(posts_id);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -84,7 +96,7 @@ public class PostViewActivity extends AppCompatActivity {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
                         Log.d(TAG, "DocumentSnapshot data: " + document.getData());
-                        String txt_title = document.getData().get("title").toString();
+                        txt_title = document.getData().get("title").toString();
                         String txt_book = document.getData().get("bookTitle").toString();
                         String txt_nickname = document.getData().get("nickname").toString();
                         publisher_uid = document.getData().get("publisher").toString();
@@ -93,6 +105,7 @@ public class PostViewActivity extends AppCompatActivity {
                         Timestamp time = (Timestamp) document.getData().get("uploadTime");
                         String txt_contents = document.getData().get("contents").toString();
                         imagePath = document.getData().get("imagePath").toString();
+                        userlist_heart = (ArrayList<String>) document.get("userlist_heart");
                         int_num_heart = Integer.parseInt(String.valueOf(document.getData().get("num_heart")));
                         int_num_comment = Integer.parseInt(String.valueOf(document.getData().get("num_comment")));
                         title.setText(txt_title);
@@ -135,9 +148,27 @@ public class PostViewActivity extends AppCompatActivity {
                 heart_clicked = !(heart_clicked);
                 if (heart_clicked) {
                     int_num_heart++;//하트 수 올리고
+                    String category = "heart";
+                    final String[] senderNickk = new String[1];
+                    sender_uid = user.getUid(); // 알림을 보내는 사람의 uid
+                    senderNickk[0] = getSenderNick(); //알림을 보내는 사람의 닉네임(현재 유저의 닉네임)
+                    System.out.println("getSenderNick 에서 받아온 sender nick: "+ senderNickk[0]);
+                    String senderNick = senderNickk[0];
+                    SendMessage sendMessage = new SendMessage(senderNick, Collections.singletonList(publisher_uid), category, txt_title);
+
+                    System.out.println("sender nick: "+ senderNick);
+                    System.out.println("postActivity에서 sendMessage 완료");
                     heart.setImageResource(R.drawable.baseline_favorite_24);
+
+                    //posts에 좋아요 누른사람 arraylist 만들어서 uid 넣기
+                    userlist_heart.add(sender_uid);
+                    docRef.update("userlist_heart", FieldValue.arrayUnion(sender_uid)); //파이어스토어에 추가
+
+
                 } else {
                     int_num_heart--;//하트 수 내리고
+                    userlist_heart.remove(sender_uid);
+                    docRef.update("userlist_heart", FieldValue.arrayRemove(sender_uid)); //파이어스토어에서 삭제
                     heart.setImageResource(R.drawable.baseline_favorite_border_24);
                 }
                 num_heart.setText(String.valueOf(int_num_heart));//포스트에 반영
@@ -167,7 +198,51 @@ public class PostViewActivity extends AppCompatActivity {
             }
         });
     }
-/*포스트의 이미지를 불러오는 메소드
+
+    private String getSenderNick() {
+
+//        final String[] nickname = new String[1];
+//
+//        final DocumentReference[] docRef = {db.collection("Users").document(user.getUid())};
+//        docRef[0].get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+//            @Override
+//            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+//                if (task.isSuccessful()) {
+//                    DocumentSnapshot document = task.getResult();
+//                    if (document.exists()) {
+//                        Log.d(TAG, "DocumentSnapshot data: " + document.getData());
+//                        nickname[0] = document.getString("nickname");
+//
+//                        handler.postDelayed(new Runnable(){
+//                            public void run(){
+//                                System.out.println("getSenderNick 내에서의 sender nick: "+ nickname[0]);
+//                            }
+//                        }, 3000); // 1sec
+//
+//
+//
+//                    } else {
+//                        Log.d(TAG, "No such document");
+//                    }
+//                } else {
+//                    Log.d(TAG, "get failed with ", task.getException());
+//                }
+//            }
+//
+//        });
+//        handler.postDelayed(new Runnable(){
+//            public void run(){
+//                System.out.println("getSenderNick 내에서의 리턴할때의 sender nick: "+ nickname[0]);
+//
+//            }
+//        }, 3000); // 1sec
+//        return nickname[0];
+
+        String nick = ((MainActivity)MainActivity.mainContext).nickname;
+        return nick;
+    }
+
+    /*포스트의 이미지를 불러오는 메소드
 * 이미지를 올리지 않은 경우는 아무 동작하지 않음*/
     public void getImage() {
         //storage

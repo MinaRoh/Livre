@@ -83,7 +83,8 @@ public class ListActivity extends AppCompatActivity {
                                         doc.getString("publisher"),
                                         doc.getTimestamp("uploadTime"),
                                         doc.getLong("num_heart").intValue(),
-                                        doc.getLong("num_comment").intValue());
+                                        doc.getLong("num_comment").intValue(),
+                                        (ArrayList<String>) doc.get("userlist_heart"));
 
                                 writeInfoList.add(writeInfo);
 

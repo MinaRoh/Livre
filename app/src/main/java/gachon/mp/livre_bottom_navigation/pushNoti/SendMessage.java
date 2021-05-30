@@ -8,11 +8,13 @@ import androidx.annotation.NonNull;
 import gachon.mp.livre_bottom_navigation.UserToken;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class SendMessage {
@@ -21,14 +23,40 @@ public class SendMessage {
     List<String> tokenList = new ArrayList<>();
     FirebaseFirestore db;
     Handler handler= new Handler();
-    String title;
-    String message;
+    Timestamp uploadTime;
+    String category;
+    String senderNick;
+    String postTitle;
+    String msgTitle;
+    String msgContent;
 
-    public SendMessage(List uidList, String title, String message){
+
+//    public SendMessage(List uidList, String title, String message, Timestamp uploadTime){
+//        this.uidList=uidList;
+//        this.title=title;
+//        this.message=message;
+//        this.uploadTime=uploadTime;
+//        store();// store token
+//    }
+    //보내는사람, 받는사람, 카테고리, 글제목
+    public SendMessage(String senderNick, List uidList, String category, String postTitle){
+        this.senderNick = senderNick;
         this.uidList=uidList;
-        this.title=title;
-        this.message=message;
+        this.category=category;
+        this.postTitle=postTitle;
+        setMessage();
+        Timestamp uploadTime = new Timestamp(new Date());
         store();// store token
+    }
+
+    private void setMessage(){
+        if(category.equals("heart")){
+            msgTitle = "좋아요 알림";
+            msgContent = senderNick + "님이 나의'" +postTitle+ "' 글에 좋아요를 누르셨습니다";
+        }else if(category.equals("comment")){
+            msgTitle = "댓글 알림";
+            msgContent = senderNick + "님이 나의'" +postTitle+ "' 글에 댓글을 남기셨습니다";
+        }
     }
 
     private void store() {// extract token list to Users
@@ -52,6 +80,7 @@ public class SendMessage {
                                 }
                             }
                             send(); // send to token user
+                            System.out.println("store에서 send 완료");
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
                         }
@@ -61,7 +90,7 @@ public class SendMessage {
     public void send(){
         Log.d(TAG, "Token List Size = "+tokenList.size());
         for(int i=0;i<tokenList.size();i++){
-            SendNotification.sendNotification(tokenList.get(i), title, message);
+            SendNotification.sendNotification(tokenList.get(i), msgTitle, msgContent);
             Log.d(TAG, "Send to "+tokenList.get(i));
         }
     }

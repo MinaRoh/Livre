@@ -150,7 +150,7 @@ public class WritingActivity extends AppCompatActivity {
         final DocumentReference documentReference = firebaseFirestore.collection("Posts").document();
 
 
-
+        ArrayList userlist_heart = new ArrayList();
         if(title.length() > 0 ){
             // 이미지라면 storage에 업로드
             uploadFile();
@@ -161,11 +161,11 @@ public class WritingActivity extends AppCompatActivity {
             if(imagePath != null){
                 String filePath = imagePath.toString(); //Uri to String
                 System.out.println("************************filePath: " + filePath);
-                WriteInfo writeInfo = new WriteInfo(posts_id, ISBN, book_title, title, nickname, contents, filename, user.getUid(), upload_time, 0, 0);
+                WriteInfo writeInfo = new WriteInfo(posts_id, ISBN, book_title, title, nickname, contents, filename, user.getUid(), upload_time, 0, 0, userlist_heart);
                 postUploader(writeInfo);
             }
             else {
-                WriteInfo writeInfo = new WriteInfo(posts_id, ISBN, book_title, title, nickname, contents, "", user.getUid(), upload_time, 0, 0);
+                WriteInfo writeInfo = new WriteInfo(posts_id, ISBN, book_title, title, nickname, contents, "", user.getUid(), upload_time, 0, 0, userlist_heart);
                 postUploader(writeInfo);
             }
             // 여기에서 나무 레벨업

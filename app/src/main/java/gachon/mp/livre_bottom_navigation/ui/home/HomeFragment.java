@@ -205,9 +205,7 @@ public class HomeFragment extends Fragment {
         btn_get_push_notice.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String msgTitle = "좋아요 알림";
-                String msgContent = "민하님이 좋아요를 누르셨습니다!";
-                SendMessage sendMessage = new SendMessage(Collections.singletonList(user.getUid()), msgTitle, msgContent);
+
             }
         });
 

@@ -1,6 +1,7 @@
 package gachon.mp.livre_bottom_navigation;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
@@ -31,12 +32,16 @@ import androidx.navigation.ui.NavigationUI;
 import static android.content.ContentValues.TAG;
 
 public class MainActivity extends AppCompatActivity {
+    public static Context mainContext;
     public static Activity Main_Activity;
     public Bundle mBundle;
+    public String nickname;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Main_Activity = MainActivity.this;
+        mainContext = this;
         setContentView(R.layout.activity_main);
         BottomNavigationView navView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
@@ -60,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(navView, navController);
 
 
+        final String[] userNick = new String[1];
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -67,12 +73,15 @@ public class MainActivity extends AppCompatActivity {
 
         }else{
             FirebaseFirestore db = FirebaseFirestore.getInstance();
-            DocumentReference docRef = db.collection("users").document(user.getUid());
+            DocumentReference docRef = db.collection("Users").document(user.getUid());
             docRef.get().addOnCompleteListener((task) -> {
                 if(task.isSuccessful()){
                     DocumentSnapshot document = task.getResult();
                     if(document!=null){
                         if(document.exists()){
+                            userNick[0] = document.getString("nickname");
+                            System.out.println("Main에서의 db 가져오기 내에서의 userNick: "+ userNick[0]);
+                            nickname = userNick[0];
                             Log.d(TAG, "DocumentSnapshot data: "+document.getData());
                         } else{
                             Log.d(TAG, "No such document");
@@ -102,6 +111,9 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         }
+
+//        System.out.println("Main에서의 userNick: "+ userNick[0]);
+
 
     }
 

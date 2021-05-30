@@ -4,6 +4,7 @@ import android.net.Uri;
 
 import com.google.firebase.Timestamp;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 public class WriteInfo {
@@ -18,8 +19,10 @@ public class WriteInfo {
     private String ISBN;
     private String imagePath;
     private String posts_id;
+    private ArrayList userlist_heart;
 
-    public WriteInfo(String posts_id, String ISBN, String book_title, String title, String nickname, String contents, String imagePath, String publisher, Timestamp upload_time, int num_heart, int num_comment){
+
+    public WriteInfo(String posts_id, String ISBN, String book_title, String title, String nickname, String contents, String imagePath, String publisher, Timestamp upload_time, int num_heart, int num_comment, ArrayList userlist_heart){
         this.posts_id = posts_id;
         this.ISBN = ISBN;
         this.book_title = book_title;
@@ -31,6 +34,7 @@ public class WriteInfo {
         this.upload_time = upload_time;
         this.num_heart = num_heart;
         this.num_comment = num_comment;
+        this.userlist_heart = userlist_heart;
 
     }
 
@@ -56,4 +60,11 @@ public class WriteInfo {
     public void setNum_comment(Integer num_comment){ this.num_comment = num_comment;}
     public Timestamp getUploadTime(){ return this.upload_time;}
     public void setUploadTime(Timestamp upload_time){ this.upload_time= upload_time;}
+    public ArrayList getUserlist_heart() {
+        return userlist_heart;
+    }
+
+    public void setUserlist_heart(ArrayList userlist_heart) {
+        this.userlist_heart = userlist_heart;
+    }
 }
