@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,10 +15,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -48,6 +52,7 @@ public class FeedDetailActivity extends AppCompatActivity {
     ImageView image;
 
     Button writing_report;
+    Button reading;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,6 +96,15 @@ public class FeedDetailActivity extends AppCompatActivity {
                 writing_intent.putExtra("book_title", title_toWriting);
 
                 startActivity(writing_intent);
+            }
+        });
+
+        // 읽고있는 책으로 추가하기 버튼 클릭
+        reading = findViewById(R.id.btn_reading);
+        reading.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                bookUpdate();
             }
         });
 
@@ -139,6 +153,31 @@ public class FeedDetailActivity extends AppCompatActivity {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy년 MM월 dd일 HH:mm");
         String txt_createdAt = formatter.format(date_createdAt).toString();
         return txt_createdAt;
+    }
+
+    private void bookUpdate() {
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        Book book = new Book(titleFromMain, authorFromMain, imageFromMain, user.getUid());
+        bookUploader(book);
+    }
+
+    /* firestore Books 에 업로드 하는 메서드 */
+    private void bookUploader(Book book) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("Books").add(book)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        Toast.makeText(getApplicationContext(), "등록 완료하였습니다.", Toast.LENGTH_LONG).show();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error adding document", e);
+                        Toast.makeText(getApplicationContext(), "등록에 실패하였습니다.", Toast.LENGTH_LONG).show();
+                    }
+                });
     }
 
     public void mOnClick(View view) {
