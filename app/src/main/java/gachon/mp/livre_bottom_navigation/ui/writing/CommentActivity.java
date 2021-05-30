@@ -40,6 +40,7 @@ public class CommentActivity extends AppCompatActivity {
     String profile_image;
     String time;
     Timestamp timestamp;
+    int num_comment;
     private FirebaseUser user;
 
     @Override
@@ -82,6 +83,41 @@ public class CommentActivity extends AppCompatActivity {
                         }
                     }
                 });
+        /*포스트 댓글 수 가져오기*/
+        db.collection("Posts")
+                .whereEqualTo("posts_id", post_id)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                num_comment = (int) document.get("num_comment");
+                                num_comment++;
+                                //Comment DB에 데이터 업데이트
+                                Map<String, Object> data = new HashMap<>();
+                                data.put("num_comment", num_comment);
+                                db.collection("Comment")
+                                        .add(data)
+                                        .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                            @Override
+                                            public void onSuccess(DocumentReference documentReference) {
+                                                Log.d(TAG, "DocumentSnapshot written with ID: " + documentReference.getId());
+                                            }
+                                        })
+                                        .addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                Log.w(TAG, "Error adding document", e);
+                                            }
+                                        });
+                            }
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+
         /*사용자가 댓글을 입력했을 때*/
         btn_button.setOnClickListener(new View.OnClickListener() {
             @Override

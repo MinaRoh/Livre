@@ -191,7 +191,7 @@ public class PostViewActivity extends AppCompatActivity {
                 @Override
                 public void onSuccess(Uri uri) {
                     try {
-                        Glide.with(PostViewActivity.this)
+                        Glide.with(getApplicationContext())
                                 .load(uri)
                                 .into(post_image);
                     }
