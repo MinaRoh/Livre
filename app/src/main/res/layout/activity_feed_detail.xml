@@ -107,6 +107,23 @@
         android:backgroundTint="@color/themeColor"
         android:text="독서감상문 작성하기" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:gravity="center"
+        android:text="이 책의 독서감상문"
+        android:textColor="@color/themeColor"
+        android:textSize="18sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="10dp"
+        android:background="@color/themeColor" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"

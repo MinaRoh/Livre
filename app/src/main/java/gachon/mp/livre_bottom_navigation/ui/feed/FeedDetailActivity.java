@@ -2,19 +2,40 @@ package gachon.mp.livre_bottom_navigation.ui.feed;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.squareup.picasso.Picasso;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import gachon.mp.livre_bottom_navigation.CustomAdapter;
 import gachon.mp.livre_bottom_navigation.R;
+import gachon.mp.livre_bottom_navigation.ui.mypage.CommentInfo;
+import gachon.mp.livre_bottom_navigation.ui.mypage.MyPageAdapter;
 import gachon.mp.livre_bottom_navigation.ui.writing.WritingActivity;
 
 public class FeedDetailActivity extends AppCompatActivity {
+    private static final String TAG = "FeedDetailActivity";
+    private FirebaseUser user;
+
     String titleFromMain;
     String descriptionFromMain;
     String authorFromMain;
@@ -72,6 +93,52 @@ public class FeedDetailActivity extends AppCompatActivity {
                 startActivity(writing_intent);
             }
         });
+
+
+        RecyclerView recyclerView = findViewById(R.id.recycler_view);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        recyclerView.setLayoutManager(layoutManager);
+        FeedDetailAdapter adapter = new FeedDetailAdapter();
+
+        /*사용자가 WritingActivity에서 쓴 포스트 내용 가져오기*/
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        db.collection("Posts")
+                .whereEqualTo("bookTitle", titleFromMain)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                String publisher = document.getData().get("publisher").toString();
+                                String post_id = document.getId();
+                                String nickname = document.getData().get("nickname").toString();
+                                Timestamp time = (Timestamp) document.getData().get("uploadTime");
+                                String upload_time = getTime(time);
+                                String title = document.getData().get("title").toString();
+                                String txt_book = document.getData().get("bookTitle").toString();
+                                String contents = document.getData().get("contents").toString();
+                                String imagePath = document.getData().get("imagePath").toString();
+                                Integer num_heart = Integer.parseInt(String.valueOf(document.getData().get("num_heart")));
+                                Integer num_comment = Integer.parseInt(String.valueOf(document.getData().get("num_comment")));
+
+                                user = FirebaseAuth.getInstance().getCurrentUser();
+                                adapter.addItem(new CommentInfo(publisher, post_id, nickname, upload_time, imagePath, title, txt_book, contents, num_heart, num_comment));
+                                recyclerView.setAdapter(adapter);
+                            }
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+    }
+
+    static String getTime(Timestamp time) {
+        Date date_createdAt = time.toDate();//Date형식으로 변경
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy년 MM월 dd일 HH:mm");
+        String txt_createdAt = formatter.format(date_createdAt).toString();
+        return txt_createdAt;
     }
 
     public void mOnClick(View view) {
