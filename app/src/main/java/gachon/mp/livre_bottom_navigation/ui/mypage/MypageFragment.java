@@ -98,10 +98,22 @@ public class MypageFragment extends Fragment {
         LinearLayoutManager layoutManager2 = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
         recyclerView2.setLayoutManager(layoutManager2);
         MyTreeAdapter adapter2 = new MyTreeAdapter();
-        adapter2.addItem(new MyTree("tree url1"));
-        adapter2.addItem(new MyTree("tree url2"));
-        adapter2.addItem(new MyTree("tree url3"));
-        recyclerView2.setAdapter(adapter2);
+
+        db.collection("Tree_complete")
+                .whereEqualTo("uid", user.getUid())
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                String img_url = document.get("img").toString();
+                                adapter2.addItem(new MyTree(img_url));
+                                recyclerView2.setAdapter(adapter2);
+                            }
+                        }
+                    }
+                });
 
         /*마이페이지 - 글 목록 파트*/
         RecyclerView recyclerView = (RecyclerView)root.findViewById(R.id.recyclerView);

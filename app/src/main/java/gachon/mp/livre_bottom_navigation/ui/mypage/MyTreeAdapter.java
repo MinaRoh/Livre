@@ -1,5 +1,7 @@
 package gachon.mp.livre_bottom_navigation.ui.mypage;
 
+import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,12 +10,21 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
 import java.util.ArrayList;
 
 import gachon.mp.livre_bottom_navigation.R;
 
 public class MyTreeAdapter extends RecyclerView.Adapter<MyTreeAdapter.ViewHolder>{
     ArrayList<MyTree> items = new ArrayList<MyTree>();
+    private static final String TAG = "MyTreeAdapter";
 
     @NonNull
     @Override
@@ -42,9 +53,30 @@ public class MyTreeAdapter extends RecyclerView.Adapter<MyTreeAdapter.ViewHolder
             imageView = itemView.findViewById(R.id.imageView);
         }
 
-        public void setItem(MyTree item){
-            //스토리지에 있는 사진 가져와서 imageView에 glide로 넣는 코드를 쓰슈.
+        public void setItem(MyTree item) {
             String tree_url = item.getTree_url();
+            FirebaseStorage storage = FirebaseStorage.getInstance();
+            StorageReference storageRef = storage.getReferenceFromUrl("gs://mp-livre.appspot.com");
+            StorageReference pathReference = storageRef.child("tree_complete");
+            if(tree_url!=null && pathReference != null){
+                StorageReference submitProfile = storage.getReferenceFromUrl("gs://mp-livre.appspot.com/"+tree_url);
+                submitProfile.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        if(imageView!=null){
+                            Glide.with(itemView)
+                                    .load(uri)
+                                    .override(1024, 980)
+                                    .into(imageView);
+                        }
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error getting image", e);
+                    }
+                });
+            }
         }
     }
     public void addItem(MyTree item){
