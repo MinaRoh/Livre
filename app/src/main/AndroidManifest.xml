@@ -80,6 +80,7 @@
         <activity android:name=".ui.mypage.PostActivity"/>
         <activity android:name=".ui.feed.PostViewActivity"/>
         <activity android:name=".ui.writing.CommentActivity"/>
+        <activity android:name=".ui.writing.EditPostActivity"/>
     </application>
 
 </manifest>

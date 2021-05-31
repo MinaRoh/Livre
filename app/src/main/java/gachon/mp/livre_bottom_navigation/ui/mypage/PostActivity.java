@@ -41,6 +41,7 @@ import java.util.Date;
 
 import gachon.mp.livre_bottom_navigation.R;
 import gachon.mp.livre_bottom_navigation.ui.writing.CommentActivity;
+import gachon.mp.livre_bottom_navigation.ui.writing.EditPostActivity;
 
 /* 자기가 쓴 포스트를 보여주는 액티비티
 * 하트수, 댓글, 메뉴(수정,삭제) 기능이 연결 돼 있음*/
@@ -147,6 +148,10 @@ public class PostActivity extends AppCompatActivity {
                     public boolean onMenuItemClick(MenuItem item) {
                         if (item.getItemId() == R.id.menu_modify){
                             //포스트 수정 기능
+                            Intent intent = new Intent(PostActivity.this, EditPostActivity.class);
+                            intent.putExtra("posts_id", posts_id);//코멘트 액티비티에 문서 id 전달
+                            startActivity(intent);
+                            finish();
                         }else if (item.getItemId() == R.id.menu_delete){
                             //포스트 삭제 기능
                             docRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -248,8 +253,9 @@ public class PostActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(PostActivity.this, CommentActivity.class);
-                intent.putExtra("posts_id", posts_id);//코멘트 액티비티에 문서 id 전달
+                intent.putExtra("posts_id", posts_id);//편집 액티비티에 문서 id 전달
                 startActivity(intent);
+
             }
         });
     }
