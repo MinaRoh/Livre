@@ -66,7 +66,6 @@
         <activity android:name=".ui.feed.FeedSearchActivity"/>
 
         <!--for MORE fragment-->
-        <activity android:name=".ui.more.SettingActivity"/>
         <activity android:name=".ui.more.AlarmActivity"/>
         <activity android:name=".ui.more.ChangePersonalInfoActivity"/>
         <activity android:name=".ui.more.AlarmSettingActivity"/>
