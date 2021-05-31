@@ -18,8 +18,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -31,11 +29,11 @@ import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 
-import gachon.mp.livre_bottom_navigation.ui.feed.Feed;
+import gachon.mp.livre_bottom_navigation.ui.feed.FeedInfo;
 import gachon.mp.livre_bottom_navigation.ui.feed.PostViewActivity;
 
 public class NotiAdapter extends RecyclerView.Adapter<NotiAdapter.ViewHolder>{
-    ArrayList<Feed> items = new ArrayList<Feed>();
+    ArrayList<FeedInfo> items = new ArrayList<FeedInfo>();
     private static final String TAG = "NotiAdapter";
     @NonNull
     @Override
@@ -47,7 +45,7 @@ public class NotiAdapter extends RecyclerView.Adapter<NotiAdapter.ViewHolder>{
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
-        Feed item = items.get(position);
+        FeedInfo item = items.get(position);
         viewHolder.setItem(item);
     }
 
@@ -93,7 +91,7 @@ public class NotiAdapter extends RecyclerView.Adapter<NotiAdapter.ViewHolder>{
             });
         }
 
-        public void setItem(Feed item){
+        public void setItem(FeedInfo item){
             post_id = item.getPost_id();
             publisher_id = item.getPublisher_id();
 
@@ -145,17 +143,17 @@ public class NotiAdapter extends RecyclerView.Adapter<NotiAdapter.ViewHolder>{
         }
 
     }
-    public void addItem(Feed item){
+    public void addItem(FeedInfo item){
         items.add(item);
     }
-    public void setItems(ArrayList<Feed> items){
+    public void setItems(ArrayList<FeedInfo> items){
         this.items = items;
     }
 
-    public Feed getItem(int position){
+    public FeedInfo getItem(int position){
         return items.get(position);
     }
-    public void setItem(int position, Feed item){
+    public void setItem(int position, FeedInfo item){
         items.set(position, item);
     }
 }

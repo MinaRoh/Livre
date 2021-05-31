@@ -158,15 +158,16 @@ public class HomeFragment extends Fragment {
                     }
                 });
 
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                int data = (Integer.parseInt(level) + 1) % 11;
-                db.collection("Tree_current").document(user.getUid()).update("level", Integer.toString(data));
-                changeLeavesStatus(data);
-                level = Integer.toString(data);
-            }
-        });
+        // 개발자 테스트용(나무성장)
+//        button.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                int data = (Integer.parseInt(level) + 1) % 11;
+//                db.collection("Tree_current").document(user.getUid()).update("level", Integer.toString(data));
+//                changeLeavesStatus(data);
+//                level = Integer.toString(data);
+//            }
+//        });
 
 
         // 나무 설정 버튼 클릭

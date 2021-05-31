@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -21,8 +22,11 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -34,8 +38,13 @@ import java.util.ArrayList;
 import gachon.mp.livre_bottom_navigation.R;
 
 public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.ViewHolder>{
-    ArrayList<Feed> items = new ArrayList<Feed>();
+    ArrayList<FeedInfo> items = new ArrayList<FeedInfo>();
     private static final String TAG = "FeedAdapter";
+    ImageButton heart;
+    ArrayList userlist_heart;
+    Boolean heart_clicked = false;
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
@@ -46,7 +55,7 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.ViewHolder>{
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
-        Feed item = items.get(position);
+        FeedInfo item = items.get(position);
         viewHolder.setItem(item);
     }
 
@@ -69,6 +78,7 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.ViewHolder>{
         String profileImg;//프로필 이미지 저장소 URL
         String post_id;//포스트 아이디
         String publisher_id;
+        ImageButton heart;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             imageView = itemView.findViewById(R.id.user_profile);
@@ -80,6 +90,8 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.ViewHolder>{
             textView5 = (TextView)itemView.findViewById(R.id.num_heart);
             textView6 = (TextView)itemView.findViewById(R.id.num_comment);
             textView7 = (TextView)itemView.findViewById(R.id.book_title);
+            heart = (ImageButton)itemView.findViewById(R.id.heart);
+            user = FirebaseAuth.getInstance().getCurrentUser();
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -94,7 +106,7 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.ViewHolder>{
             });
         }
 
-        public void setItem(Feed item){
+        public void setItem(FeedInfo item){
             post_id = item.getPost_id();
             publisher_id = item.getPublisher_id();
 
@@ -105,6 +117,39 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.ViewHolder>{
             textView5.setText(String.valueOf(item.getNum_heart()));//하트 개수
             textView6.setText(String.valueOf(item.getNum_comment()));//댓글 개수
             textView7.setText(item.getBook_title());
+
+
+            DocumentReference docRef = db.collection("Posts").document(post_id);
+            docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document.exists()) {
+                            Log.d(TAG, "DocumentSnapshot data: " + document.getData());
+                            userlist_heart = (ArrayList<String>) document.get("userlist_heart");
+                            if(userlist_heart.isEmpty()){// 하트 리스트가 비어있다면(디폴트)
+                                heart.setImageResource(R.drawable.baseline_favorite_border_24);
+                                heart_clicked=false;
+                            }
+                            else if(userlist_heart.contains(user.getUid())){//현재 유저가 해당 글에 이미 하트를 눌렀다면
+                                heart.setImageResource(R.drawable.baseline_favorite_24); //하트 채워두기
+                                heart_clicked=true;
+                            }
+
+                        } else {
+                            Log.d(TAG, "No such document");
+                        }
+                    } else {
+                        Log.d(TAG, "get failed with ", task.getException());
+                    }
+                }
+
+            });
+
+
+
+
             /*유저 프로필 이미지 불러오기*/
             imageView.setBackground(new ShapeDrawable(new OvalShape()));
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -169,17 +214,17 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.ViewHolder>{
         }
 
     }
-    public void addItem(Feed item){
+    public void addItem(FeedInfo item){
         items.add(item);
     }
-    public void setItems(ArrayList<Feed> items){
+    public void setItems(ArrayList<FeedInfo> items){
         this.items = items;
     }
 
-    public Feed getItem(int position){
+    public FeedInfo getItem(int position){
         return items.get(position);
     }
-    public void setItem(int position, Feed item){
+    public void setItem(int position, FeedInfo item){
         items.set(position, item);
     }
 }

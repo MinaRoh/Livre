@@ -1,6 +1,6 @@
 package gachon.mp.livre_bottom_navigation.ui.feed;
 
-public class Feed {
+public class FeedInfo {
     String publisher_id;
     String post_id;
     String nickname;
@@ -12,7 +12,7 @@ public class Feed {
     int num_heart;
     int num_comment;
 
-    public Feed(String publisher_id, String post_id, String nickname, String time, String postImage, String title, String book_title, String contents, int num_heart, int num_comment) {
+    public FeedInfo(String publisher_id, String post_id, String nickname, String time, String postImage, String title, String book_title, String contents, int num_heart, int num_comment) {
         this.publisher_id = publisher_id;
         this.post_id = post_id;
         this.nickname = nickname;

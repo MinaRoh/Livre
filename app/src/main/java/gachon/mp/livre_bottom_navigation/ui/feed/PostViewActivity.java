@@ -84,6 +84,7 @@ public class PostViewActivity extends AppCompatActivity {
         ImageButton comment = (ImageButton)findViewById(R.id.comment);
         TextView num_comment = (TextView)findViewById(R.id.num_comment);
         post_image = (ImageView)findViewById(R.id.post_image);
+
         /*문서의 uid를 전달 받아서 해당 문서를 보여준다.*/
         Intent intent = getIntent();
         posts_id = intent.getStringExtra("posts_id");
@@ -100,14 +101,40 @@ public class PostViewActivity extends AppCompatActivity {
                         String txt_book = document.getData().get("bookTitle").toString();
                         String txt_nickname = document.getData().get("nickname").toString();
                         publisher_uid = document.getData().get("publisher").toString();
+                        user = FirebaseAuth.getInstance().getCurrentUser();
+                        sender_uid = user.getUid(); // 알림을 보내는 사람의 uid
                         upload_profile();
                         nick = txt_nickname;
                         Timestamp time = (Timestamp) document.getData().get("uploadTime");
                         String txt_contents = document.getData().get("contents").toString();
                         imagePath = document.getData().get("imagePath").toString();
+
                         userlist_heart = (ArrayList<String>) document.get("userlist_heart");
-                        int_num_heart = Integer.parseInt(String.valueOf(document.getData().get("num_heart")));
+
+
+                        System.out.println("userlist_heart.size(): "+userlist_heart.size());
+                        System.out.println("userlist_heart.isEmpty(): "+userlist_heart.isEmpty());
+                        System.out.println("userlist_heart: "+userlist_heart);
+                        if(userlist_heart.isEmpty()){// 하트 리스트가 비어있다면(디폴트)
+                            heart.setImageResource(R.drawable.baseline_favorite_border_24);
+                            heart_clicked=false;
+                        }
+                        else if(userlist_heart.contains(user.getUid())){//현재 유저가 해당 글에 이미 하트를 눌렀다면
+                            heart.setImageResource(R.drawable.baseline_favorite_24); //하트 채워두기
+                            heart_clicked=true;
+                        }
+//                        handler.postDelayed(new Runnable(){
+//                            public void run(){
+//
+//
+//                            }
+//                        }, 2000); // 1sec
+
+
+//                        int_num_heart = Integer.parseInt(String.valueOf(document.getData().get("num_heart")));
                         int_num_comment = Integer.parseInt(String.valueOf(document.getData().get("num_comment")));
+                        int_num_heart = userlist_heart.size();
+
                         title.setText(txt_title);
                         nickname.setText(txt_nickname);
                         upload_time.setText(getTime(time));
@@ -139,38 +166,38 @@ public class PostViewActivity extends AppCompatActivity {
             user_profile.setClipToOutline(true);
         }
 
+
         /*하트 눌렀을 때*/
         heart.setOnClickListener(new View.OnClickListener() {
             //문제점: 이건 한정적으로 방금 자기가 업로드한 글에만 적용되는 코드
             //자기가 눌렀던 걸 기억할 수 있으면 다른 사람 글이나 옛날에 올린 자기 글에도 적용가능.
             @Override
             public void onClick(View view) {
-                heart_clicked = !(heart_clicked);
-                if (heart_clicked) {
-                    int_num_heart++;//하트 수 올리고
-                    String category = "heart";
-                    final String[] senderNickk = new String[1];
-                    sender_uid = user.getUid(); // 알림을 보내는 사람의 uid
-                    senderNickk[0] = getSenderNick(); //알림을 보내는 사람의 닉네임(현재 유저의 닉네임)
-                    System.out.println("getSenderNick 에서 받아온 sender nick: "+ senderNickk[0]);
-                    String senderNick = senderNickk[0];
-                    String receiverNick = publisher_uid;
-                    SendMessage sendMessage = new SendMessage(senderNick, Collections.singletonList(publisher_uid), category, txt_title);
-                    System.out.println("sender nick: "+ senderNick);
-                    System.out.println("postActivity에서 sendMessage 완료");
-                    heart.setImageResource(R.drawable.baseline_favorite_24);
+                    if (!heart_clicked) {
+                        int_num_heart++;//하트 수 올리고
+                        String category = "heart";
+                        final String[] senderNickk = new String[1];
+                        senderNickk[0] = getSenderNick(); //알림을 보내는 사람의 닉네임(현재 유저의 닉네임)
+                        System.out.println("getSenderNick 에서 받아온 sender nick: " + senderNickk[0]);
+                        String senderNick = senderNickk[0];
+                        String receiverNick = publisher_uid;
+                        SendMessage sendMessage = new SendMessage(senderNick, Collections.singletonList(publisher_uid), category, txt_title);
+                        System.out.println("sender nick: " + senderNick);
+                        System.out.println("postActivity에서 sendMessage 완료");
+                        heart.setImageResource(R.drawable.baseline_favorite_24);
 
-                    //posts에 좋아요 누른사람 arraylist 만들어서 uid 넣기
-                    userlist_heart.add(sender_uid);
-                    docRef.update("userlist_heart", FieldValue.arrayUnion(sender_uid)); //파이어스토어에 추가
+                        //posts에 좋아요 누른사람 arraylist 만들어서 uid 넣기
+                        userlist_heart.add(sender_uid);
+                        docRef.update("userlist_heart", FieldValue.arrayUnion(sender_uid)); //파이어스토어에 추가
 
 
-                } else {
-                    int_num_heart--;//하트 수 내리고
-                    userlist_heart.remove(sender_uid);
-                    docRef.update("userlist_heart", FieldValue.arrayRemove(sender_uid)); //파이어스토어에서 삭제
-                    heart.setImageResource(R.drawable.baseline_favorite_border_24);
-                }
+                    } else {
+                        int_num_heart--;//하트 수 내리고
+                        userlist_heart.remove(sender_uid);
+                        docRef.update("userlist_heart", FieldValue.arrayRemove(sender_uid)); //파이어스토어에서 삭제
+                        heart.setImageResource(R.drawable.baseline_favorite_border_24);
+                    }
+
                 num_heart.setText(String.valueOf(int_num_heart));//포스트에 반영
                 docRef
                         .update("num_heart", int_num_heart)
@@ -203,44 +230,6 @@ public class PostViewActivity extends AppCompatActivity {
     }
 
     private String getSenderNick() {
-
-//        final String[] nickname = new String[1];
-//
-//        final DocumentReference[] docRef = {db.collection("Users").document(user.getUid())};
-//        docRef[0].get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-//            @Override
-//            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-//                if (task.isSuccessful()) {
-//                    DocumentSnapshot document = task.getResult();
-//                    if (document.exists()) {
-//                        Log.d(TAG, "DocumentSnapshot data: " + document.getData());
-//                        nickname[0] = document.getString("nickname");
-//
-//                        handler.postDelayed(new Runnable(){
-//                            public void run(){
-//                                System.out.println("getSenderNick 내에서의 sender nick: "+ nickname[0]);
-//                            }
-//                        }, 3000); // 1sec
-//
-//
-//
-//                    } else {
-//                        Log.d(TAG, "No such document");
-//                    }
-//                } else {
-//                    Log.d(TAG, "get failed with ", task.getException());
-//                }
-//            }
-//
-//        });
-//        handler.postDelayed(new Runnable(){
-//            public void run(){
-//                System.out.println("getSenderNick 내에서의 리턴할때의 sender nick: "+ nickname[0]);
-//
-//            }
-//        }, 3000); // 1sec
-//        return nickname[0];
-
         String nick = ((MainActivity)MainActivity.mainContext).nickname;
         return nick;
     }

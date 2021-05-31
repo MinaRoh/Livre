@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -64,6 +65,7 @@ public class FeedFragment extends Fragment {
     TextView peopleNum;
     TextView status;
 
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -76,6 +78,9 @@ public class FeedFragment extends Fragment {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
         FeedAdapter adapter = new FeedAdapter();
+
+
+
 
         /*사용자가 WritingActivity에서 쓴 포스트 내용 가져오기*/
         db.collection("Posts").orderBy("num_heart", Query.Direction.DESCENDING).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -92,11 +97,12 @@ public class FeedFragment extends Fragment {
                         String txt_book = document.getData().get("bookTitle").toString();
                         String contents = document.getData().get("contents").toString();
                         String imagePath = document.getData().get("imagePath").toString();
+
                         Integer num_heart = Integer.parseInt(String.valueOf(document.getData().get("num_heart")));
                         Integer num_comment = Integer.parseInt(String.valueOf(document.getData().get("num_comment")));
 
                         user = FirebaseAuth.getInstance().getCurrentUser();
-                        adapter.addItem(new Feed(publisher, post_id, nickname, upload_time, imagePath, title, txt_book,  contents, num_heart, num_comment));
+                        adapter.addItem(new FeedInfo(publisher, post_id, nickname, upload_time, imagePath, title, txt_book,  contents, num_heart, num_comment));
                         recyclerView.setAdapter(adapter);
                     }
                 } else {
