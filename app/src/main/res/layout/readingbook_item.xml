@@ -10,12 +10,12 @@
         android:layout_width="134dp"
         android:layout_height="match_parent"
         android:layout_marginLeft="5dp"
-        android:layout_marginBottom="100dp"
-        android:src="@drawable/ic_launcher_background" />
+        android:layout_marginBottom="100dp" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginRight="10dp"
         android:layout_weight="1"
         android:orientation="vertical">
 
@@ -44,8 +44,8 @@
             android:id="@+id/btn_toWriting"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="right"
+            android:layout_gravity="bottom|right"
             android:layout_marginRight="9dp"
-            android:text="writing activity로"/>
+            android:text="글쓰기" />
     </LinearLayout>
 </LinearLayout>
