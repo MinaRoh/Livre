@@ -22,6 +22,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -70,6 +71,7 @@ public class CommentActivity extends AppCompatActivity {
         CommentAdapter adapter = new CommentAdapter();
 
         db.collection("Comment")
+                .orderBy("time", Query.Direction.ASCENDING)
                 .whereEqualTo("postID", post_id)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -80,8 +82,9 @@ public class CommentActivity extends AppCompatActivity {
                                 profile_image = document.get("profile_image").toString();
                                 nickname = document.get("nickname").toString();
                                 comment = document.get("content").toString();
+                                System.out.println("(Timestamp) document.get: "+ (Timestamp) document.get("time"));
                                 timestamp = (Timestamp) document.get("time");
-                                time = getTime(timestamp);
+                                time = getTime(timestamp); // 스트링화
                                 //어댑터 add
                                 adapter.addItem(new CommentInfo(comment, nickname, post_id, profile_image, time));
                                 recyclerView.setAdapter(adapter);
@@ -187,7 +190,7 @@ public class CommentActivity extends AppCompatActivity {
     static String getTime(Timestamp time) {
         Date date_createdAt = time.toDate();//Date형식으로 변경
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy년 MM월 dd일 HH:mm");
-        String txt_createdAt = formatter.format(date_createdAt).toString();
+        String txt_createdAt = formatter.format(date_createdAt);
         return txt_createdAt;
     }
     public void updateNumComment(){
