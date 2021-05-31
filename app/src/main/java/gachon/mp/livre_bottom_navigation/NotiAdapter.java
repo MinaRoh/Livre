@@ -36,7 +36,7 @@ import gachon.mp.livre_bottom_navigation.ui.feed.PostViewActivity;
 
 public class NotiAdapter extends RecyclerView.Adapter<NotiAdapter.ViewHolder>{
     ArrayList<Feed> items = new ArrayList<Feed>();
-    private static final String TAG = "FeedAdapter";
+    private static final String TAG = "NotiAdapter";
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
@@ -141,30 +141,7 @@ public class NotiAdapter extends RecyclerView.Adapter<NotiAdapter.ViewHolder>{
                         }
                     });
 
-            /*포스트 이미지 불러오기*/
-            FirebaseStorage storage = FirebaseStorage.getInstance();
-            StorageReference storageRef = storage.getReferenceFromUrl("gs://mp-livre.appspot.com");
-            String filename = item.getPostImage();
-            StorageReference pathReference = storageRef.child("images");
-            if(filename!=null && pathReference != null){
-                StorageReference submitProfile = storage.getReferenceFromUrl("gs://mp-livre.appspot.com").child("images/"+ publisher_id + "/" + filename);
-                submitProfile.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                    @Override
-                    public void onSuccess(Uri uri) {
-                        if(imageView2!=null){
-                            Glide.with(itemView)
-                                    .load(uri)
-                                    .override(1024, 980)
-                                    .into(imageView2);
-                        }
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error getting image", e);
-                    }
-                });
-            }
+
         }
 
     }
