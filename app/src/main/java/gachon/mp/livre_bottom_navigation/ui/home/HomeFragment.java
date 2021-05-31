@@ -11,7 +11,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -72,12 +74,14 @@ public class HomeFragment extends Fragment {
     private String background;
     SimpleDateFormat formatter;
     ConstraintLayout bg_area;
+    LinearLayout tree_setting;
     Button button;
     ImageView colorView;
     ImageView bg;
     ImageView trunk;
     ImageView leaves;
     ImageView butterfly;
+
     int number = 0;
     int bgnum = 1;
     int trunknum = 1;
@@ -92,6 +96,7 @@ public class HomeFragment extends Fragment {
     String reading_author_txt;
     String reading_img_url_txt;
     String isbn_txt;
+    ImageButton magic_want;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -117,16 +122,13 @@ public class HomeFragment extends Fragment {
         trunk = getActivity().findViewById(R.id.trunk);
         colorView = getActivity().findViewById(R.id.colorView);
         butterfly = getActivity().findViewById(R.id.butterfly);
-        bg_area = (ConstraintLayout)getActivity().findViewById(R.id.bg_area);
-
+        bg_area = (ConstraintLayout) getActivity().findViewById(R.id.bg_area);
+        tree_setting = getActivity().findViewById(R.id.tree_setting);
+        magic_want = getActivity().findViewById(R.id.magic_wand);
         butterfly.setVisibility(View.GONE);//처음엔 나비 안보이게
 
 
-        Button btn_change_color = getActivity().findViewById(R.id.btn_change_color);
-        Button btn_change_bg = getActivity().findViewById(R.id.btn_change_bg);
-        Button btn_change_trunk = getActivity().findViewById(R.id.btn_change_trunk);
-        Button btn_get_push_notice = getActivity().findViewById(R.id.btn_get_push_notice);
-
+        // 파베에서 저장한 정보 가져오기
         user = FirebaseAuth.getInstance().getCurrentUser();
         db.collection("Tree_current")
                 .whereEqualTo("uid", user.getUid())
@@ -141,12 +143,11 @@ public class HomeFragment extends Fragment {
                                 leaf_color = document.get("color_leaf").toString();
                                 background = document.get("background").toString();
 
-                                if(leaf_color.isEmpty()) {
+                                if (leaf_color.isEmpty()) {
                                     changeLeavesStatus(Integer.parseInt(level));
                                     changeTrunk(Integer.parseInt(trunk_color));
                                     changeBGStatus(Integer.parseInt(background));
-                                                                    }
-                                else{
+                                } else {
                                     changeLeavesStatus(Integer.parseInt(level));
                                     changeTrunk(Integer.parseInt(trunk_color));
                                     changeBGStatus(Integer.parseInt(background));
@@ -160,60 +161,31 @@ public class HomeFragment extends Fragment {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int data = (Integer.parseInt(level)+1)%11;
+                int data = (Integer.parseInt(level) + 1) % 11;
                 db.collection("Tree_current").document(user.getUid()).update("level", Integer.toString(data));
                 changeLeavesStatus(data);
                 level = Integer.toString(data);
             }
         });
 
-        //임시 잎 색 변경 버튼
-        btn_change_color.setOnClickListener(new View.OnClickListener() {
+
+        // 나무 설정 버튼 클릭
+        tree_setting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                colorPicker();
+                Intent intent = new Intent(getActivity(), TreeSetting.class);
+                startActivity(intent);
+            }
+        });
+        // 나무 설정 버튼(마법봉) 클릭
+        magic_want.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), TreeSetting.class);
+                startActivity(intent);
             }
         });
 
-        //임시 배경 전환 버튼
-        btn_change_bg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                int data = (Integer.parseInt(background)+1)%6;
-                db.collection("Tree_current").document(user.getUid()).update("background", Integer.toString(data));
-                changeBGStatus(data);
-                background = Integer.toString(data);
-            }
-        });
-
-        //임시 trunk 전환 버튼
-        btn_change_trunk.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                int data = (Integer.parseInt(trunk_color)+1)%2;
-                db.collection("Tree_current").document(user.getUid()).update("color_trunk", Integer.toString(data));
-                changeTrunk(data);
-                trunk_color = Integer.toString(data);
-            }
-        });
-
-
-        //임시 list activity로 가는 버튼
-        Button button_temp = getActivity().findViewById(R.id.button_temp);
-        button_temp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startListActivity();
-            }
-        });
-
-        //임시 푸시알림 버튼
-        btn_get_push_notice.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
 
         reading_pager = getActivity().findViewById(R.id.reading_pager);
         reading_pager.setOrientation(reading_pager.ORIENTATION_HORIZONTAL);
@@ -234,7 +206,7 @@ public class HomeFragment extends Fragment {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document:task.getResult()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
                                 reading_book_title_txt = document.getData().get("book_title").toString();
                                 reading_author_txt = document.getData().get("author").toString();
                                 reading_img_url_txt = document.getData().get("imageUrl").toString();
@@ -249,32 +221,6 @@ public class HomeFragment extends Fragment {
                 });
     }
 
-
-    private void colorPicker(){
-        new ColorPickerDialog
-                .Builder(getActivity())
-                .setTitle("나뭇잎 색상을 선택하세요")
-                .setColorShape(ColorShape.SQAURE)
-                .setDefaultColor(parseColor("#ffffff"))
-                .setColorListener(new ColorListener() {
-                    @Override
-                    public void onColorSelected(int color, @NotNull String colorHex) {
-                        db.collection("Tree_current").document(user.getUid()).update("color_leaf", colorHex);
-                        System.out.println("색상 int값: " + color + "/ String colorHex: "+colorHex);
-                        // Handle Color Selection
-                        leaves.setColorFilter(Color.parseColor(colorHex));//나뭇잎 색 변경
-
-                    }
-                })
-                .setDismissListener(new DismissListener() {
-                    @Override
-                    public void onDismiss() {
-                        // Handle Dismiss Event
-                    }
-                })
-                .show();
-
-    }
 
     private void startListActivity() {
         Intent intent = new Intent(getActivity(), ListActivity.class);
@@ -318,14 +264,15 @@ public class HomeFragment extends Fragment {
                 butterfly.setVisibility(View.VISIBLE);
                 bg_area.setDrawingCacheEnabled(true);
                 Bitmap bm = bg_area.getDrawingCache();
-                try{
+                try {
                     // 나무 사진 저장
                     onCap(bm);
-                } catch(Exception e){
+                } catch (Exception e) {
                 }
 
                 break;
-            default: break;
+            default:
+                break;
 
         }
     }
@@ -360,12 +307,14 @@ public class HomeFragment extends Fragment {
                 bg.setImageResource(R.drawable.bg_pink_orange);
                 break;
 
-            default: break;
+            default:
+                break;
 
         }
 
         bg_area.setBackgroundColor(bg_color);
     }
+
 
     private void changeTrunk(int num) {
 
@@ -377,17 +326,19 @@ public class HomeFragment extends Fragment {
                 trunk.setImageResource(R.drawable.trunk_brown);
                 break;
 
-            default: break;
+            default:
+                break;
 
         }
     }
 
-    private void toastMsg(String msg){
+
+    private void toastMsg(String msg) {
         Toast.makeText(getActivity(), msg, Toast.LENGTH_SHORT).show();
     }
 
-    private void onCap(Bitmap bm) throws Exception{
-        try{
+    private void onCap(Bitmap bm) throws Exception {
+        try {
             FirebaseStorage storage = FirebaseStorage.getInstance();
             StorageReference storageRef = storage.getReference();
 
@@ -398,7 +349,7 @@ public class HomeFragment extends Fragment {
             //Unique한 파일명을 만들자.
             formatter = new SimpleDateFormat("yyyyMMdd_HHmmss");
             Date now = new Date();
-            String filename = "tree_complete/"+user.getUid()+"/"+ formatter.format(now) +".jpg";
+            String filename = "tree_complete/" + user.getUid() + "/" + formatter.format(now) + ".jpg";
             // 저장소에 사진 저장
             StorageReference riverRef = storageRef.child(filename);
             UploadTask uploadTask = riverRef.putBytes(data);
@@ -409,7 +360,7 @@ public class HomeFragment extends Fragment {
             }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) { // db 업데이트
-                    int data = (Integer.parseInt(level)+1)%11;
+                    int data = (Integer.parseInt(level) + 1) % 11;
                     db.collection("Tree_current").document(user.getUid()).update("level", Integer.toString(data));
                     changeLeavesStatus(data);
                     level = Integer.toString(data);

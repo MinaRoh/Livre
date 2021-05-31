@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/btn_back"
+            android:layout_width="30dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:adjustViewBounds="true"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/back"
+            android:gravity="center_vertical"
+            android:scaleType="fitCenter"
+            android:src="@drawable/btn_backward" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_marginLeft="10dp"
+            android:gravity="left|center"
+            android:text="나무설정"
+            android:textColor="@color/themeColor"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/bg_area"
+        android:layout_width="match_parent"
+        android:layout_height="325dp"
+        android:layout_margin="20dp">
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:backgroundTint="#33FFFFFF"
+            android:gravity="center"
+            android:text="나무 성장 미리보기"
+            android:textColor="@color/black"
+            android:textSize="12dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/bg"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:scaleType="centerCrop"
+
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <ImageView
+            android:id="@+id/trunk"
+            android:layout_width="133dp"
+            android:layout_height="173dp"
+
+            app:layout_constraintBottom_toBottomOf="@+id/bg"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <ImageView
+            android:id="@+id/leaves"
+            android:layout_width="274dp"
+            android:layout_height="142dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="60dp"
+
+            app:layout_constraintBottom_toBottomOf="@+id/bg"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <ImageView
+            android:id="@+id/butterfly"
+            android:layout_width="274dp"
+            android:layout_height="142dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="60dp"
+
+            app:layout_constraintBottom_toBottomOf="@+id/bg"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <ImageView
+            android:id="@+id/star"
+            android:layout_width="wrap_content"
+            android:layout_height="280dp"
+            android:layout_marginBottom="40dp"
+            android:scaleType="fitXY"
+            app:layout_constraintBottom_toBottomOf="@+id/bg"
+            app:layout_constraintStart_toStartOf="@+id/bg" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:textStyle="bold"
+        android:textSize="20dp"
+        android:gravity="center"
+        android:text="변경 사항은 상시 자동 저장됩니다!" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:orientation="vertical">
+
+
+
+
+
+        <TextView
+            android:id="@+id/btn_change_color"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:textSize="20dp"
+            android:gravity="center"
+            android:text="나뭇잎색상변경" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@color/themeColor" />
+
+
+        <TextView
+            android:id="@+id/btn_change_bg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:textSize="20dp"
+            android:gravity="center"
+            android:text="배경 변경" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@color/themeColor" />
+
+
+        <TextView
+            android:id="@+id/btn_change_trunk"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:textSize="20dp"
+            android:gravity="center"
+            android:text="줄기 변경" />
+
+
+
+
+
+    </LinearLayout>
+
+
+
+
+
+</LinearLayout>
