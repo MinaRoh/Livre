@@ -4,15 +4,15 @@ import com.google.firebase.Timestamp;
 
 public class NotiInfo {
     private Timestamp uploadTime;
-    private String detail, msgTitle, msgContent, user_sent;
+    private String category, msgTitle, msgContent, sender, receiver;
 
-    public NotiInfo(Timestamp uploadTime, String detail, String msgTitle, String msgContent, String user_sent){
+    public NotiInfo(Timestamp uploadTime, String category, String msgTitle, String msgContent, String sender){
 
         this.uploadTime = uploadTime;
-        this.detail = detail;
+        this.category = category;
         this.msgTitle = msgTitle;
         this.msgContent = msgContent;
-        this.user_sent = user_sent;
+        this.sender = sender;
     }
 
     public Timestamp getUploadTime() {
@@ -23,12 +23,12 @@ public class NotiInfo {
         this.uploadTime = uploadTime;
     }
 
-    public String getDetail() {
-        return detail;
+    public String getCategory() {
+        return category;
     }
 
-    public void setDetail(String detail) {
-        this.detail = detail;
+    public void setCategory(String category) {
+        this.category = category;
     }
 
     public String getMsgTitle() {
@@ -47,11 +47,19 @@ public class NotiInfo {
         this.msgContent = msgContent;
     }
 
-    public String getUser_sent() {
-        return user_sent;
+    public String getSender() {
+        return sender;
     }
 
-    public void setUser_sent(String user_sent) {
-        this.user_sent = user_sent;
+    public void setSender(String sender) {
+        this.sender = sender;
+    }
+
+    public String getReceiver() {
+        return receiver;
+    }
+
+    public void setReceiver(String receiver) {
+        this.receiver = receiver;
     }
 }

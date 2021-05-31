@@ -26,11 +26,14 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.SimpleDateFormat;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import gachon.mp.livre_bottom_navigation.MainActivity;
 import gachon.mp.livre_bottom_navigation.R;
+import gachon.mp.livre_bottom_navigation.pushNoti.SendMessage;
 
 public class CommentActivity extends AppCompatActivity {
     private static final String TAG = "CommentActivity";
@@ -42,6 +45,9 @@ public class CommentActivity extends AppCompatActivity {
     Timestamp timestamp;
     long num_comment;
     private FirebaseUser user;
+    String sender_uid;
+    String publisher_uid;
+    String post_title;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -53,7 +59,9 @@ public class CommentActivity extends AppCompatActivity {
 
         /*문서의 uid를 전달 받아서 해당 문서의 댓글 내용을 보여준다.*/
         Intent intent = getIntent();
+        publisher_uid=intent.getStringExtra("publisher_uid");
         post_id = intent.getStringExtra("posts_id");
+        post_title= intent.getStringExtra("post_title");
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
@@ -126,6 +134,20 @@ public class CommentActivity extends AppCompatActivity {
                                                         Log.w(TAG, "Error adding document", e);
                                                     }
                                                 });
+
+                                        //알림 주기
+                                        String category = "comment";
+                                        final String[] senderNickk = new String[1];
+                                        sender_uid = user.getUid(); // 알림을 보내는 사람의 uid
+                                        senderNickk[0] = getSenderNick(); //알림을 보내는 사람의 닉네임(현재 유저의 닉네임)
+                                        System.out.println("getSenderNick 에서 받아온 sender nick: "+ senderNickk[0]);
+                                        String senderNick = senderNickk[0];
+                                        String receiverNick = publisher_uid;
+                                        SendMessage sendMessage = new SendMessage(senderNick, Collections.singletonList(publisher_uid), category, post_title);
+                                        System.out.println("sender nick: "+ senderNick);
+                                        System.out.println("postActivity에서 sendMessage 완료");
+
+
                                         //어댑터에 값 전달
                                         adapter.addItem(new CommentInfo(comment, nickname, post_id, profile_image, time));
                                         recyclerView.setAdapter(adapter);
@@ -185,5 +207,9 @@ public class CommentActivity extends AppCompatActivity {
                         Log.w(TAG, "Error updating document", e);
                     }
                 });
+    }
+    private String getSenderNick() {
+        String nick = ((MainActivity)MainActivity.mainContext).nickname;
+        return nick;
     }
 }

@@ -154,8 +154,8 @@ public class PostViewActivity extends AppCompatActivity {
                     senderNickk[0] = getSenderNick(); //알림을 보내는 사람의 닉네임(현재 유저의 닉네임)
                     System.out.println("getSenderNick 에서 받아온 sender nick: "+ senderNickk[0]);
                     String senderNick = senderNickk[0];
+                    String receiverNick = publisher_uid;
                     SendMessage sendMessage = new SendMessage(senderNick, Collections.singletonList(publisher_uid), category, txt_title);
-
                     System.out.println("sender nick: "+ senderNick);
                     System.out.println("postActivity에서 sendMessage 완료");
                     heart.setImageResource(R.drawable.baseline_favorite_24);
@@ -193,8 +193,11 @@ public class PostViewActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(PostViewActivity.this, CommentActivity.class);
+                intent.putExtra("post_title", txt_title); //글 제목 전달
                 intent.putExtra("posts_id", posts_id);//코멘트 액티비티에 문서 id 전달
+                intent.putExtra("publisher_uid", publisher_uid);//글 작성자 uid 전달
                 startActivity(intent);
+
             }
         });
     }
