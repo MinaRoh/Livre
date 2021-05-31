@@ -79,8 +79,7 @@ public class PostActivity extends AppCompatActivity {
 
         //그 전에 posts_id 필드 추가
         DocumentReference docRef = db.collection("Posts").document(posts_id);
-        docRef
-                .update("posts_id", posts_id)// posts_id 필드를 WritingAvtivity 에서 받아온 id값으로 변경
+        docRef.update("posts_id", posts_id)// posts_id 필드를 WritingAvtivity 에서 받아온 id값으로 변경
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
@@ -135,6 +134,7 @@ public class PostActivity extends AppCompatActivity {
 
         });
 
+
         /*글 수정, 삭제 메뉴*/
         user_menu.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -146,9 +146,21 @@ public class PostActivity extends AppCompatActivity {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
                         if (item.getItemId() == R.id.menu_modify){
-                            //수정 기능
+                            //포스트 수정 기능
                         }else if (item.getItemId() == R.id.menu_delete){
-                            //삭제 기능
+                            //포스트 삭제 기능
+                            docRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    Toast.makeText(PostActivity.this, "삭제되었습니다!", Toast.LENGTH_LONG).show();
+                                    PostActivity.this.finish();
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Toast.makeText(PostActivity.this, "삭제에 실패하였습니다", Toast.LENGTH_LONG).show();
+                                }
+                            });
                         }
                         return false;
                     }
