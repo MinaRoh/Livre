@@ -62,7 +62,6 @@ public class MypageFragment extends Fragment {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         user = FirebaseAuth.getInstance().getCurrentUser();
         db.collection("Users")
-                .orderBy("time", Query.Direction.DESCENDING)
                 .whereEqualTo("uid", user.getUid())
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -70,6 +69,7 @@ public class MypageFragment extends Fragment {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
+                                System.out.println("1");
                                 textView.setText(document.get("nickname").toString());
                                 profileImg = document.get("profileImage").toString();
                             }
@@ -81,19 +81,25 @@ public class MypageFragment extends Fragment {
                             storageReference.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Uri> task) {
+                                    System.out.println("2");
                                     if (task.isSuccessful()) {
+                                        System.out.println("3");
                                         // Glide 이용하여 이미지뷰에 로딩
                                         if(getActivity() != null){
+                                            System.out.println("4");
                                             Glide.with(getActivity())//네비게이션 왔다갔다 이동하다보면 여기서 맨날 에러남.
                                                     .load(task.getResult())
                                                     .override(1024, 980)
                                                     .into(imageView);
                                         }
+                                        System.out.println("5");
 
                                     } else {
+                                        System.out.println("6");
                                         // URL을 가져오지 못하면 토스트 메세지
                                         Toast.makeText(getActivity(), task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                                     }
+                                    System.out.println("7");
                                 }
                             });
                         }
@@ -104,6 +110,7 @@ public class MypageFragment extends Fragment {
         LinearLayoutManager layoutManager2 = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
         recyclerView2.setLayoutManager(layoutManager2);
         MyTreeAdapter adapter2 = new MyTreeAdapter();
+
 
         db.collection("Tree_complete")
                 .whereEqualTo("uid", user.getUid())
@@ -129,6 +136,7 @@ public class MypageFragment extends Fragment {
 
         /*사용자가 WritingActivity에서 쓴 포스트 내용 가져오기*/
         db.collection("Posts")
+                .orderBy("time", Query.Direction.DESCENDING)
                 .whereEqualTo("publisher", user.getUid())
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {

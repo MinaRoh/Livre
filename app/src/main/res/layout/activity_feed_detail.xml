@@ -1,174 +1,181 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--book detail in feed-->
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<?xml version="1.0" encoding="utf-8"?><!--book detail in feed-->
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#EDF6ED"
-    android:orientation="vertical"
-    tools:context=".ui.feed.FeedDetailActivity">
+    android:layout_height="match_parent">
 
     <LinearLayout
+
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_height="match_parent"
+        android:layout_margin="10dp"
+        android:background="#EDF6ED"
+        android:orientation="vertical"
+        tools:context=".ui.feed.FeedDetailActivity">
 
-        <ImageButton
-            android:id="@+id/feed_detail_btn_back"
-            android:layout_width="8dp"
-            android:layout_height="12dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="25dp"
-            android:adjustViewBounds="true"
-            android:background="@android:color/transparent"
-            android:contentDescription="@string/back"
-            android:scaleType="fitCenter"
-            android:src="@drawable/btn_backward" />
-
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="22dp"
-            android:fontFamily="@font/nanum_barun_gothic_ultra_light"
-            android:gravity="center_horizontal"
-            android:lineSpacingExtra="-0.7sp"
-            android:text="@string/feed_detail"
-            android:textColor="#97b843"
-            android:textSize="20sp"
-            android:textStyle="normal" />
+            android:orientation="horizontal">
 
-    </LinearLayout>
-    
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+            <ImageButton
+                android:id="@+id/feed_detail_btn_back"
+                android:layout_width="2dp"
+                android:layout_height="7dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="25dp"
+                android:adjustViewBounds="true"
+                android:background="@android:color/transparent"
+                android:contentDescription="@string/back"
+                android:scaleType="fitCenter"
+                android:src="@drawable/btn_backward" />
 
-        <ImageView
-            android:id="@+id/image_detail"
-            android:layout_marginTop="10dp"
-            android:layout_width="134dp"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="6dp"
-            android:src="@drawable/ic_launcher_background" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="22dp"
+                android:fontFamily="@font/nanum_barun_gothic_ultra_light"
+                android:gravity="center_horizontal"
+                android:lineSpacingExtra="-0.7sp"
+                android:text="@string/feed_detail"
+                android:textColor="#97b843"
+                android:textSize="20sp"
+                android:textStyle="normal" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/image_detail"
+                android:layout_width="134dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="6dp"
+                android:layout_marginTop="10dp"
+                android:src="@drawable/ic_launcher_background" />
 
             <LinearLayout
                 android:layout_width="265dp"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="13dp"
                 android:layout_weight="1"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="13dp">
+                android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/txttitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
-                    android:textColor="@color/black"
                     android:text="책제목"
+                    android:textColor="@color/black"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/txtauthor"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginTop="10dp"
+                    android:text="책저자"
+                    android:textColor="@color/black"
                     android:textSize="13sp" />
 
                 <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/txtauthor"
-                    android:textColor="@color/black"
-                    android:text="책저자"
-                    android:layout_marginTop="10dp"
-                    android:textSize="13sp"
-                    android:layout_centerVertical="true" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
                     android:id="@+id/txtdescription"
-                    android:text="책설명"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
                     android:layout_marginTop="10dp"
-                    android:textSize="12sp"
+                    android:text="책설명"
                     android:textColor="@color/black"
-                    android:layout_centerVertical="true" />
+                    android:textSize="12sp" />
             </LinearLayout>
 
         </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <View
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_weight="1"/>
-
-        <Button
-            android:id="@+id/btn_reading"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="13dp"
-            android:backgroundTint="@color/themeColor"
-            android:text="읽고 있는 책" />
+            android:layout_marginTop="10dp">
 
-        <Button
-            android:id="@+id/btn_write_report"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="13dp"
-            android:backgroundTint="@color/themeColor"
-            android:text="독서감상문 작성하기" />
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
 
-    </LinearLayout>
+            <Button
+                android:id="@+id/btn_reading"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="13dp"
+                android:backgroundTint="@color/themeColor"
+                android:text="읽고 있는 책" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        android:gravity="center"
-        android:text="이 책의 독서감상문"
-        android:textColor="@color/themeColor"
-        android:textSize="18sp" />
+            <Button
+                android:id="@+id/btn_write_report"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="13dp"
+                android:backgroundTint="@color/themeColor"
+                android:text="독서감상문 작성" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_gravity="center"
-        android:layout_marginBottom="10dp"
-        android:background="@color/themeColor" />
-
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        </LinearLayout>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="20dp"
             android:layout_marginBottom="10dp"
             android:gravity="center"
-            android:text="아직 등록된 감상문이 없네요!"
+            android:text="이 책의 독서감상문"
+            android:textColor="@color/themeColor"
             android:textSize="18sp" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler_view"
+        <View
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:nestedScrollingEnabled="false"
-            app:layout_constraintBottom_toBottomOf="parent" />
+            android:layout_height="1dp"
+            android:layout_gravity="center"
+            android:layout_marginBottom="10dp"
+            android:background="@color/themeColor" />
 
-    </FrameLayout>
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-</LinearLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="50dp"
+                android:gravity="center"
+                android:text="아직 등록된 감상문이 없네요!"
+                android:textSize="18sp" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="10dp"
+                android:nestedScrollingEnabled="false"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+        </FrameLayout>
+
+    </LinearLayout>
+</ScrollView>
 
 
