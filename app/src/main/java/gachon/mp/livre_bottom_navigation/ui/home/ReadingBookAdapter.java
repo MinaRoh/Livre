@@ -10,8 +10,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -37,6 +39,7 @@ import gachon.mp.livre_bottom_navigation.ui.feed.Book;
 import gachon.mp.livre_bottom_navigation.ui.mypage.CommentInfo;
 import gachon.mp.livre_bottom_navigation.ui.mypage.MyPageAdapter;
 import gachon.mp.livre_bottom_navigation.ui.mypage.PostActivity;
+import gachon.mp.livre_bottom_navigation.ui.writing.WritingActivity;
 
 public class ReadingBookAdapter extends RecyclerView.Adapter<ReadingBookAdapter.ViewHolder>{
     private static final String TAG = "ReadingBookAdapter";
@@ -67,32 +70,47 @@ public class ReadingBookAdapter extends RecyclerView.Adapter<ReadingBookAdapter.
         TextView reading_book_title;
         TextView reading_author;
         String isbn;
+        Button btn_toWriting;
+        String book_title;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             reading_img = (ImageView) itemView.findViewById(R.id.reading_img);
             reading_book_title = (TextView) itemView.findViewById(R.id.reading_book_title);
             reading_author = (TextView)itemView.findViewById(R.id.reading_author);
+
+            /* writing activity 로 를 누르면 해당 책의 writing activity로 이동한다 */
+            btn_toWriting = (Button) itemView.findViewById(R.id.btn_toWriting);
+            btn_toWriting.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Context context = view.getContext();
+                    Intent writing_intent = new Intent(context, WritingActivity.class);
+                    writing_intent.putExtra("isbn", isbn);
+                    writing_intent.putExtra("book_title", book_title);
+                    context.startActivity(writing_intent);
+                }
+            });
         }
 
+        // 읽고 있는 책 정보 db 에서 가져오기
+        // user id 가 같은 경우에~
+        public void setItem(Book item) {
+            user = FirebaseAuth.getInstance().getCurrentUser();
+            assert user != null;
+            String user_id = user.getUid();//사용자 uid
+            book_title = item.getBook_title();
+            reading_book_title.setText(item.getBook_title());
+            reading_author.setText(item.getAuthor());
+            isbn = item.getIsbn();
 
-    // 읽고 있는 책 정보 db 에서 가져오기
-    // user id 가 같은 경우에~
-    public void setItem(Book item) {
-        user = FirebaseAuth.getInstance().getCurrentUser();
-        assert user != null;
-        String user_id = user.getUid();//사용자 uid
-        reading_book_title.setText(item.getBook_title());
-        reading_author.setText(item.getAuthor());
-        isbn = item.getIsbn();
-
-        Picasso.get().load(item.getImageUrl()).resize(200,270).into(reading_img);
+            Picasso.get().load(item.getImageUrl()).resize(200,270).into(reading_img);
         }
 
     }
+
     public void addItem(Book item){
         items.add(item);
     }
-
 
 }

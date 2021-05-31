@@ -247,22 +247,6 @@ public class HomeFragment extends Fragment {
                         }
                     }
                 });
-
-//        //ISBN과 책 제목을 WritingActivity로 전달
-//        btn_toWriting = getActivity().findViewById(R.id.btn_reading);
-//        btn_toWriting.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                String isbn_toWriting = isbn_txt;
-//                String title_toWriting = reading_book_title_txt;
-//
-//                Intent writing_intent = new Intent(getActivity(), WritingActivity.class);
-//                writing_intent.putExtra("isbn", isbn_toWriting);
-//                writing_intent.putExtra("book_title", title_toWriting);
-//
-//                startActivity(writing_intent);
-//            }
-//        });
     }
 
 
