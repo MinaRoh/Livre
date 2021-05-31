@@ -2,14 +2,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="match_parent"
-    android:background="#00FFFFFF"
-    android:backgroundTint="#00FFFFFF">
+    android:background="#E5F1C8"
+    android:backgroundTint="#E5F1C8">
 
     <androidx.cardview.widget.CardView
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:background="#00FFFFFF"
-        android:backgroundTint="#00FFFFFF">
+        android:background="#E5F1C8"
+        android:backgroundTint="#E5F1C8">
 
         <ImageView
             android:id="@+id/imageView"
@@ -17,7 +17,7 @@
             android:layout_height="150dp"
             android:layout_margin="5dp"
             android:adjustViewBounds="false"
-            android:background="#00FFFFFF"
+            android:background="#E5F1C8"
             android:backgroundTint="#00FFFFFF"
             android:scaleType="fitCenter" />
     </androidx.cardview.widget.CardView>

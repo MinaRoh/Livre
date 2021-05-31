@@ -123,12 +123,6 @@ public class PostViewActivity extends AppCompatActivity {
                             heart.setImageResource(R.drawable.baseline_favorite_24); //하트 채워두기
                             heart_clicked=true;
                         }
-//                        handler.postDelayed(new Runnable(){
-//                            public void run(){
-//
-//
-//                            }
-//                        }, 2000); // 1sec
 
 
 //                        int_num_heart = Integer.parseInt(String.valueOf(document.getData().get("num_heart")));
@@ -149,7 +143,7 @@ public class PostViewActivity extends AppCompatActivity {
                                     //스플래시 -- 로딩중입니다.
                                     getImage();
                                 }
-                            }, 4500); // 1sec
+                            }, 1000); // 1sec
                         }
                     } else {
                         Log.d(TAG, "No such document");
