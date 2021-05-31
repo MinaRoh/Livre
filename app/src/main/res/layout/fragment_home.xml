@@ -121,12 +121,12 @@
 
 
 
-            <Button
-                android:id="@+id/button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:text="나무 성장시키기" />
+<!--            <Button-->
+<!--                android:id="@+id/button"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_margin="10dp"-->
+<!--                android:text="나무 성장시키기" />-->
 
 
             <TextView
@@ -137,7 +137,7 @@
                 android:text="지금 읽고 있는 책"
                 android:textColor="@color/white"
                 android:textStyle="bold"
-                android:layout_marginBottom="15dp"
+                android:layout_marginBottom="20dp"
                 android:textSize="20dp"/>
 
             <View
@@ -156,18 +156,55 @@
 
 
 
-            <!--읽고 있는 책-->
-            <androidx.viewpager2.widget.ViewPager2
-                android:id="@+id/reading_pager"
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_marginTop="20dp"
+                android:layout_height="300dp"
+                android:layout_marginBottom="100dp">
 
-                android:layout_height="match_parent">
-            </androidx.viewpager2.widget.ViewPager2>
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="100dp"/>
+
+
+                <TextView
+                    android:id="@+id/reading_book_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+
+                    android:padding="10dp"
+                    android:text="읽고 있는 책이 없습니다"
+                    android:textColor="#D6D6D6"
+                    android:textSize="20dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/reading_author"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="50dp"
+                    android:layout_marginBottom="10dp"
+                    android:text="피드에서 책을 등록해 주세요"
+                    android:textColor="#FFF7AD"
+                    android:textStyle="bold" />
+
+                <!--읽고 있는 책-->
+                <androidx.viewpager2.widget.ViewPager2
+                    android:id="@+id/reading_pager"
+                    android:layout_width="match_parent"
+                    android:layout_marginTop="20dp"
+
+                    android:layout_height="match_parent">
+                </androidx.viewpager2.widget.ViewPager2>
+
+            </FrameLayout>
+
+
+
+
+
+
+
+
 
         </LinearLayout>
 

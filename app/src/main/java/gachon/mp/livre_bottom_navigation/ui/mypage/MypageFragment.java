@@ -136,7 +136,6 @@ public class MypageFragment extends Fragment {
 
         /*사용자가 WritingActivity에서 쓴 포스트 내용 가져오기*/
         db.collection("Posts")
-                .orderBy("time", Query.Direction.DESCENDING)
                 .whereEqualTo("publisher", user.getUid())
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {

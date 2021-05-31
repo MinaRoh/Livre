@@ -158,16 +158,16 @@ public class HomeFragment extends Fragment {
                     }
                 });
 
-//         개발자 테스트용(나무성장)
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                int data = (Integer.parseInt(level) + 1) % 11;
-                db.collection("Tree_current").document(user.getUid()).update("level", Integer.toString(data));
-                changeLeavesStatus(data);
-                level = Integer.toString(data);
-            }
-        });
+////         개발자 테스트용(나무성장)
+//        button.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                int data = (Integer.parseInt(level) + 1) % 11;
+//                db.collection("Tree_current").document(user.getUid()).update("level", Integer.toString(data));
+//                changeLeavesStatus(data);
+//                level = Integer.toString(data);
+//            }
+//        });
 
 
         // 나무 설정 버튼 클릭
@@ -200,26 +200,31 @@ public class HomeFragment extends Fragment {
         reading_book_title = getActivity().findViewById(R.id.reading_book_title);
         reading_author = getActivity().findViewById(R.id.reading_author);
         reading_img = getActivity().findViewById(R.id.reading_img);
-        db.collection("Books")
-                .whereEqualTo("uid", user_id)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                reading_book_title_txt = document.getData().get("book_title").toString();
-                                reading_author_txt = document.getData().get("author").toString();
-                                reading_img_url_txt = document.getData().get("imageUrl").toString();
-                                isbn_txt = document.getData().get("isbn").toString();
+        try {
+            db.collection("Books")
+                    .whereEqualTo("uid", user_id)
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                    reading_book_title_txt = document.getData().get("book_title").toString();
+                                    reading_author_txt = document.getData().get("author").toString();
+                                    reading_img_url_txt = document.getData().get("imageUrl").toString();
+                                    isbn_txt = document.getData().get("isbn").toString();
 
-                                adapter.addItem(new Book(reading_book_title_txt, reading_author_txt, reading_img_url_txt, user.getUid(), isbn_txt));
-                                reading_pager.setAdapter(adapter);
+                                    adapter.addItem(new Book(reading_book_title_txt, reading_author_txt, reading_img_url_txt, user.getUid(), isbn_txt));
+                                    reading_pager.setAdapter(adapter);
 
+                                }
                             }
                         }
-                    }
-                });
+                    });
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
 
