@@ -46,10 +46,12 @@ import gachon.mp.livre_bottom_navigation.ui.mypage.PostActivity;
 public class WritingActivity extends AppCompatActivity {
     private static final String TAG = "WritingActivity";
     final int GET_GALLERY_IMAGE=200;
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseUser user;
     private String posts_id;
     private String nickname = "샘플닉네임";
     private String ISBN;
+    private String level;
     private String book_title;
 
     Uri imagePath;
@@ -79,7 +81,6 @@ public class WritingActivity extends AppCompatActivity {
         textView_book_title.setText(book_title);
 
         mContext = this;        //외부참조용 context 초기화 (onCreate 에서 해야함)
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
         user = FirebaseAuth.getInstance().getCurrentUser();
 
         assert user != null;
@@ -168,7 +169,26 @@ public class WritingActivity extends AppCompatActivity {
                 WriteInfo writeInfo = new WriteInfo(posts_id, ISBN, book_title, title, nickname, contents, "", user.getUid(), upload_time, 0, 0, userlist_heart);
                 postUploader(writeInfo);
             }
-            // 여기에서 나무 레벨업
+            // 나무 레벨업
+            db.collection("Tree_current")
+                    .whereEqualTo("uid", user.getUid())
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                    level = document.getData().get("level").toString();
+                                    int data = (Integer.parseInt(level)+1)%11;
+                                    db.collection("Tree_current").document(user.getUid()).update("level", Integer.toString(data));
+
+                                }
+                            } else {
+                                Log.d(TAG, "Error getting documents: ", task.getException());
+                            }
+
+                        }
+                    });
 
         }else{
             toastMsg("제목 또는 내용을 입력해주세요.");
