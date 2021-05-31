@@ -134,6 +134,15 @@
                 android:gravity="center"
                 android:text="푸시알림받기^^" />
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:layout_marginLeft="15dp"
+                android:text="지금 읽고 있는 책"
+                android:textStyle="bold"
+                android:textSize="20dp"/>
+
             <!--읽고 있는 책-->
             <androidx.viewpager2.widget.ViewPager2
                 android:id="@+id/reading_pager"
