@@ -14,8 +14,9 @@
  데이터는 파이어베이스를 통해 읽고 쓰며 내 글과 댓글, 유저 프로필과 나의 나무 현황을 실시간으로 불러오고, 내 글에 좋아요와 댓글의 알림 수신을 통해 빠른 커뮤니케이션 지원합니다.
  
  ### 미리 보기
- 여기에 움짤 드래그 해서 넣어주면 됩니당
- 
+<img src="https://user-images.githubusercontent.com/72744190/123213360-e2663f00-d500-11eb-9d1e-52773c8cd1bf.gif" width="200" height="400"> <img src="https://user-images.githubusercontent.com/72744190/123213420-f3af4b80-d500-11eb-8975-e460d70aefe1.gif" width="200" height="400"> <img src="https://user-images.githubusercontent.com/72744190/123213446-fa3dc300-d500-11eb-8b0e-4811bdc972d6.gif" width="200" height="400">
+
+
  
  ### 주요 기술
 
